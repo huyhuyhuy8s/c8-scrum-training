@@ -33,3 +33,32 @@ export const createNewEmployee = async (
     throw new Error();
   }
 };
+export const updateEmployeeById = async (
+  idEmployee,
+  data
+) => {
+  try {
+    const updatedEmployee = await EmployeeRepository.update({
+      where: {
+        id: idEmployee,
+      },
+      data: {
+        ...data, 
+      },
+      select: {
+        id: true,
+        name: true,
+        department: true,
+        role: true,
+        email: true,
+      },
+    });
+    return updatedEmployee;
+  } catch (error) {
+    console.error(
+      `Error Update new employee for employee`,
+      error
+    );
+    throw new Error();
+  }
+};
