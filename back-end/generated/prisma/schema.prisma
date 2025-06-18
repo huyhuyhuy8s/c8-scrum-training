@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../back-end/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id               Int              @id @default(autoincrement())
+  name             String
+  department       String
+  role             Role             @default(EMPLOYEE)
+  requests         ExpenseRequest[] // One-to-many
+  managerApprovals ExpenseRequest[] @relation("ManagerApproval")
+  financeApprovals ExpenseRequest[] @relation("FinanceApproval")
+
+  @@map("employees")
+}
+
+model ExpenseRequest {
+  id                Int           @id @default(autoincrement())
+  employee          Employee      @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+  description       String
+  amount            Float
+  status            RequestStatus @default(PENDING)
+  createdAt         DateTime      @default(now())
+  approvedById      Int? // Manager
+  approvedBy        Employee?     @relation("ManagerApproval", fields: [approvedById], references: [id])
+  finalApprovedById Int? // Finance officer
+  finalApprovedBy   Employee?     @relation("FinanceApproval", fields: [finalApprovedById], references: [id])
+  logs              SystemLog[]
+
+  @@map("expense_requests")
+}
+
+model SystemLog {
+  id        Int            @id @default(autoincrement())
+  action    String
+  timestamp DateTime       @default(now())
+  request   ExpenseRequest @relation(fields: [requestId], references: [id])
+  requestId Int
+
+  @@map("system_logs")
+}
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+  FINANCE
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FINAL_APPROVED
+  PROCESSED
+}
