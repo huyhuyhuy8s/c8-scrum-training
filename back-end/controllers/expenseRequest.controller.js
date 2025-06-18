@@ -1,4 +1,15 @@
-import * as expenseService from "../services/expenseService.js";
+import { createExpenseRequest } from "../services/expenseRequest.service.js";
+import {expenseService} from "../services/expenseService.js";
+
+export const createExpenseRequestController = async (req, res) => {
+    try {
+        const expenseRequest = req.body;
+        const newExpenseRequest = await createExpenseRequest(expenseRequest);
+        res.status(201).json(newExpenseRequest);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export const getEmployeeRequests = async (req, res) => {
   try {

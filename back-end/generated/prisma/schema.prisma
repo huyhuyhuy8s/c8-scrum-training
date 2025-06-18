@@ -36,6 +36,7 @@ model ExpenseRequest {
   imageUrl          String?
   createdAt         DateTime      @default(now())
   approvedById      Int? // Manager
+  rejectedReason    String?
   approvedBy        Employee?     @relation("ManagerApproval", fields: [approvedById], references: [id])
   finalApprovedById Int? // Finance officer
   finalApprovedBy   Employee?     @relation("FinanceApproval", fields: [finalApprovedById], references: [id])

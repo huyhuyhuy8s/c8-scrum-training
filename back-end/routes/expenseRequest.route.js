@@ -1,9 +1,11 @@
-import express from 'express';
+
+import { Router } from "express";
 import { getEmployeeRequests } from '../controllers/expenseController.js';
-import auth from '../middlewares/auth.js';
+import { createExpenseRequestController } from "../controllers/expenseRequest.controller.js";
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', auth, getEmployeeRequests);
+router.post("/", createExpenseRequestController);
+router.get('/', getEmployeeRequests);
 
 export default router;
