@@ -1,15 +1,14 @@
 import React from 'react';
-import { FiCheck, FiX, FiCalendar, FiFilter } from 'react-icons/fi';
+import { FiCalendar, FiFilter, FiFileText } from 'react-icons/fi';
 
 const FinanceAction = ({ 
-  selectedCount = 0, 
-  onAccept, 
-  onReject,
   startDate,
   endDate,
   onStartDateChange,
   onEndDateChange,
-  onDateFilter
+  onDateFilter,
+  onSummary,
+  onClearFilter,
 }) => {
   return (
     <div className="action-container">
@@ -58,40 +57,26 @@ const FinanceAction = ({
             <FiFilter />
             Apply Filter
           </button>
+          <button
+            onClick={onClearFilter}
+            className="filter-button clear-filter-button"
+            title="Clear date filter"
+            aria-label="Clear date filter"
+          >
+            Clear
+          </button>
         </div>
       </div>
-
-      {/* Action Buttons Section */}
       <div className="action-right">
-        <div className="action-info">
-          <span className="selected-count">
-            {selectedCount} request(s) selected
-          </span>
-        </div>
-        
-        <div className="action-buttons">
-          <button
-            onClick={onAccept}
-            className="action-create-button accept-button"
-            disabled={selectedCount === 0}
-            title={selectedCount === 0 ? 'Select requests to approve' : `Approve ${selectedCount} request(s)`}
-            aria-label={`Approve ${selectedCount} selected expense requests`}
-          >
-            <FiCheck />
-            Approve ({selectedCount})
-          </button>
-          
-          <button
-            onClick={onReject}
-            className="action-create-button reject-button"
-            disabled={selectedCount === 0}
-            title={selectedCount === 0 ? 'Select requests to reject' : `Reject ${selectedCount} request(s)`}
-            aria-label={`Reject ${selectedCount} selected expense requests`}
-          >
-            <FiX />
-            Reject ({selectedCount})
-          </button>
-        </div>
+        <button
+            onClick={onSummary}
+            className="action-create-button summary-button"
+            title="Generate summary report"
+            aria-label="Generate summary report of expense requests"
+        >
+            <FiFileText />
+            Summary
+        </button>
       </div>
     </div>
   );

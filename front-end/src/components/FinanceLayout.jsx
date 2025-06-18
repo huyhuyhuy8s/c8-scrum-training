@@ -4,49 +4,60 @@ import Card from "./Card";
 import FinanceAction from "./FinanceAction";
 import List from "./List";
 import FeedbackButton from "./FeedbackButton";
+import SummaryPopup from "./SummaryPopup"; // Import the popup component
 import { FiDownload, FiCalendar } from "react-icons/fi";
 import "../styles/MainLayout.css";
+import "../styles/SummaryPopup.css";
 
-const FinanceLayout = () => {  const [selectedRequests, setSelectedRequests] = useState([]);
+const FinanceLayout = () => {
   const [exportStartDate, setExportStartDate] = useState('');
   const [exportEndDate, setExportEndDate] = useState('');
   const [isExporting, setIsExporting] = useState(false);
   const [filterStartDate, setFilterStartDate] = useState('');
   const [filterEndDate, setFilterEndDate] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const [departmentSummary, setDepartmentSummary] = useState(null);
+  const [employeeSummary, setEmployeeSummary] = useState(null);
+  const [showSummaryPopup, setShowSummaryPopup] = useState(false);
 
-  const handleApprove = () => {
-    if (selectedRequests.length === 0) {
-      alert('Please select requests to approve for payment processing');
-      return;
-    }
-    console.log('Finance approving requests:', selectedRequests);
-    alert(`Approved ${selectedRequests.length} request(s) for payment processing!`);
-    setSelectedRequests([]);
+  const handleSummary = () => {
+    const approvedRequests = expenseRequestsData.filter(
+      (request) => request.status === 'approved'
+    );
+
+    const deptSummary = approvedRequests.reduce((acc, request) => {
+      const { department } = request.employee;
+      const amount = parseFloat(request.amount.replace(/[^\d.-]/g, ''));
+
+      if (!acc[department]) {
+        acc[department] = 0;
+      }
+      acc[department] += amount;
+      return acc;
+    }, {});
+
+    const empSummary = approvedRequests.reduce((acc, request) => {
+      const { name } = request.employee;
+      const amount = parseFloat(request.amount.replace(/[^\d.-]/g, ''));
+
+      if (!acc[name]) {
+        acc[name] = 0;
+      }
+      acc[name] += amount;
+      return acc;
+    }, {});
+
+    setDepartmentSummary(deptSummary);
+    setEmployeeSummary(empSummary);
+    setShowSummaryPopup(true);
   };
 
-  const handleReject = () => {
-    if (selectedRequests.length === 0) {
-      alert('Please select requests to reject');
-      return;
-    }
-    const reason = prompt('Please provide a reason for final rejection:');
-    if (reason && reason.trim()) {
-      console.log('Finance rejecting requests:', selectedRequests, 'Reason:', reason);
-      alert(`Rejected ${selectedRequests.length} request(s) with reason: "${reason}"`);
-      setSelectedRequests([]);
-    } else if (reason !== null) {
-      alert('Rejection reason is required.');
-    }
+  const handleCloseSummary = () => {
+    setShowSummaryPopup(false);
+    setDepartmentSummary(null);
+    setEmployeeSummary(null);
   };
 
-  const handleRequestSelection = (requestId, isSelected) => {
-    if (isSelected) {
-      setSelectedRequests(prev => [...prev, requestId]);
-    } else {
-      setSelectedRequests(prev => prev.filter(id => id !== requestId));
-    }
-  };
   const handleFeedback = () => {
     console.log("Finance feedback submitted");
     alert("Thank you for your feedback! We appreciate your input.");
@@ -81,6 +92,7 @@ const FinanceLayout = () => {  const [selectedRequests, setSelectedRequests] = u
     setFilterStartDate('');
     setFilterEndDate('');
     setFilteredData([]);
+    console.log('Date filter cleared');
   };
 
   const handleExport = async () => {
@@ -352,47 +364,58 @@ const FinanceLayout = () => {  const [selectedRequests, setSelectedRequests] = u
           <Card title="REJECTED" count="3" subtitle="request(s)" />
         </div>        {/* Finance Action Section with Date Filter */}
         <FinanceAction
-          selectedCount={selectedRequests.length}
-          onAccept={handleApprove}
-          onReject={handleReject}
           startDate={filterStartDate}
           endDate={filterEndDate}
           onStartDateChange={setFilterStartDate}
-          onEndDateChange={setFilterEndDate}
+          onEndDateChange={setExportEndDate}
           onDateFilter={handleDateFilter}
+          onClearFilter={clearDateFilter}
+          onSummary={handleSummary}
         />        {/* All Expense Requests List */}
-        <List 
-          title={filteredData.length > 0 ? `Filtered Expense Requests (${filteredData.length})` : "Expense Requests - Finance Review"}
-          data={filteredData.length > 0 ? filteredData : expenseRequestsData}
-          isManagerView={true}
-          isFinanceView={true}
-          onRequestSelection={handleRequestSelection}
-          selectedRequests={selectedRequests}
-        />
+        <div className="request-list-container">
+          <List
+            items={filteredData.length > 0 ? filteredData : expenseRequestsData}
+            userRole="finance"
+          />
+        </div>
 
-        {filteredData.length > 0 && (
-          <div style={{ textAlign: 'center', margin: '10px 0' }}>
-            <button 
-              onClick={clearDateFilter}
-              style={{
-                padding: '8px 16px',
-                background: '#dedcff',
-                border: 'none',
-                borderRadius: '6px',
-                color: '#2f27ce',
-                cursor: 'pointer',
-                fontSize: '0.875rem'
-              }}
-            >
-              Clear Date Filter
-            </button>
-          </div>
+        {showSummaryPopup && (
+          <SummaryPopup 
+            departmentSummary={departmentSummary} 
+            employeeSummary={employeeSummary} 
+            onClose={handleCloseSummary} 
+          />
         )}
 
-        
-
-        {/* Feedback Button */}
-        <FeedbackButton onClick={handleFeedback} />
+        {/* Export Section */}
+        <div className="export-container">
+          <h2>Export Approved Requests</h2>
+          <div className="date-range">
+            <div className="date-picker">
+              <label>Start Date:</label>
+              <input 
+                type="date" 
+                value={exportStartDate} 
+                onChange={(e) => setExportStartDate(e.target.value)} 
+              />
+            </div>
+            <div className="date-picker">
+              <label>End Date:</label>
+              <input 
+                type="date" 
+                value={exportEndDate} 
+                onChange={(e) => setExportEndDate(e.target.value)} 
+              />
+            </div>
+          </div>
+          <button 
+            className="export-button" 
+            onClick={handleExport}
+            disabled={isExporting}
+          >
+            {isExporting ? 'Exporting...' : <><FiDownload /> Export to CSV</>}
+          </button>
+        </div>
       </div>
     </>
   );
