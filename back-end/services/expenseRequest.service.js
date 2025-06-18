@@ -173,10 +173,12 @@ export const updateExpenseRequest = async (
   });
 
   // Log the action
-  // await SystemLogRepository.create({
-  //     action: `Request updated by employee ID ${employeeId}`,
-  //     requestId: parseInt(requestId)
-  // });
+  await SystemLogRepository.create({
+    data: {
+      action: `Request updated by employee ID ${employeeId}`,
+      requestId: parseInt(requestId),
+    },
+  });
 
   return updatedRequest;
 };
@@ -196,16 +198,17 @@ export const deleteExpenseRequest = async (requestId, employeeId) => {
     throw new Error("Request not found or cannot be deleted");
   }
 
-  // Delete the request
+  // Delete related system logs first
+  await SystemLogRepository.deleteMany({
+    where: {
+      requestId: parseInt(requestId)
+    }
+  });
+
+  // Then delete the request
   const deletedRequest = await ExpenseRequestRepository.delete({
     where: { id: parseInt(requestId) },
   });
-
-  // Log the action
-  // await SystemLogRepository.create({
-  //     action: `Request deleted by employee ID ${employeeId}`,
-  //     requestId: parseInt(requestId)
-  // });
 
   return deletedRequest;
 };

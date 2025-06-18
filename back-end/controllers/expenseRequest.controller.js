@@ -1,5 +1,6 @@
 import {
-  createExpenseRequest,
+//   createExpenseRequest,
+//   changeStatusRequest,
   getPendingRequests,
   getRequestById,
   approveRequest,
@@ -8,7 +9,7 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-  changeStatusRequest,
+//   getTeamRequests
 } from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
@@ -18,6 +19,67 @@ export const createExpenseRequestController = async (req, res) => {
     res.status(201).json(newExpenseRequest);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Fix: Complete the getEmployeeRequestsController function
+export const getEmployeeRequestsController = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee ID is required",
+      });
+    }
+
+    const requests = await getEmployeeRequests(employeeId);
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching employee requests",
+      error: error.message,
+    });
+  }
+};
+
+// Add: Missing getTeamRequestsController function
+export const getTeamRequestsController = async (req, res) => {
+  try {
+    const { managerId } = req.params;
+
+    if (!managerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Manager ID is required",
+      });
+    }
+
+    const requests = await getTeamRequests(managerId);
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    if (error.message === "Manager not found" || error.message === "User is not a manager") {
+      return res.status(403).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    
+    res.status(500).json({
+      success: false,
+      message: "Error fetching team requests",
+      error: error.message,
+    });
   }
 };
 
@@ -125,33 +187,6 @@ export const rejectRequestController = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error rejecting request",
-      error: error.message,
-    });
-  }
-};
-
-// Get employee's own requests
-export const getEmployeeRequestsController = async (req, res) => {
-  try {
-    const { employeeId } = req.params;
-
-    if (!employeeId) {
-      return res.status(400).json({
-        success: false,
-        message: "Employee ID is required",
-      });
-    }
-
-    const requests = await getEmployeeRequests(employeeId);
-
-    res.status(200).json({
-      success: true,
-      data: requests,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching employee requests",
       error: error.message,
     });
   }
