@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { getEmployeeRequests } from "../controllers/expenseRequest.controller.js";
-import { createExpenseRequestController } from "../controllers/expenseRequest.controller.js";
+import {
+  getEmployeeRequestsController,
+  getRequestsByStatusController,
+  createExpenseRequestController,
+} from "../controllers/expenseRequest.controller.js";
 
 const router = Router();
 
 router.post("/employee", createExpenseRequestController);
-router.get("/employee/:employeeId", getEmployeeRequests);
+router.get("/employee/:employeeId", getEmployeeRequestsController);
+router.get("/employee/status/:status", getRequestsByStatusController);
 
 export default router;

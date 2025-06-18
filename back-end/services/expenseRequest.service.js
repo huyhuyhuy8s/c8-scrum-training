@@ -36,3 +36,10 @@ export const getRequestsByEmployeeId = async (employeeId) => {
     orderBy: { createdAt: "desc" },
   });
 };
+
+export const getRequestsByStatus = async (status) => {
+  return await ExpenseRequestRepository.findMany({
+    where: { status },
+    orderBy: { createdAt: "desc" },
+  });
+};
