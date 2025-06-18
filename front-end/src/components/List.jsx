@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { FiEdit2, FiTrash2 } from 'react-icons/fi'
+import { FiEdit2, FiTrash2, FiCheck, FiX } from 'react-icons/fi'
 import AddExpense from './AddExpense'
 import '../styles/List.css'
 
-const List = ({ title = "Recent Activities", data = [] }) => {
+const List = ({ title = "Recent Activities", data = [], userRole = 'employee' }) => {
   const [showModal, setShowModal] = useState(false)
   const [selectedExpense, setSelectedExpense] = useState(null)
+  const [selectedRequests, setSelectedRequests] = useState([]) // For checkboxes
   
   // Sample data if no data is provided
   const sampleData = [
@@ -114,9 +115,22 @@ const List = ({ title = "Recent Activities", data = [] }) => {
       amount: "$2,500.00",
       status: "approved",
       statusText: "Approved"
+    }  ];
+  
+  // Filter data based on user role
+  const getFilteredData = () => {
+    const baseData = data.length > 0 ? data : sampleData;
+    
+    if (userRole === 'manager') {
+      // Manager should see requests that need approval (pending status)
+      return baseData.filter(item => item.status === 'pending');
+    } else {
+      // Employee sees all their requests
+      return baseData;
     }
-  ];
-  const displayData = data.length > 0 ? data : sampleData;
+  };
+  
+  const displayData = getFilteredData();
 
   const handleRowClick = (expense) => {
     setSelectedExpense(expense)
@@ -155,6 +169,50 @@ const List = ({ title = "Recent Activities", data = [] }) => {
     }
   }
 
+  // Checkbox handlers
+  const handleSelectRequest = (requestId) => {
+    setSelectedRequests(prev => {
+      if (prev.includes(requestId)) {
+        return prev.filter(id => id !== requestId);
+      } else {
+        return [...prev, requestId];
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedRequests.length === displayData.length) {
+      setSelectedRequests([]);
+    } else {
+      setSelectedRequests(displayData.map(item => item.id));
+    }
+  };
+
+  // Manager action handlers
+  const handleAcceptRequest = (e, item) => {
+    e.stopPropagation();
+    if (userRole !== 'manager') return;
+    
+    console.log(`Accept request with ID: ${item.id}`);
+    alert(`Request from "${item.employee.name}" has been accepted!`);
+    // Here you would typically call an API to update the request status
+  };
+
+  const handleRejectRequest = (e, item) => {
+    e.stopPropagation();
+    if (userRole !== 'manager') return;
+    
+    const confirmReject = window.confirm(
+      `Are you sure you want to reject the expense request from "${item.employee.name}"?\n\nThis action can be undone later.`
+    );
+    
+    if (confirmReject) {
+      console.log(`Reject request with ID: ${item.id}`);
+      alert(`Request from "${item.employee.name}" has been rejected!`);
+      // Here you would typically call an API to update the request status
+    }
+  };
+
   const closeModal = () => {
     setShowModal(false)
     setSelectedExpense(null)
@@ -183,15 +241,24 @@ const List = ({ title = "Recent Activities", data = [] }) => {
       
       <table className="list-table">        <thead className="list-table-header">
           <tr>
+            {userRole === 'manager' && (
+              <th>
+                <input
+                  type="checkbox"
+                  checked={selectedRequests.length === displayData.length && displayData.length > 0}
+                  onChange={handleSelectAll}
+                  title="Select all"
+                />
+              </th>
+            )}
             <th>Date</th>
             <th>Employee</th>
             <th>Category</th>
             <th>Amount</th>
             <th>Status</th>
-            <th>Note</th>
+            <th>{userRole === 'manager' ? 'Actions' : 'Note'}</th>
           </tr>
-        </thead>
-        <tbody>
+        </thead>        <tbody>
           {displayData.map((item) => (
             <tr 
               key={item.id} 
@@ -199,6 +266,21 @@ const List = ({ title = "Recent Activities", data = [] }) => {
               onClick={() => handleRowClick(item)}
               title="Click to view details"
             >
+              {userRole === 'manager' && (                <td className="list-table-cell checkbox-cell">
+                  <input
+                    type="checkbox"
+                    checked={selectedRequests.includes(item.id)}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      handleSelectRequest(item.id);
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    title="Select this request"
+                  />
+                </td>
+              )}
               <td className="list-table-cell">
                 <span className="list-date">{item.date}</span>
               </td>
@@ -217,24 +299,47 @@ const List = ({ title = "Recent Activities", data = [] }) => {
                 <span className={`list-status ${getStatusClass(item.status)}`}>
                   {item.statusText}
                 </span>
-              </td>
-              <td className="list-table-cell">                <div className="list-actions">
-                  <button 
-                    className={`action-button update-button ${item.status !== 'draft' ? 'disabled' : ''}`}
-                    onClick={(e) => handleUpdate(e, item)}
-                    title={item.status !== 'draft' ? 'Update only available for draft items' : 'Update record'}
-                    disabled={item.status !== 'draft'}
-                  >
-                    <FiEdit2 />
-                  </button>
-                  <button 
-                    className={`action-button delete-button ${item.status !== 'draft' ? 'disabled' : ''}`}
-                    onClick={(e) => handleDelete(e, item)}
-                    title={item.status !== 'draft' ? 'Delete only available for draft items' : 'Delete record'}
-                    disabled={item.status !== 'draft'}
-                  >
-                    <FiTrash2 />
-                  </button>
+              </td>              <td className="list-table-cell">
+                <div className="list-actions">
+                  {userRole === 'manager' ? (
+                    // Manager view: Accept/Reject buttons
+                    <>
+                      <button 
+                        className="action-button accept-button"
+                        onClick={(e) => handleAcceptRequest(e, item)}
+                        title="Accept this request"
+                      >
+                        <FiCheck />
+                      </button>
+                      <button 
+                        className="action-button reject-button"
+                        onClick={(e) => handleRejectRequest(e, item)}
+                        title="Reject this request"
+                      >
+                        <FiX />
+                      </button>
+                    </>
+                  ) : (
+                    // Employee view: Update/Delete buttons
+                    <>
+                      <button 
+                        className={`action-button update-button ${item.status !== 'draft' ? 'disabled' : ''}`}
+                        onClick={(e) => handleUpdate(e, item)}
+                        title={item.status !== 'draft' ? 'Update only available for draft items' : 'Update record'}
+                        disabled={item.status !== 'draft'}
+                      >
+                        <FiEdit2 />
+                      </button>
+                      <button 
+                        className={`action-button delete-button ${item.status !== 'draft' ? 'disabled' : ''}`}
+                        onClick={(e) => handleDelete(e, item)}
+                        title={item.status !== 'draft' ? 'Delete only available for draft items' : 'Delete record'}
+                        disabled={item.status !== 'draft'}
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </>
+                  )}
                 </div>
               </td>
             </tr>

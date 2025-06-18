@@ -184,6 +184,43 @@
   color: #9ca3af;
 }
 
+/* Checkbox styles */
+.checkbox-cell {
+  width: 40px;
+  text-align: center;
+  position: relative;
+}
+
+.checkbox-cell input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2f27ce;
+  position: relative;
+  z-index: 10;
+}
+
+/* Manager-specific action buttons */
+.action-button.accept-button {
+  color: #10b981;
+  padding: 4px 6px;
+}
+
+.action-button.accept-button:hover {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.action-button.reject-button {
+  color: #ef4444;
+  padding: 4px 6px;
+}
+
+.action-button.reject-button:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
 /* Clickable row styling */
 .clickable-row {
   cursor: pointer;
@@ -260,6 +297,15 @@
   }
   
   .action-button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .checkbox-cell {
+    width: 30px;
+  }
+  
+  .checkbox-cell input[type="checkbox"] {
     width: 14px;
     height: 14px;
   }
