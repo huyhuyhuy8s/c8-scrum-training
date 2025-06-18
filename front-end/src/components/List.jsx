@@ -3,16 +3,60 @@ import { FiEdit2, FiTrash2, FiCheck, FiX } from 'react-icons/fi'
 import AddExpense from './AddExpense'
 import '../styles/List.css'
 
-const List = ({ title = "Recent Activities", data = [], userRole = 'employee' }) => {
+const List = ({ 
+  title = "Recent Activities", 
+  data = [], 
+  isManagerView = false,
+  isFinanceView = false, 
+  onRequestSelection = null, 
+  selectedRequests = [] 
+}) => {
   const [showModal, setShowModal] = useState(false)
   const [selectedExpense, setSelectedExpense] = useState(null)
-  const [selectedRequests, setSelectedRequests] = useState([]) // For checkboxes
-  
-  // Sample data if no data is provided
+    // Sample data if no data is provided
   const sampleData = [
+    // Draft requests - Employee can edit/delete
     {
       id: 1,
-      date: "2025-06-15",
+      date: "2025-06-20",
+      employee: {
+        name: "Alice Cooper",
+        department: "Design"
+      },
+      category: "Software License",
+      amount: "$299.00",
+      status: "draft",
+      statusText: "Draft"
+    },
+    {
+      id: 2,
+      date: "2025-06-19",
+      employee: {
+        name: "Tom Rodriguez",
+        department: "Engineering"
+      },
+      category: "Training & Development",
+      amount: "$1,450.00",
+      status: "draft",
+      statusText: "Draft"
+    },
+    {
+      id: 3,
+      date: "2025-06-18",
+      employee: {
+        name: "Maria Gonzalez",
+        department: "Quality Assurance"
+      },
+      category: "Office Supplies",
+      amount: "$89.95",
+      status: "draft",
+      statusText: "Draft"
+    },
+    
+    // Pending Manager
+    {
+      id: 4,
+      date: "2025-06-17",
       employee: {
         name: "John Smith",
         department: "IT"
@@ -23,32 +67,94 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
       statusText: "Pending Manager"
     },
     {
-      id: 2,
-      date: "2025-06-14",
+      id: 5,
+      date: "2025-06-16",
       employee: {
         name: "Sarah Johnson",
         department: "Marketing"
       },
-      category: "Meals",
-      amount: "$75.50",
+      category: "Client Entertainment",
+      amount: "$275.50",
+      status: "pending",
+      statusText: "Pending Manager"
+    },
+    {
+      id: 6,
+      date: "2025-06-15",
+      employee: {
+        name: "David Brown",
+        department: "Finance"
+      },
+      category: "Business Travel",
+      amount: "$890.00",
+      status: "pending",
+      statusText: "Pending Manager"
+    },
+    {
+      id: 7,
+      date: "2025-06-14",
+      employee: {
+        name: "Jennifer Lee",
+        department: "Marketing"
+      },
+      category: "Equipment Purchase",
+      amount: "$2,450.75",
+      status: "pending",
+      statusText: "Pending Manager"
+    },
+    {
+      id: 8,
+      date: "2025-06-13",
+      employee: {
+        name: "Michael Chen",
+        department: "Sales"
+      },
+      category: "Meals & Accommodation",
+      amount: "$125.50",
+      status: "pending",
+      statusText: "Pending Manager"
+    },
+    {
+      id: 9,
+      date: "2025-06-12",
+      employee: {
+        name: "Emma Wilson",
+        department: "Operations"
+      },
+      category: "Conference & Events",
+      amount: "$850.00",
+      status: "pending",
+      statusText: "Pending Manager"
+    },
+    
+    // Approved requests
+    {
+      id: 10,
+      date: "2025-06-11",
+      employee: {
+        name: "Lisa Anderson",
+        department: "IT"
+      },
+      category: "Software License",
+      amount: "$1,200.00",
       status: "approved",
       statusText: "Approved"
     },
     {
-      id: 3,
-      date: "2025-06-13",
+      id: 11,
+      date: "2025-06-10",
       employee: {
-        name: "Mike Wilson",
-        department: "Sales"
+        name: "Robert Taylor",
+        department: "Operations"
       },
-      category: "Accommodation",
-      amount: "$320.00",
-      status: "rejected",
-      statusText: "Rejected"
+      category: "Training & Development",
+      amount: "$750.00",
+      status: "approved",
+      statusText: "Approved"
     },
     {
-      id: 4,
-      date: "2025-06-12",
+      id: 12,
+      date: "2025-06-09",
       employee: {
         name: "Emily Davis",
         department: "HR"
@@ -59,78 +165,172 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
       statusText: "Approved"
     },
     {
-      id: 5,
-      date: "2025-06-11",
+      id: 13,
+      date: "2025-06-08",
       employee: {
-        name: "David Brown",
-        department: "Finance"
+        name: "Kevin Park",
+        department: "Legal"
       },
-      category: "Transportation",
-      amount: "$890.00",
+      category: "Legal & Professional Services",
+      amount: "$3,200.00",
+      status: "approved",
+      statusText: "Approved"
+    },
+    {
+      id: 14,
+      date: "2025-06-07",
+      employee: {
+        name: "Amanda White",
+        department: "Marketing"
+      },
+      category: "Advertising & Promotion",
+      amount: "$5,500.00",
+      status: "approved",
+      statusText: "Approved"
+    },
+    
+    // Rejected requests
+    {
+      id: 15,
+      date: "2025-06-06",
+      employee: {
+        name: "Mike Wilson",
+        department: "Sales"
+      },
+      category: "Personal Entertainment",
+      amount: "$320.00",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    {
+      id: 16,
+      date: "2025-06-05",
+      employee: {
+        name: "Rachel Green",
+        department: "Customer Support"
+      },
+      category: "Excessive Meal Allowance",
+      amount: "$450.00",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    {
+      id: 17,
+      date: "2025-06-04",
+      employee: {
+        name: "James Miller",
+        department: "Research & Development"
+      },
+      category: "Unauthorized Equipment",
+      amount: "$1,850.00",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+      // More diverse categories and departments
+    {
+      id: 18,
+      date: "2025-06-03",
+      employee: {
+        name: "Sophie Turner",
+        department: "Product Management"
+      },
+      category: "Market Research",
+      amount: "$680.00",
+      status: "approved",
+      statusText: "Approved"
+    },
+    {
+      id: 19,
+      date: "2025-06-02",
+      employee: {
+        name: "Carlos Santos",
+        department: "Security"
+      },
+      category: "Security Tools & Software",
+      amount: "$1,100.00",
       status: "pending",
       statusText: "Pending Manager"
     },
     {
-      id: 6,
-      date: "2025-06-10",
+      id: 20,
+      date: "2025-06-01",
       employee: {
-        name: "Lisa Anderson",
-        department: "IT"
+        name: "Nina Patel",
+        department: "Business Intelligence"
       },
-      category: "Software License",
-      amount: "$1,200.00",
-      status: "approved",
-      statusText: "Approved"    },
-    {
-      id: 7,
-      date: "2025-06-09",
-      employee: {
-        name: "Robert Taylor",
-        department: "Operations"
-      },
-      category: "Training",
-      amount: "$250.00",
+      category: "Data Analytics Tools",
+      amount: "$2,200.00",
       status: "draft",
       statusText: "Draft"
     },
-    {
-      id: 8,
-      date: "2025-06-08",
-      employee: {
-        name: "Jennifer Lee",
-        department: "Marketing"
-      },
-      category: "Equipment",
-      amount: "$450.75",
-      status: "pending",
-      statusText: "Pending Manager"    },
-    {
-      id: 9,
-      date: "2025-06-08",
-      employee: {
-        name: "Jennifer Lee",
-        department: "Marketing"
-      },
-      category: "Advertising",
-      amount: "$2,500.00",
-      status: "approved",
-      statusText: "Approved"
-    }  ];
-  
-  // Filter data based on user role
-  const getFilteredData = () => {
-    const baseData = data.length > 0 ? data : sampleData;
     
-    if (userRole === 'manager') {
-      // Manager should see requests that need approval (pending status)
-      return baseData.filter(item => item.status === 'pending');
-    } else {
-      // Employee sees all their requests
-      return baseData;
+    // Additional rejected requests for testing
+    {
+      id: 21,
+      date: "2025-05-31",
+      employee: {
+        name: "Alex Johnson",
+        department: "Engineering"
+      },
+      category: "Personal Equipment",
+      amount: "$1,299.99",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    {
+      id: 22,
+      date: "2025-05-30",
+      employee: {
+        name: "Isabella Garcia",
+        department: "Design"
+      },
+      category: "Non-Business Travel",
+      amount: "$750.00",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    {
+      id: 23,
+      date: "2025-05-29",
+      employee: {
+        name: "Daniel Kim",
+        department: "Operations"
+      },
+      category: "Excessive Meal Expense",
+      amount: "$85.75",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    
+    
+    // Additional mixed status for variety
+    {
+      id: 28,
+      date: "2025-05-24",
+      employee: {
+        name: "Grace Liu",
+        department: "Quality Assurance"
+      },
+      category: "Testing Tools",
+      amount: "$420.00",
+      status: "rejected",
+      statusText: "Rejected"
+    },
+    
+    {
+      id: 30,
+      date: "2025-05-22",
+      employee: {
+        name: "Sophia Chen",
+        department: "Research & Development"
+      },
+      category: "Lab Equipment",
+      amount: "$3,750.00",
+      status: "rejected",
+      statusText: "Rejected"
     }
-  };
-  
-  const displayData = getFilteredData();
+  ];
+  const displayData = data.length > 0 ? data : sampleData;
 
   const handleRowClick = (expense) => {
     setSelectedExpense(expense)
@@ -168,50 +368,72 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
       // or update the state to remove the item from the list
     }
   }
+  const handleCheckboxChange = (id, isChecked) => {
+    if (onRequestSelection) {
+      onRequestSelection(id, isChecked)
+    }
+  }
 
-  // Checkbox handlers
-  const handleSelectRequest = (requestId) => {
-    setSelectedRequests(prev => {
-      if (prev.includes(requestId)) {
-        return prev.filter(id => id !== requestId);
-      } else {
-        return [...prev, requestId];
+  const handleIndividualAccept = (e, item) => {
+    e.stopPropagation()
+      // Check status based on view type
+    if (isFinanceView) {
+      // Finance can only approve pending requests
+      if (item.status !== 'pending') {
+        console.log(`Finance cannot approve item with status: ${item.status}`)
+        return
       }
-    });
-  };
-
-  const handleSelectAll = () => {
-    if (selectedRequests.length === displayData.length) {
-      setSelectedRequests([]);
     } else {
-      setSelectedRequests(displayData.map(item => item.id));
+      // Manager can only approve pending requests
+      if (item.status !== 'pending') {
+        console.log(`Manager cannot accept item with status: ${item.status}`)
+        return
+      }
     }
-  };
-
-  // Manager action handlers
-  const handleAcceptRequest = (e, item) => {
-    e.stopPropagation();
-    if (userRole !== 'manager') return;
+      const actionText = isFinanceView ? 'approve' : 'approve';
+    const confirmAccept = window.confirm(
+      `Are you sure you want to ${actionText} the expense request for "${item.employee.name}"?\n\nAmount: ${item.amount}\nCategory: ${item.category}`
+    )
     
-    console.log(`Accept request with ID: ${item.id}`);
-    alert(`Request from "${item.employee.name}" has been accepted!`);
-    // Here you would typically call an API to update the request status
-  };
-
-  const handleRejectRequest = (e, item) => {
-    e.stopPropagation();
-    if (userRole !== 'manager') return;
-    
-    const confirmReject = window.confirm(
-      `Are you sure you want to reject the expense request from "${item.employee.name}"?\n\nThis action can be undone later.`
-    );
-    
-    if (confirmReject) {
-      console.log(`Reject request with ID: ${item.id}`);
-      alert(`Request from "${item.employee.name}" has been rejected!`);
-      // Here you would typically call an API to update the request status
+    if (confirmAccept) {
+      console.log(`${isFinanceView ? 'Finance approving' : 'Manager accepting'} individual request with ID: ${item.id}`)
+      const successMessage = isFinanceView 
+        ? `Expense request for "${item.employee.name}" has been approved by Finance!`
+        : `Expense request for "${item.employee.name}" has been approved successfully!`;      alert(successMessage)
+      // Here you would typically call an API to update the item status
     }
-  };
+  }
+
+  const handleIndividualReject = (e, item) => {
+    e.stopPropagation()
+      // Check status based on view type
+    if (isFinanceView) {
+      // Finance can only reject pending requests
+      if (item.status !== 'pending') {
+        console.log(`Finance cannot reject item with status: ${item.status}`)
+        return
+      }
+    } else {
+      // Manager can only reject pending requests
+      if (item.status !== 'pending') {
+        console.log(`Manager cannot reject item with status: ${item.status}`)
+        return
+      }
+    }
+      const actionText = isFinanceView ? 'rejection' : 'rejection';
+    const reason = prompt(`Please provide a reason for ${actionText} of "${item.employee.name}"'s expense request:`)
+    
+    if (reason && reason.trim()) {
+      console.log(`${isFinanceView ? 'Finance rejecting' : 'Manager rejecting'} individual request with ID: ${item.id}, Reason: ${reason}`)
+      const rejectionMessage = isFinanceView 
+        ? `Expense request for "${item.employee.name}" has been rejected by Finance.\nReason: "${reason}"`
+        : `Expense request for "${item.employee.name}" has been rejected.\nReason: "${reason}"`;
+      alert(rejectionMessage)
+      // Here you would typically call an API to update the item status
+    } else if (reason !== null) {
+      alert('Rejection reason is required.')
+    }
+  }
 
   const closeModal = () => {
     setShowModal(false)
@@ -227,6 +449,8 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
         return 'rejected';
       case 'draft':
         return 'draft';
+      case 'claimed':
+        return 'claimed';
       default:
         return 'pending';
     }
@@ -241,43 +465,30 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
       
       <table className="list-table">        <thead className="list-table-header">
           <tr>
-            {userRole === 'manager' && (
-              <th>
-                <input
-                  type="checkbox"
-                  checked={selectedRequests.length === displayData.length && displayData.length > 0}
-                  onChange={handleSelectAll}
-                  title="Select all"
-                />
-              </th>
-            )}
+            {(isManagerView || isFinanceView) && <th>Select</th>}
             <th>Date</th>
             <th>Employee</th>
             <th>Category</th>
             <th>Amount</th>
             <th>Status</th>
-            <th>{userRole === 'manager' ? 'Actions' : 'Note'}</th>
+            <th>Note</th>
           </tr>
-        </thead>        <tbody>
-          {displayData.map((item) => (
-            <tr 
+        </thead>
+        <tbody>
+          {displayData.map((item) => (            <tr 
               key={item.id} 
-              className="list-table-row clickable-row"
-              onClick={() => handleRowClick(item)}
-              title="Click to view details"
+              className={`list-table-row ${(!isManagerView && !isFinanceView) ? 'clickable-row' : ''}`}
+              onClick={(!isManagerView && !isFinanceView) ? () => handleRowClick(item) : undefined}
+              title={(!isManagerView && !isFinanceView) ? "Click to view details" : undefined}
             >
-              {userRole === 'manager' && (                <td className="list-table-cell checkbox-cell">
+              {(isManagerView || isFinanceView) && (
+                <td className="list-table-cell">
                   <input
                     type="checkbox"
                     checked={selectedRequests.includes(item.id)}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      handleSelectRequest(item.id);
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    title="Select this request"
+                    onChange={(e) => handleCheckboxChange(item.id, e.target.checked)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="manager-checkbox"
                   />
                 </td>
               )}
@@ -294,56 +505,72 @@ const List = ({ title = "Recent Activities", data = [], userRole = 'employee' })
                 <span className="list-category">{item.category}</span>
               </td>
               <td className="list-table-cell">
-                <span className="list-amount">{item.amount}</span>
-              </td>              <td className="list-table-cell">
+                <span className="list-amount">{item.amount}</span>              </td>
+              <td className="list-table-cell">
                 <span className={`list-status ${getStatusClass(item.status)}`}>
                   {item.statusText}
-                </span>
-              </td>              <td className="list-table-cell">
-                <div className="list-actions">
-                  {userRole === 'manager' ? (
-                    // Manager view: Accept/Reject buttons
-                    <>
-                      <button 
-                        className="action-button accept-button"
-                        onClick={(e) => handleAcceptRequest(e, item)}
-                        title="Accept this request"
-                      >
-                        <FiCheck />
-                      </button>
-                      <button 
-                        className="action-button reject-button"
-                        onClick={(e) => handleRejectRequest(e, item)}
-                        title="Reject this request"
-                      >
-                        <FiX />
-                      </button>
-                    </>
-                  ) : (
-                    // Employee view: Update/Delete buttons
-                    <>
-                      <button 
-                        className={`action-button update-button ${item.status !== 'draft' ? 'disabled' : ''}`}
-                        onClick={(e) => handleUpdate(e, item)}
-                        title={item.status !== 'draft' ? 'Update only available for draft items' : 'Update record'}
-                        disabled={item.status !== 'draft'}
-                      >
-                        <FiEdit2 />
-                      </button>
-                      <button 
-                        className={`action-button delete-button ${item.status !== 'draft' ? 'disabled' : ''}`}
-                        onClick={(e) => handleDelete(e, item)}
-                        title={item.status !== 'draft' ? 'Delete only available for draft items' : 'Delete record'}
-                        disabled={item.status !== 'draft'}
-                      >
-                        <FiTrash2 />
-                      </button>
-                    </>
-                  )}
-                </div>
-              </td>
+                </span>              </td>
+              {(!isManagerView && !isFinanceView) && (
+                <td className="list-table-cell">
+                  <div className="list-actions">
+                    <button 
+                      className={`action-button update-button ${item.status !== 'draft' ? 'disabled' : ''}`}
+                      onClick={(e) => handleUpdate(e, item)}
+                      title={item.status !== 'draft' ? 'Update only available for draft items' : 'Update record'}
+                      disabled={item.status !== 'draft'}
+                    >
+                      <FiEdit2 />
+                    </button>
+                    <button 
+                      className={`action-button delete-button ${item.status !== 'draft' ? 'disabled' : ''}`}
+                      onClick={(e) => handleDelete(e, item)}
+                      title={item.status !== 'draft' ? 'Delete only available for draft items' : 'Delete record'}
+                      disabled={item.status !== 'draft'}
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </td>
+              )}              {(isManagerView || isFinanceView) && (
+                <td className="list-table-cell">
+                  <div className="list-actions">                    <button 
+                      className={`action-button manager-accept-button ${
+                        isFinanceView 
+                          ? (item.status !== 'pending' ? 'disabled' : '') 
+                          : (item.status !== 'pending' ? 'disabled' : '')
+                      }`}
+                      onClick={(e) => handleIndividualAccept(e, item)}
+                      title={
+                        isFinanceView 
+                          ? (item.status !== 'pending' ? 'Approval only available for pending requests' : 'Approve expense request')
+                          : (item.status !== 'pending' ? 'Accept only available for pending approval' : 'Approve expense request')
+                      }
+                      disabled={item.status !== 'pending'}
+                    >
+                      <FiCheck />
+                    </button>
+                    <button 
+                      className={`action-button manager-reject-button ${
+                        isFinanceView 
+                          ? (item.status !== 'pending' ? 'disabled' : '') 
+                          : (item.status !== 'pending' ? 'disabled' : '')
+                      }`}
+                      onClick={(e) => handleIndividualReject(e, item)}
+                      title={
+                        isFinanceView 
+                          ? (item.status !== 'pending' ? 'Rejection only available for pending requests' : 'Reject expense request')
+                          : (item.status !== 'pending' ? 'Reject only available for pending approval' : 'Reject expense request')
+                      }
+                      disabled={item.status !== 'pending'}
+                    >
+                      <FiX />
+                    </button>
+                  </div>
+                </td>
+              )}
             </tr>
-          ))}        </tbody>
+          ))}
+        </tbody>
       </table>
       
       {/* Modal for expense details */}

@@ -7,22 +7,12 @@ import List from "./List";
 import FeedbackButton from "./FeedbackButton";
 import "../styles/MainLayout.css";
 
-const MainLayout = ({ userRole = 'employee' }) => {
+const MainLayout = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
 
   const handleCreateRequest = () => {
     console.log("Create new request");
     setShowAddExpense(true);
-  };
-
-  const handleAcceptRequest = () => {
-    console.log("Accept request");
-    alert("Request has been accepted!");
-  };
-
-  const handleRejectRequest = () => {
-    console.log("Reject request");
-    alert("Request has been rejected!");
   };
 
   const handleCloseAddExpense = () => {
@@ -32,44 +22,6 @@ const MainLayout = ({ userRole = 'employee' }) => {
   const handleFeedback = () => {
     console.log("Feedback submitted");
     alert("Thank you for your feedback! We appreciate your input.");
-  };
-
-  // Define buttons based on user role
-  const getActionButtons = () => {
-    if (userRole === 'manager') {
-      return [
-        {
-          text: "Accept",
-          icon: "✓",
-          className: "action-accept-button",
-          onClick: handleAcceptRequest,
-          title: "Accept selected requests"
-        },
-        {
-          text: "Reject",
-          icon: "✗",
-          className: "action-reject-button", 
-          onClick: handleRejectRequest,
-          title: "Reject selected requests"
-        }
-      ];
-    } else {
-      return [
-        {
-          text: "Create a new request",
-          icon: "+",
-          className: "action-create-button",
-          onClick: handleCreateRequest,
-          title: "Create a new expense request"
-        }
-      ];
-    }
-  };
-
-  const getActionTitle = () => {
-    return userRole === 'manager' 
-      ? "Expense requests management" 
-      : "Employees expense management";
   };
   return (
     <>
@@ -102,23 +54,25 @@ const MainLayout = ({ userRole = 'employee' }) => {
             </div>
           </div>
         )}
-          {/* Dashboard Cards */}
+        
+        {/* Dashboard Cards */}
         <div className="dashboard-cards">
+          <Card title="DRAFT" count="7" subtitle="batch(s)" />
+
           <Card title="PENDING" count="3" subtitle="batch(s)" />
 
-          <Card title="CLAIMED" count="7" subtitle="batch(s)" />
+          <Card title="APPROVED" count="1" subtitle="batch(s)" />
 
-          <Card title="REJECTED" count="1" subtitle="batch(s)" />
-
-          <Card title="TOTAL" count="11" subtitle="batch(s)" />
-        </div>{/* Action Section */}
+          <Card title="REJECTED" count="12" subtitle="batch(s)" />
+        </div>
+        {/* Action Section */}
         <Action
-          title={getActionTitle()}
-          buttons={getActionButtons()}
-          userRole={userRole}
+          title="Employees expense management"
+          buttonText="Create a new request"
+          onButtonClick={handleCreateRequest}
         />
         {/* List Component */}
-        <List userRole={userRole} />
+        <List />
         {/* Feedback Button */}
         <FeedbackButton onClick={handleFeedback} />
       </div>

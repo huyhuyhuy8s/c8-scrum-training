@@ -1,0 +1,145 @@
+/* Manager Action Styles */
+
+.manager-action-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  margin: 0 0 20px 0;
+  border-bottom: 1px double black;
+  width: 100%;
+}
+
+.manager-action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.manager-action-title {
+  font-size: 30px;
+  font-weight: 600;
+  color: #050315;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.manager-action-count {
+  font-size: 14px;
+  color: #433bff;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.manager-action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.manager-action-button {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.manager-action-accept {
+  background-color: #10b981;
+  color: white;
+}
+
+.manager-action-accept:hover:not(:disabled) {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.manager-action-reject {
+  background-color: #ef4444;
+  color: white;
+}
+
+.manager-action-reject:hover:not(:disabled) {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.manager-action-button:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.manager-action-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 39, 206, 0.3);
+}
+
+.manager-action-button.disabled,
+.manager-action-button:disabled {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.manager-action-button.disabled:hover,
+.manager-action-button:disabled:hover {
+  background-color: #d1d5db;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.manager-action-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .manager-action-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 16px 0;
+  }
+  
+  .manager-action-info {
+    text-align: center;
+  }
+  
+  .manager-action-title {
+    font-size: 24px;
+  }
+  
+  .manager-action-buttons {
+    justify-content: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .manager-action-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .manager-action-button {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  
+  .manager-action-title {
+    font-size: 22px;
+  }
+}

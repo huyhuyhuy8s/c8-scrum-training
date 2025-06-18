@@ -127,6 +127,11 @@
   border: 1px solid #d1d5db;
 }
 
+.list-status.claimed {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+
 /* Action buttons styles */
 .list-actions {
   display: flex;
@@ -182,43 +187,6 @@
 .action-button:disabled:hover {
   background-color: transparent;
   color: #9ca3af;
-}
-
-/* Checkbox styles */
-.checkbox-cell {
-  width: 40px;
-  text-align: center;
-  position: relative;
-}
-
-.checkbox-cell input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  accent-color: #2f27ce;
-  position: relative;
-  z-index: 10;
-}
-
-/* Manager-specific action buttons */
-.action-button.accept-button {
-  color: #10b981;
-  padding: 4px 6px;
-}
-
-.action-button.accept-button:hover {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.action-button.reject-button {
-  color: #ef4444;
-  padding: 4px 6px;
-}
-
-.action-button.reject-button:hover {
-  background-color: #fee2e2;
-  color: #dc2626;
 }
 
 /* Clickable row styling */
@@ -279,6 +247,37 @@
   color: #333;
 }
 
+/* Manager View Styles */
+.manager-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #2f27ce;
+}
+
+.manager-checkbox:hover {
+  transform: scale(1.1);
+}
+
+/* Manager Note Actions Styles */
+.manager-accept-button {
+  color: #10b981;
+}
+
+.manager-accept-button:hover:not(:disabled) {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.manager-reject-button {
+  color: #ef4444;
+}
+
+.manager-reject-button:hover:not(:disabled) {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .list-table-cell {
@@ -297,15 +296,6 @@
   }
   
   .action-button svg {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .checkbox-cell {
-    width: 30px;
-  }
-  
-  .checkbox-cell input[type="checkbox"] {
     width: 14px;
     height: 14px;
   }
