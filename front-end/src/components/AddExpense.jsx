@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import '../styles/AddExpense.css'
+import { useState, useEffect } from 'react'
 
-function AddExpense() {
+function AddExpense({ onClose }) {
   const today = new Date().toISOString().split('T')[0]
   const [expense, setExpense] = useState({
     amount: '',
@@ -9,24 +8,78 @@ function AddExpense() {
     image: null
   })
 
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && onClose) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [onClose])
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Tạm thời log ra console, có thể gửi lên server sau
+    
+    // Validate amount
+    const amount = parseFloat(expense.amount)
+    if (!expense.amount || isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount greater than 0')
+      return
+    }
+    
+    // Validate description
+    if (!expense.description.trim()) {
+      alert('Please enter a description')
+      return
+    }
+    
+    // Process the expense data
     const data = {
       expenseDate: today,
-      amount: expense.amount,
-      description: expense.description,
+      amount: amount,
+      description: expense.description.trim(),
       image: expense.image
     }
     console.log('Expense data:', data)
+    
+    // Show success message
+    alert('Expense added successfully!')
+    
+    // Reset form
+    setExpense({
+      amount: '',
+      description: '',
+      image: null
+    })
+    
+    // Close modal if onClose function is provided
+    if (onClose) {
+      onClose()
+    }
   }
-
   const handleChange = (e) => {
     const { name, value } = e.target
-    setExpense(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    
+    // For amount field, only allow numeric input with decimals
+    if (name === 'amount') {
+      // Remove any non-numeric characters except decimal point
+      const numericValue = value.replace(/[^0-9.]/g, '')
+      // Ensure only one decimal point
+      const parts = numericValue.split('.')
+      const cleanValue = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : numericValue
+      
+      setExpense(prev => ({
+        ...prev,
+        [name]: cleanValue
+      }))
+    } else {
+      setExpense(prev => ({
+        ...prev,
+        [name]: value
+      }))
+    }
   }
 
   const handleFileChange = (e) => {
@@ -51,9 +104,8 @@ function AddExpense() {
               readOnly
               className="form-input"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="amount">Amount</label>
+          </div>          <div className="form-group">
+            <label htmlFor="amount">Amount ($)</label>
             <input
               type="text"
               id="amount"
@@ -62,7 +114,9 @@ function AddExpense() {
               onChange={handleChange}
               required
               className="form-input"
-              placeholder="Enter amount"
+              placeholder="0.00"
+              pattern="[0-9]+(\.[0-9]{1,2})?"
+              title="Please enter a valid amount (e.g., 10.50)"
             />
           </div>
         </div>

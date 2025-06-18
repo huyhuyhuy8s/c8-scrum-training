@@ -1,12 +1,12 @@
-/* AddExpense Styles - Light mode, giữ nguyên layout cũ */
+/* AddExpense Styles - Optimized for modal usage */
 .add-expense-container {
-  width: 90vw;
-  max-width: 1200px;
-  margin: 24px auto 32px auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.10);
-  padding: 48px 64px 40px 64px;
+  box-shadow: none; /* Modal already has shadow */
+  padding: 20px 24px 24px 24px;
   color: #222;
   display: flex;
   flex-direction: column;
@@ -14,9 +14,10 @@
 }
 
 .add-expense-title {
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
+  margin-top: 8px; /* Account for close button */
   text-align: left;
   color: #111;
 }
@@ -25,13 +26,13 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 16px;
 }
 
 .form-row {
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 16px;
   width: 100%;
 }
 
@@ -86,29 +87,38 @@
 }
 
 .add-expense-btn {
-  margin-top: 18px;
-  padding: 14px 0;
+  margin-top: 12px;
+  padding: 12px 0;
   border: none;
   border-radius: 8px;
-  background: #3b82f6;
+  background: #2f27ce; /* Use primary color from design system */
   color: #fff;
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.10);
+  box-shadow: 0 2px 8px 0 rgba(47, 39, 206, 0.15);
   transition: background 0.2s, transform 0.1s;
   width: 100%;
 }
 
 .add-expense-btn:hover {
-  background: #2563eb;
-  transform: translateY(-2px) scale(1.03);
+  background: #433bff; /* Use accent color on hover */
+  transform: translateY(-1px);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
   .add-expense-container {
-    max-width: 98vw;
-    padding: 18px 2vw;
+    padding: 16px 20px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .add-expense-title {
+    font-size: 1.25rem;
+    margin-bottom: 16px;
   }
 }
 

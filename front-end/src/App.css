@@ -1,2 +1,8 @@
-/* Import NavigationBar styles */
+/* Import all component styles */
 @import './styles/NavigationBar.css';
+@import './styles/AddExpense.css';
+@import './styles/Action.css';
+@import './styles/Card.css';
+@import './styles/feedback.css';
+@import './styles/List.css';
+@import './styles/MainLayout.css';

@@ -1,5 +1,4 @@
 import React from 'react'
-import '../style/List.css'
 
 const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data if no data is provided
   const sampleData = [

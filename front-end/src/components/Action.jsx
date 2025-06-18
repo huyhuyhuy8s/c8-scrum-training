@@ -1,5 +1,4 @@
 import React from 'react'
-import '../style/action.css'
 
 const Action = ({ title, buttonText, onButtonClick }) => {
   return (

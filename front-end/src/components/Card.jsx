@@ -1,5 +1,4 @@
 import React from 'react'
-import '../style/card.css'
 
 const Card = ({ title, count, subtitle }) => {
   return (
