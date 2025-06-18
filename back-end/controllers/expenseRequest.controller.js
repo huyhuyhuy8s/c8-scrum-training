@@ -1,4 +1,8 @@
-import { createExpenseRequest } from "../services/expenseRequest.service.js";
+import e from "express";
+import {
+  createExpenseRequest,
+  getRequestsByEmployeeId,
+} from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
   try {
@@ -13,8 +17,10 @@ export const createExpenseRequestController = async (req, res) => {
 
 export const getEmployeeRequests = async (req, res) => {
   try {
-    const employeeId = req.user.id;
-    const requests = await expenseService.getRequestsByEmployee(employeeId);
+    let employeeId = req.params.employeeId || 0;
+    employeeId = parseInt(employeeId);
+
+    const requests = await getRequestsByEmployeeId(employeeId);
     res.json(requests);
   } catch (err) {
     console.error(err);
