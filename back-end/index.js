@@ -4,13 +4,13 @@ import expenseRequestRoute from "./routes/expenseRequest.route.js";
 
 const app = express();
 
-app.use("/api/expense-requests", expenseRequestRoute);
+// Middleware
 app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use("/api/expense-requests", expenseRequestRoute);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
-
-
-
