@@ -17,7 +17,7 @@ export const createExpenseRequest = async (expenseRequest) => {
 
     const newExpenseRequest = await ExpenseRequestRepository.create({
       data: {
-        employeeId: expenseRequest.employeeId,
+        employeeId: expenseRequest.employeeId || 1,
         description: expenseRequest.description,
         amount: expenseRequest.amount,
         imageUrl: imageUrl,
@@ -201,8 +201,8 @@ export const deleteExpenseRequest = async (requestId, employeeId) => {
   // Delete related system logs first
   await SystemLogRepository.deleteMany({
     where: {
-      requestId: parseInt(requestId)
-    }
+      requestId: parseInt(requestId),
+    },
   });
 
   // Then delete the request

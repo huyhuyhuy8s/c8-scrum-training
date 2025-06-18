@@ -1,6 +1,6 @@
 import {
-//   createExpenseRequest,
-//   changeStatusRequest,
+  createExpenseRequest,
+  //   changeStatusRequest,
   getPendingRequests,
   getRequestById,
   approveRequest,
@@ -9,7 +9,7 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-//   getTeamRequests
+  //   getTeamRequests
 } from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
@@ -68,13 +68,16 @@ export const getTeamRequestsController = async (req, res) => {
       data: requests,
     });
   } catch (error) {
-    if (error.message === "Manager not found" || error.message === "User is not a manager") {
+    if (
+      error.message === "Manager not found" ||
+      error.message === "User is not a manager"
+    ) {
       return res.status(403).json({
         success: false,
         message: error.message,
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: "Error fetching team requests",
