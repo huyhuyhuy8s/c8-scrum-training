@@ -1,5 +1,5 @@
 import { createExpenseRequest } from "../services/expenseRequest.service.js";
-import {expenseService} from "../services/expenseService.js";
+import {expenseService} from "../services/expenseService.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
     try {
