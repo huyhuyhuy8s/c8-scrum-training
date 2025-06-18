@@ -1,0 +1,122 @@
+.list-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.list-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-icon {
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.list-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.list-table-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.list-table-header th {
+  text-align: center;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.list-table-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.list-table-row:hover {
+  background-color: #f9fafb;
+}
+
+.list-table-row:last-child {
+  border-bottom: none;
+}
+
+.list-table-cell {
+  padding: 16px 24px;
+  font-size: 14px;
+  color: #374151;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.list-date {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.list-employee-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.list-employee-dept {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.list-category {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.list-amount {
+  font-weight: 600;
+  color: #111827;
+}
+
+.list-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.list-status.pending {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.list-status.approved {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.list-status.rejected {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
