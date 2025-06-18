@@ -16,13 +16,14 @@ applyTo: "**"
 
     When working with large files (>300 lines) or complex changes:
     	1. ALWAYS start by creating a detailed plan BEFORE making any edits
-            2. Your plan MUST include:
-                   - All functions/sections that need modification
-                   - The order in which changes should be applied
-                   - Dependencies between changes
-                   - Estimated number of separate edits required
+        2. Your plan MUST include:
 
-            3. Format your plan as:
+        - All functions/sections that need modification
+        - The order in which changes should be applied
+        - Dependencies between changes
+        - Estimated number of separate edits required
+
+        3. Format your plan as:
 
 ## PROPOSED EDIT PLAN
 

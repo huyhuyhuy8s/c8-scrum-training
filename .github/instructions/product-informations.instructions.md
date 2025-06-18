@@ -15,10 +15,22 @@ Finance department can final approve then process payment or reject the request 
 
 All icon must be used via (React Icons)[https://react-icons.github.io/react-icons/]
 
+Typography: Inter
+
+Type scale: Perfect Fourth 1.333
+
 Color palette:
 
-- primary:#226a99
-- secondary:#ffffff
-- background:#e8eff0
-- active:#71be5e
-- warning:#f23334
+- primary: #2f27ce
+- secondary: #dedcff
+- accent: #433bff
+- background: #fbfbfe
+- text: #050315
+
+Folders tree:
+
+All React components must be stored in /front-end/src/components/
+All React components styles must be stored in /front-end/src/styles/ then import the styles onto /front-end/src/App.css
+All React services must be stored in /front-end/src/services/
+
+## BACK-END
