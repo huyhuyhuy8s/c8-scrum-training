@@ -1,110 +1,138 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
+import { createExpense, updateExpense } from "../services/expenseService";
 
-function AddExpense({ onClose }) {
-  const today = new Date().toISOString().split('T')[0]
+function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
+  const today = new Date().toISOString().split("T")[0];
   const [expense, setExpense] = useState({
-    amount: '',
-    description: '',
-    image: null
-  })
+    expenseDate: existingExpense?.expenseDate || today,
+    amount: existingExpense?.amount || "",
+    description: existingExpense?.description || "",
+    image: null,
+  });
 
   // Handle Escape key to close modal
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && onClose) {
-        onClose()
+      if (e.key === "Escape" && onClose) {
+        onClose();
       }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [onClose]);  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate amount
+    const amount = parseFloat(expense.amount);
+    if (!expense.amount || isNaN(amount) || amount <= 0) {
+      alert("Please enter a valid amount greater than 0");
+      return;
     }
 
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [onClose])
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    
-    // Validate amount
-    const amount = parseFloat(expense.amount)
-    if (!expense.amount || isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid amount greater than 0')
-      return
-    }
-    
     // Validate description
     if (!expense.description.trim()) {
-      alert('Please enter a description')
-      return
+      alert("Please enter a description");
+      return;
     }
-    
+
     // Process the expense data
     const data = {
-      expenseDate: today,
+      expenseDate: expense.expenseDate,
       amount: amount,
       description: expense.description.trim(),
-      image: expense.image
+      image: expense.image,
+    };    try {
+      if (isEditing && existingExpense?.id) {
+        // Update existing expense
+        await updateExpense(existingExpense.id, data);
+      } else {
+        // Create new expense
+        await createExpense(data);
+      }
+
+      // Show success message
+      alert(
+        isEditing
+          ? "Expense updated successfully!"
+          : "Expense added successfully!"
+      );
+
+      // Reset form
+      setExpense({
+        expenseDate: today,
+        amount: "",
+        description: "",
+        image: null,
+      });
+
+      // Close modal if onClose function is provided
+      if (onClose) {
+        onClose();
+      }
+    } catch (error) {
+      // Handle API errors
+      console.error("Error saving expense:", error);
+      alert(
+        isEditing
+          ? "Failed to update expense. Please try again."
+          : "Failed to add expense. Please try again."
+      );
     }
-    console.log('Expense data:', data)
-    
-    // Show success message
-    alert('Expense added successfully!')
-    
-    // Reset form
-    setExpense({
-      amount: '',
-      description: '',
-      image: null
-    })
-    
-    // Close modal if onClose function is provided
-    if (onClose) {
-      onClose()
-    }
-  }
+  };
   const handleChange = (e) => {
-    const { name, value } = e.target
-    
+    const { name, value } = e.target;
+
     // For amount field, only allow numeric input with decimals
-    if (name === 'amount') {
+    if (name === "amount") {
       // Remove any non-numeric characters except decimal point
-      const numericValue = value.replace(/[^0-9.]/g, '')
+      const numericValue = value.replace(/[^0-9.]/g, "");
       // Ensure only one decimal point
-      const parts = numericValue.split('.')
-      const cleanValue = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : numericValue
-      
-      setExpense(prev => ({
+      const parts = numericValue.split(".");
+      const cleanValue =
+        parts.length > 2
+          ? parts[0] + "." + parts.slice(1).join("")
+          : numericValue;
+
+      setExpense((prev) => ({
         ...prev,
-        [name]: cleanValue
-      }))
+        [name]: cleanValue,
+      }));
     } else {
-      setExpense(prev => ({
+      setExpense((prev) => ({
         ...prev,
-        [name]: value
-      }))
+        [name]: value,
+      }));
     }
-  }
+  };
 
   const handleFileChange = (e) => {
-    setExpense(prev => ({
+    setExpense((prev) => ({
       ...prev,
-      image: e.target.files[0] || null
-    }))
-  }
-
+      image: e.target.files[0] || null,
+    }));
+  };
   return (
     <div className="add-expense-container">
-      <h1 className="add-expense-title">Add New Expense</h1>
+      <h1 className="add-expense-title">
+        {isEditing ? "Edit Expense" : "Add New Expense"}
+      </h1>
       <form className="add-expense-form" onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="expenseDate">Expense Date</label>
+            <label htmlFor="expenseDate">Expense Date</label>{" "}
             <input
               type="date"
               id="expenseDate"
               name="expenseDate"
-              value={today}
-              readOnly
+              value={expense.expenseDate}
+              onChange={handleChange}
               className="form-input"
+              readOnly
+              max={today} // Prevent future dates
             />
-          </div>          <div className="form-group">
+          </div>{" "}
+          <div className="form-group">
             <label htmlFor="amount">Amount ($)</label>
             <input
               type="text"
@@ -131,7 +159,7 @@ function AddExpense({ onClose }) {
             className="form-input"
             placeholder="Enter description"
             rows={3}
-            style={{resize: 'vertical'}}
+            style={{ resize: "vertical" }}
           />
         </div>
         <div className="form-group">
@@ -145,10 +173,12 @@ function AddExpense({ onClose }) {
             className="form-input"
           />
         </div>
-        <button type="submit" className="add-expense-btn">Add Expense</button>
+        <button type="submit" className="add-expense-btn">
+          {isEditing ? "Update Expense" : "Add Expense"}
+        </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default AddExpense
+export default AddExpense;

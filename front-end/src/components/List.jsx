@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { getAllExpenses } from '../services/expenseService';
 
-const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data if no data is provided
+const List = ({ title = "Recent Activities", data = [], onItemClick }) => {
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);// Sample data if no data is provided
   const sampleData = [
     {
       id: 1,
@@ -97,10 +101,70 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       amount: "$2,500.00",
       status: "approved",
       statusText: "Approved"
-    }
-  ];
+    }  ];
 
-  const displayData = data.length > 0 ? data : sampleData;
+  // Fetch expenses from the API
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await getAllExpenses();
+        setExpenses(response);
+      } catch (err) {
+        console.error('Error fetching expenses:', err);
+        setError('Failed to load expenses');
+        // Fall back to sample data if API fails
+        setExpenses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
+  // Transform API expense data to display format
+  const transformExpenseToDisplay = (expense) => {
+    return {
+      id: expense.id,
+      date: expense.expenseDate,
+      employee: {
+        name: expense.employeeName || "Current User",
+        department: expense.department || "Unknown"
+      },
+      category: expense.category || "General",
+      amount: `$${parseFloat(expense.amount).toFixed(2)}`,
+      status: expense.status || "pending",
+      statusText: expense.status ? expense.status.charAt(0).toUpperCase() + expense.status.slice(1) : "Pending"
+    };
+  };
+
+  // Use provided data, API data, or sample data
+  let displayData;
+  if (data.length > 0) {
+    displayData = data;
+  } else if (loading) {
+    displayData = []; // Show empty while loading
+  } else if (error || expenses.length === 0) {
+    displayData = sampleData; // Fallback to sample data
+  } else {
+    displayData = expenses.map(transformExpenseToDisplay);
+  }
+
+  // Transform list item to expense format for editing
+  const transformItemToExpense = (item) => {
+    return {
+      id: item.id,
+      expenseDate: item.date,
+      amount: item.amount.replace('$', '').replace(',', ''), // Remove $ and commas
+      description: `${item.category} - ${item.employee.name} (${item.employee.department})`,
+      category: item.category,
+      employee: item.employee,
+      status: item.status,
+      originalItem: item // Keep reference to original item
+    };
+  };
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -114,12 +178,13 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
         return 'pending';
     }
   };
-
   return (
     <div className="list-container">
       <div className="list-header">
         <span className="list-icon">📊</span>
         <h2 className="list-title">{title}</h2>
+        {loading && <span className="loading-indicator">Loading...</span>}
+        {error && <span className="error-indicator">{error}</span>}
       </div>
       
       <table className="list-table">
@@ -130,10 +195,35 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
             <th>Amount</th>
             <th>Status</th>
           </tr>
-        </thead>
-        <tbody>
-          {displayData.map((item) => (
-            <tr key={item.id} className="list-table-row">
+        </thead>        <tbody>
+          {displayData.length === 0 && loading ? (
+            <tr>
+              <td colSpan="5" className="list-table-cell text-center">
+                Loading expenses...
+              </td>
+            </tr>
+          ) : displayData.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="list-table-cell text-center">
+                No expenses found
+              </td>
+            </tr>
+          ) : (
+            displayData.map((item) => (
+            <tr 
+              key={item.id} 
+              className="list-table-row clickable" 
+              onClick={() => onItemClick?.(transformItemToExpense(item))}
+              role="button"
+              tabIndex={0}
+              aria-label={`Edit expense for ${item.employee.name} - ${item.category}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onItemClick?.(transformItemToExpense(item));
+                }
+              }}
+            >
               <td className="list-table-cell">
                 <span className="list-date">{item.date}</span>
               </td>
@@ -152,10 +242,10 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
               <td className="list-table-cell">
                 <span className={`list-status ${getStatusClass(item.status)}`}>
                   {item.statusText}
-                </span>
-              </td>
+                </span>              </td>
             </tr>
-          ))}
+          ))
+          )}
         </tbody>
       </table>
     </div>

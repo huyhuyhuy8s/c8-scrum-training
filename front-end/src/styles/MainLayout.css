@@ -1,0 +1,102 @@
+/* MainLayout Component Styles */
+
+/* Main content container - accounts for fixed navbar */
+.main-layout {
+  margin: 0;
+  padding: 1.25rem;
+  padding-top: calc(10vh + 1.25rem);
+  /* Account for fixed navbar height */
+  background-color: #fbfbfe;
+  /* Use design system background color */
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Modal overlay/backdrop */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+}
+
+/* Modal content container */
+.modal-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 0;
+  max-width: 31.25rem;
+  /* 500px */
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 0.25rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+/* Modal close button */
+.modal-close-btn {
+  position: absolute;
+  top: 0.9375rem;
+  /* 15px */
+  right: 1.25rem;
+  /* 20px */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  z-index: 10;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.modal-close-btn:focus {
+  outline: 2px solid #2f27ce;
+  /* Primary color from design system */
+  outline-offset: 2px;
+}
+
+/* Dashboard cards container */
+.dashboard-cards {
+  display: flex;
+  gap: 1.25rem;
+  width: 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  margin-bottom: 1.25rem;
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .main-layout {
+    padding: 1rem;
+    padding-top: calc(15vh + 1rem);
+  }
+
+  .dashboard-cards {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+}
