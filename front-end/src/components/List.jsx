@@ -1,6 +1,6 @@
 import React from 'react'
 
-const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data if no data is provided
+const List = ({ title = "Recent Activities", data = [], filterStatus }) => {  // Sample data if no data is provided
   const sampleData = [
     {
       id: 1,
@@ -12,7 +12,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Transportation",
       amount: "$500.00",
       status: "pending",
-      statusText: "Pending Manager"
+      statusText: "Pending"
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Meals",
       amount: "$75.50",
       status: "approved",
-      statusText: "Approved"
+      statusText: "Claimed"
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Office Supplies",
       amount: "$150.25",
       status: "approved",
-      statusText: "Approved"
+      statusText: "Claimed"
     },
     {
       id: 5,
@@ -60,7 +60,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Transportation",
       amount: "$890.00",
       status: "pending",
-      statusText: "Pending Manager"
+      statusText: "Pending"
     },
     {
       id: 6,
@@ -72,7 +72,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Software License",
       amount: "$1,200.00",
       status: "approved",
-      statusText: "Approved"
+      statusText: "Claimed"
     },
     {
       id: 7,
@@ -84,7 +84,7 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Equipment",
       amount: "$450.75",
       status: "pending",
-      statusText: "Pending Manager"
+      statusText: "Pending"
     },
     {
       id: 8,
@@ -96,11 +96,31 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
       category: "Advertising",
       amount: "$2,500.00",
       status: "approved",
-      statusText: "Approved"
+      statusText: "Claimed"
+    },
+    {
+      id: 9,
+      date: "2025-06-07",
+      employee: {
+        name: "Anna Draft",
+        department: "Admin"
+      },
+      category: "Draft Example",
+      amount: "$0.00",
+      status: "draft",
+      statusText: "Draft"
     }
   ];
 
-  const displayData = data.length > 0 ? data : sampleData;
+  let displayData = data.length > 0 ? data : sampleData;
+  if (filterStatus) {
+    if (filterStatus === 'raft') {
+      // Giả sử status "raft" là những item chưa có trạng thái (hoặc status === 'raft' nếu có)
+      displayData = displayData.filter(item => item.status === 'raft');
+    } else {
+      displayData = displayData.filter(item => item.status === filterStatus);
+    }
+  }
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -110,6 +130,8 @@ const List = ({ title = "Recent Activities", data = [] }) => {  // Sample data i
         return 'approved';
       case 'rejected':
         return 'rejected';
+      case 'draft':
+        return 'draft';
       default:
         return 'pending';
     }

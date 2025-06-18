@@ -1,5 +1,7 @@
 ---
-applyTo: "**"
+description: 
+globs: 
+alwaysApply: false
 ---
 
 # VISION
@@ -8,6 +10,12 @@ We would like to have a tool to help finance department process expense requests
 Employee can send expense requests for spending on work activities. E.g transportation, meals, stationary,...
 Manager can confirm or reject the requests
 Finance department can final approve then process payment or reject the request that is confirmed by employee's manager.
+
+EVERY REQUEST IN THE LIST HAS 1 IN 4 STATUS:
+- DRAFT
+- PENDING
+- CLAIMED
+- REJECTED
 
 # ADDITIONAL TECHNICAL REQUIREMENTS
 

@@ -120,3 +120,8 @@
   background-color: #fee2e2;
   color: #dc2626;
 }
+
+.list-status.draft {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}

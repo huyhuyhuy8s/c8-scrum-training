@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Card = ({ title, count, subtitle }) => {
+const Card = ({ title, count, subtitle, onClick }) => {
   return (
-    <div className="card-container">
+    <div className="card-container" onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <div className="card-title">
         {title}
       </div>

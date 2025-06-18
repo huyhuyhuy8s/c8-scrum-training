@@ -5,7 +5,8 @@ function AddExpense({ onClose }) {
   const [expense, setExpense] = useState({
     amount: '',
     description: '',
-    image: null
+    image: null,
+    expenseDate: today
   })
 
   // Handle Escape key to close modal
@@ -34,10 +35,16 @@ function AddExpense({ onClose }) {
       alert('Please enter a description')
       return
     }
+
+    // Validate date
+    if (!expense.expenseDate) {
+      alert('Please enter a valid date')
+      return
+    }
     
     // Process the expense data
     const data = {
-      expenseDate: today,
+      expenseDate: expense.expenseDate,
       amount: amount,
       description: expense.description.trim(),
       image: expense.image
@@ -51,7 +58,8 @@ function AddExpense({ onClose }) {
     setExpense({
       amount: '',
       description: '',
-      image: null
+      image: null,
+      expenseDate: today
     })
     
     // Close modal if onClose function is provided
@@ -100,8 +108,9 @@ function AddExpense({ onClose }) {
               type="date"
               id="expenseDate"
               name="expenseDate"
-              value={today}
-              readOnly
+              value={expense.expenseDate}
+              onChange={handleChange}
+              required
               className="form-input"
             />
           </div>          <div className="form-group">

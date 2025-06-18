@@ -8,6 +8,8 @@ import FeedbackButton from "./FeedbackButton";
 
 const MainLayout = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
+  const [filterStatus, setFilterStatus] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleCreateRequest = () => {
     console.log("Create new request");
@@ -114,22 +116,23 @@ const MainLayout = () => {
             marginBottom: "20px",
           }}
         >
-          <Card title="CLAIMED (APPROVED/PAID)" count="7" subtitle="batch(s)" />
-
-          <Card title="PENDING APPROVAL" count="3" subtitle="batch(s)" />
-
-          <Card title="REJECTED" count="1" subtitle="batch(s)" />
-
-          <Card title="IN PROGRESS" count="12" subtitle="batch(s)" />
+          <Card title="DRAFT" count="1" subtitle="batch(s)" onClick={() => setFilterStatus('draft')} />
+          <Card title="PENDING" count="3" subtitle="batch(s)" onClick={() => setFilterStatus('pending')} />
+          <Card title="CLAIMED" count="4" subtitle="batch(s)" onClick={() => setFilterStatus('approved')} />
+          <Card title="REJECTED" count="1" subtitle="batch(s)" onClick={() => setFilterStatus('rejected')} />
         </div>
         {/* Action Section */}
         <Action
           title="Employees expense management"
           buttonText="Create a new request"
           onButtonClick={handleCreateRequest}
+          onRefresh={() => {
+            setFilterStatus(null);
+            setRefreshKey(prev => prev + 1);
+          }}
         />
         {/* List Component */}
-        <List />
+        <List filterStatus={filterStatus} key={refreshKey} />
         {/* Feedback Button */}
         <FeedbackButton onClick={handleFeedback} />
       </div>
