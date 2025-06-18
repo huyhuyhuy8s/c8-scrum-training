@@ -143,7 +143,7 @@ export const updateExpenseRequest = async (
     where: {
       id: parseInt(requestId),
       employeeId: parseInt(employeeId),
-      status: "PENDING",
+      status: "WRAPPED",
     },
   });
 
