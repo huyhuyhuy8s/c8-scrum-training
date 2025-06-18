@@ -1,0 +1,130 @@
+/* AddExpense Styles - Light mode, giữ nguyên layout cũ */
+.add-expense-container {
+  width: 90vw;
+  max-width: 1200px;
+  margin: 24px auto 32px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.10);
+  padding: 48px 64px 40px 64px;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.add-expense-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 32px;
+  text-align: left;
+  color: #111;
+}
+
+.add-expense-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  width: 100%;
+}
+
+.form-row .form-group {
+  flex: 1 1 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+.form-input, .form-group input[type="file"], .form-group textarea {
+  padding: 12px 14px;
+  border-radius: 7px;
+  border: 1.5px solid #d1d5db;
+  background: #fff;
+  color: #222;
+  font-size: 1.08rem;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus, .form-group textarea:focus {
+  border: 1.5px solid #2563eb;
+  background: #f3f6fa;
+}
+
+.form-group input[type="file"] {
+  background: #fff;
+  border: none;
+  padding: 0;
+  color: #222;
+}
+
+.upload-hint {
+  font-size: 0.95rem;
+  color: #888;
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+.add-expense-btn {
+  margin-top: 18px;
+  padding: 14px 0;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 rgba(59, 130, 246, 0.10);
+  transition: background 0.2s, transform 0.1s;
+  width: 100%;
+}
+
+.add-expense-btn:hover {
+  background: #2563eb;
+  transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 800px) {
+  .add-expense-container {
+    max-width: 98vw;
+    padding: 18px 2vw;
+  }
+}
+
+.form-group input[readonly][type="date"] {
+  background: #f3f6fa !important;
+  color: #888 !important;
+  opacity: 1;
+  cursor: not-allowed;
+  border: 1.5px solid #d1d5db;
+}
+
+.form-group input[readonly][type="date"]:focus {
+  border: 1.5px solid #d1d5db;
+  background: #f3f6fa;
+}
+
+body {
+  background: #f3f4f6;
+}
