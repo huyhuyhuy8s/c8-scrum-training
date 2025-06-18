@@ -11,10 +11,11 @@ Employee can send expense requests for spending on work activities. E.g transpor
 Manager can confirm or reject the requests
 Finance department can final approve then process payment or reject the request that is confirmed by employee's manager.
 
-EVERY REQUEST IN THE LIST HAS 1 IN 4 STATUS:
+EVERY REQUEST IN THE LIST HAS 1 IN 5 STATUS:
 - DRAFT
 - PENDING
-- CLAIMED
+- APPROVED
+- FINAL_APPROVED
 - REJECTED
 
 # ADDITIONAL TECHNICAL REQUIREMENTS

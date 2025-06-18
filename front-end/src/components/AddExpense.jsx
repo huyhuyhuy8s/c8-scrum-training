@@ -44,7 +44,7 @@ function AddExpense({ onClose }) {
     
     // Process the expense data
     const data = {
-      expenseDate: expense.expenseDate,
+      expenseDate: today,
       amount: amount,
       description: expense.description.trim(),
       image: expense.image
@@ -108,9 +108,8 @@ function AddExpense({ onClose }) {
               type="date"
               id="expenseDate"
               name="expenseDate"
-              value={expense.expenseDate}
-              onChange={handleChange}
-              required
+              value={today}
+              readOnly
               className="form-input"
             />
           </div>          <div className="form-group">

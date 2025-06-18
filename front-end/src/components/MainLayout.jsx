@@ -118,7 +118,7 @@ const MainLayout = () => {
         >
           <Card title="DRAFT" count="1" subtitle="batch(s)" onClick={() => setFilterStatus('draft')} />
           <Card title="PENDING" count="3" subtitle="batch(s)" onClick={() => setFilterStatus('pending')} />
-          <Card title="CLAIMED" count="4" subtitle="batch(s)" onClick={() => setFilterStatus('approved')} />
+          <Card title="APPROVED" count="4" subtitle="batch(s)" onClick={() => setFilterStatus('approved')} />
           <Card title="REJECTED" count="1" subtitle="batch(s)" onClick={() => setFilterStatus('rejected')} />
         </div>
         {/* Action Section */}

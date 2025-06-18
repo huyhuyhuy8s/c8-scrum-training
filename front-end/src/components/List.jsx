@@ -24,7 +24,7 @@ const List = ({ title = "Recent Activities", data = [], filterStatus }) => {  //
       category: "Meals",
       amount: "$75.50",
       status: "approved",
-      statusText: "Claimed"
+      statusText: "Approved"
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ const List = ({ title = "Recent Activities", data = [], filterStatus }) => {  //
       category: "Office Supplies",
       amount: "$150.25",
       status: "approved",
-      statusText: "Claimed"
+      statusText: "Approved"
     },
     {
       id: 5,
@@ -72,7 +72,7 @@ const List = ({ title = "Recent Activities", data = [], filterStatus }) => {  //
       category: "Software License",
       amount: "$1,200.00",
       status: "approved",
-      statusText: "Claimed"
+      statusText: "Approved"
     },
     {
       id: 7,
@@ -96,7 +96,7 @@ const List = ({ title = "Recent Activities", data = [], filterStatus }) => {  //
       category: "Advertising",
       amount: "$2,500.00",
       status: "approved",
-      statusText: "Claimed"
+      statusText: "Approved"
     },
     {
       id: 9,
