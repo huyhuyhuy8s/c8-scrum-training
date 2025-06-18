@@ -3,7 +3,6 @@ import SystemLogRepository from "../models/systemLog.js";
 
 import ExpenseRequestRepository from "../models/expenseRequest.js";
 
-
 export const createExpenseRequest = async (expenseRequest) => {
   try {
     const { image } = expenseRequest;
@@ -36,25 +35,6 @@ export const createExpenseRequest = async (expenseRequest) => {
 // Get all pending requests for manager
 export const getPendingRequests = async () => {
   return await ExpenseRequestRepository.findMany({
-    where: { employeeId },
-    select: {
-      id: true,
-      description: true,
-      amount: true,
-      status: true,
-      createdAt: true,
-      imageUrl: true,
-      approvedBy: {
-        select: { id: true, name: true },
-      },
-      finalApprovedBy: {
-        select: { id: true, name: true },
-      },
-      logs: {
-        select: { id: true, action: true, timestamp: true },
-      },
-    },
-
     where: {
       status: "PENDING",
     },

@@ -1,6 +1,3 @@
-
-import { createExpenseRequest,changeStatusRequest } from "../services/expenseRequest.service.js";
-
 import {
   createExpenseRequest,
   getPendingRequests,
@@ -11,8 +8,8 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
+  changeStatusRequest,
 } from "../services/expenseRequest.service.js";
-
 
 export const createExpenseRequestController = async (req, res) => {
   try {
@@ -24,12 +21,8 @@ export const createExpenseRequestController = async (req, res) => {
   }
 };
 
-export const getEmployeeRequests = async (req, res) => {
-
-
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
-
   try {
     const requests = await getPendingRequests();
     res.status(200).json({
@@ -83,9 +76,7 @@ export const approveRequestController = async (req, res) => {
         message: "Manager ID is required",
       });
     }
-    console.log(" controller: ");
-    // console.log(updatedRequest)
-    // Comment is optional for approval
+
     const updatedRequest = await approveRequest(
       id,
       managerId,
@@ -118,14 +109,6 @@ export const rejectRequestController = async (req, res) => {
         message: "Manager ID is required",
       });
     }
-
-    // Comment is now optional for rejection - removed the validation
-    // if (!comment || comment.trim() === "") {
-    //     return res.status(400).json({
-    //         success: false,
-    //         message: "Comment explaining the decision is required"
-    //     });
-    // }
 
     const updatedRequest = await rejectRequest(
       id,
@@ -260,30 +243,45 @@ export const deleteExpenseRequestController = async (req, res) => {
 // Get requests by status
 export const getRequestsByStatusController = async (req, res) => {
   try {
-    const status = req.params.status;
+    const { status } = req.params;
     const requests = await getRequestsByStatus(status);
-    res.json(requests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Server error" });
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching requests by status",
+      error: error.message,
+    });
   }
 };
+
+// Change status request (Finance)
 export const changeStatusRequestController = async (req, res) => {
   try {
-    const idFinance = parseInt(req.params.idFinance);
-    const idExpenseRequest = parseInt(req.params.idExpenseRequest);
-    const changeStatus = req.params.changeStatus;
-    const rejectedReason = req.body.rejectedReason || ""
-    
+    const { idFinance, idExpenseRequest, changeStatus } = req.params;
+    const { rejectedReason } = req.body;
+
     const updatedRequest = await changeStatusRequest(
-      idFinance,
-      idExpenseRequest,
+      parseInt(idFinance),
+      parseInt(idExpenseRequest),
       changeStatus,
       rejectedReason
     );
-    res.status(201).json(updatedRequest);
 
+    res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      data: updatedRequest,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Error updating request status",
+      error: error.message,
+    });
   }
 };

@@ -1,8 +1,5 @@
 import { Router } from "express";
 
-import { getEmployeeRequests } from "../controllers/expenseRequest.controller.js";
-import { createExpenseRequestController,changeStatusRequestController } from "../controllers/expenseRequest.controller.js";
-
 import {
   createExpenseRequestController,
   getPendingRequestsController,
@@ -13,8 +10,8 @@ import {
   updateExpenseRequestController,
   deleteExpenseRequestController,
   getRequestsByStatusController,
+  changeStatusRequestController,
 } from "../controllers/expenseRequest.controller.js";
-
 
 const router = Router();
 
@@ -27,8 +24,9 @@ router.put("/:id/reject", rejectRequestController);
 router.put("/my-requests/:id", updateExpenseRequestController);
 router.delete("/my-requests/:id", deleteExpenseRequestController);
 router.get("/finance/status/:status", getRequestsByStatusController);
+router.patch(
+  "/:idFinance/:idExpenseRequest/:changeStatus",
+  changeStatusRequestController
+);
 
-
-router.patch("/:idFinance/:idExpenseRequest/:changeStatus",changeStatusRequestController)
 export default router;
-
