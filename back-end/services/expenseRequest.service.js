@@ -2,6 +2,7 @@ import cloudinary from "../libs/cloudinary.js";
 import SystemLogRepository from "../models/systemLog.js";
 
 import ExpenseRequestRepository from "../models/expenseRequest.js";
+import EmployeeRepository from "../models/employee.js";  
 
 export const createExpenseRequest = async (expenseRequest) => {
   try {
@@ -218,6 +219,7 @@ export const getRequestsByStatus = async (status) => {
   return await ExpenseRequestRepository.findMany({
     where: { status },
 
+  
     orderBy: { createdAt: "desc" },
   });
 };
@@ -274,3 +276,42 @@ export const changeStatusRequest = async (
     throw error; // Re-throw the original error
   }
 };
+
+// Get all requests from manager's team (same department)
+export const getTeamRequests = async (managerId) => {
+    // First, get manager info to find their department
+    const manager = await EmployeeRepository.findUnique({
+        where: { id: parseInt(managerId) }
+    });
+    
+    if (!manager || manager.role !== 'MANAGER') {
+        throw new Error('Manager not found or insufficient permissions');
+    }
+    
+    // Get all employees in the same department
+    const teamEmployees = await EmployeeRepository.findMany({
+        where: {
+            department: manager.department,
+            role: 'EMPLOYEE' // Only get employees, not other managers
+        }
+    });
+    
+    const employeeIds = teamEmployees.map(emp => emp.id);
+    
+    // Get all requests from team members
+    return await ExpenseRequestRepository.findMany({
+        where: {
+            employeeId: {
+                in: employeeIds
+            }
+        },
+        include: {
+            employee: true,
+            approvedBy: true
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+};
+

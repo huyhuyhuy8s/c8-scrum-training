@@ -1,6 +1,6 @@
 import {
   createExpenseRequest,
-  //   changeStatusRequest,
+  changeStatusRequest,
   getPendingRequests,
   getRequestById,
   approveRequest,
@@ -9,7 +9,7 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-  //   getTeamRequests
+  getTeamRequests
 } from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
@@ -49,42 +49,6 @@ export const getEmployeeRequestsController = async (req, res) => {
   }
 };
 
-// Add: Missing getTeamRequestsController function
-export const getTeamRequestsController = async (req, res) => {
-  try {
-    const { managerId } = req.params;
-
-    if (!managerId) {
-      return res.status(400).json({
-        success: false,
-        message: "Manager ID is required",
-      });
-    }
-
-    const requests = await getTeamRequests(managerId);
-
-    res.status(200).json({
-      success: true,
-      data: requests,
-    });
-  } catch (error) {
-    if (
-      error.message === "Manager not found" ||
-      error.message === "User is not a manager"
-    ) {
-      return res.status(403).json({
-        success: false,
-        message: error.message,
-      });
-    }
-
-    res.status(500).json({
-      success: false,
-      message: "Error fetching team requests",
-      error: error.message,
-    });
-  }
-};
 
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
@@ -323,3 +287,39 @@ export const changeStatusRequestController = async (req, res) => {
     });
   }
 };
+// Get all requests from manager's team
+export const getTeamRequestsController = async (req, res) => {
+    try {
+        const { managerId } = req.params;
+        
+        if (!managerId) {
+            return res.status(400).json({
+                success: false,
+                message: "Manager ID is required"
+            });
+        }
+
+        const requests = await getTeamRequests(managerId);
+        
+        res.status(200).json({
+            success: true,
+            message: "Team requests retrieved successfully",
+            data: requests,
+            count: requests.length
+        });
+    } catch (error) {
+        if (error.message.includes('Manager not found') || error.message.includes('insufficient permissions')) {
+            return res.status(403).json({
+                success: false,
+                message: error.message
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: "Error fetching team requests",
+            error: error.message
+        });
+    }
+};
+
