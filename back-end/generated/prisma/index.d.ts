@@ -1164,6 +1164,8 @@ export namespace Prisma {
     name: string | null
     department: string | null
     role: $Enums.Role | null
+    email: string | null
+    password: string | null
   }
 
   export type EmployeeMaxAggregateOutputType = {
@@ -1171,6 +1173,8 @@ export namespace Prisma {
     name: string | null
     department: string | null
     role: $Enums.Role | null
+    email: string | null
+    password: string | null
   }
 
   export type EmployeeCountAggregateOutputType = {
@@ -1178,6 +1182,8 @@ export namespace Prisma {
     name: number
     department: number
     role: number
+    email: number
+    password: number
     _all: number
   }
 
@@ -1195,6 +1201,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
   }
 
   export type EmployeeMaxAggregateInputType = {
@@ -1202,6 +1210,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
   }
 
   export type EmployeeCountAggregateInputType = {
@@ -1209,6 +1219,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
     _all?: true
   }
 
@@ -1303,6 +1315,8 @@ export namespace Prisma {
     name: string
     department: string
     role: $Enums.Role
+    email: string
+    password: string
     _count: EmployeeCountAggregateOutputType | null
     _avg: EmployeeAvgAggregateOutputType | null
     _sum: EmployeeSumAggregateOutputType | null
@@ -1329,6 +1343,8 @@ export namespace Prisma {
     name?: boolean
     department?: boolean
     role?: boolean
+    email?: boolean
+    password?: boolean
     requests?: boolean | Employee$requestsArgs<ExtArgs>
     managerApprovals?: boolean | Employee$managerApprovalsArgs<ExtArgs>
     financeApprovals?: boolean | Employee$financeApprovalsArgs<ExtArgs>
@@ -1342,9 +1358,11 @@ export namespace Prisma {
     name?: boolean
     department?: boolean
     role?: boolean
+    email?: boolean
+    password?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "department" | "role", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "department" | "role" | "email" | "password", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requests?: boolean | Employee$requestsArgs<ExtArgs>
     managerApprovals?: boolean | Employee$managerApprovalsArgs<ExtArgs>
@@ -1364,6 +1382,8 @@ export namespace Prisma {
       name: string
       department: string
       role: $Enums.Role
+      email: string
+      password: string
     }, ExtArgs["result"]["employee"]>
     composites: {}
   }
@@ -1740,6 +1760,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Employee", 'String'>
     readonly department: FieldRef<"Employee", 'String'>
     readonly role: FieldRef<"Employee", 'Role'>
+    readonly email: FieldRef<"Employee", 'String'>
+    readonly password: FieldRef<"Employee", 'String'>
   }
     
 
@@ -4257,7 +4279,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     department: 'department',
-    role: 'role'
+    role: 'role',
+    email: 'email',
+    password: 'password'
   };
 
   export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
@@ -4299,7 +4323,9 @@ export namespace Prisma {
 
   export const EmployeeOrderByRelevanceFieldEnum: {
     name: 'name',
-    department: 'department'
+    department: 'department',
+    email: 'email',
+    password: 'password'
   };
 
   export type EmployeeOrderByRelevanceFieldEnum = (typeof EmployeeOrderByRelevanceFieldEnum)[keyof typeof EmployeeOrderByRelevanceFieldEnum]
@@ -4387,6 +4413,8 @@ export namespace Prisma {
     name?: StringFilter<"Employee"> | string
     department?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    email?: StringFilter<"Employee"> | string
+    password?: StringFilter<"Employee"> | string
     requests?: ExpenseRequestListRelationFilter
     managerApprovals?: ExpenseRequestListRelationFilter
     financeApprovals?: ExpenseRequestListRelationFilter
@@ -4397,6 +4425,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
     requests?: ExpenseRequestOrderByRelationAggregateInput
     managerApprovals?: ExpenseRequestOrderByRelationAggregateInput
     financeApprovals?: ExpenseRequestOrderByRelationAggregateInput
@@ -4405,22 +4435,26 @@ export namespace Prisma {
 
   export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    email?: string
     AND?: EmployeeWhereInput | EmployeeWhereInput[]
     OR?: EmployeeWhereInput[]
     NOT?: EmployeeWhereInput | EmployeeWhereInput[]
     name?: StringFilter<"Employee"> | string
     department?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    password?: StringFilter<"Employee"> | string
     requests?: ExpenseRequestListRelationFilter
     managerApprovals?: ExpenseRequestListRelationFilter
     financeApprovals?: ExpenseRequestListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type EmployeeOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
     _count?: EmployeeCountOrderByAggregateInput
     _avg?: EmployeeAvgOrderByAggregateInput
     _max?: EmployeeMaxOrderByAggregateInput
@@ -4436,6 +4470,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Employee"> | string
     department?: StringWithAggregatesFilter<"Employee"> | string
     role?: EnumRoleWithAggregatesFilter<"Employee"> | $Enums.Role
+    email?: StringWithAggregatesFilter<"Employee"> | string
+    password?: StringWithAggregatesFilter<"Employee"> | string
   }
 
   export type ExpenseRequestWhereInput = {
@@ -4587,6 +4623,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
@@ -4597,6 +4635,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
@@ -4606,6 +4646,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
@@ -4616,6 +4658,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
@@ -4626,12 +4670,16 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
   }
 
   export type EmployeeUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
   }
 
   export type EmployeeUncheckedUpdateManyInput = {
@@ -4639,6 +4687,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
   }
 
   export type ExpenseRequestCreateInput = {
@@ -4829,6 +4879,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeAvgOrderByAggregateInput = {
@@ -4840,6 +4892,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeMinOrderByAggregateInput = {
@@ -4847,6 +4901,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeSumOrderByAggregateInput = {
@@ -5816,6 +5872,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5825,6 +5883,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5838,6 +5898,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5847,6 +5909,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5860,6 +5924,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
   }
@@ -5869,6 +5935,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
   }
@@ -5914,6 +5982,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5923,6 +5993,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5942,6 +6014,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5951,6 +6025,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5970,6 +6046,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
   }
@@ -5979,6 +6057,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   }

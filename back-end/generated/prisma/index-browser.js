@@ -124,7 +124,9 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   department: 'department',
-  role: 'role'
+  role: 'role',
+  email: 'email',
+  password: 'password'
 };
 
 exports.Prisma.ExpenseRequestScalarFieldEnum = {
@@ -154,7 +156,9 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.EmployeeOrderByRelevanceFieldEnum = {
   name: 'name',
-  department: 'department'
+  department: 'department',
+  email: 'email',
+  password: 'password'
 };
 
 exports.Prisma.NullsOrder = {

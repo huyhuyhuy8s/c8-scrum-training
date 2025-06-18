@@ -2,7 +2,7 @@ import cloudinary from "../libs/cloudinary.js";
 import SystemLogRepository from "../models/systemLog.js";
 
 import ExpenseRequestRepository from "../models/expenseRequest.js";
-import EmployeeRepository from "../models/employee.js";  
+import EmployeeRepository from "../models/employee.js";
 
 export const createExpenseRequest = async (expenseRequest) => {
   try {
@@ -22,7 +22,6 @@ export const createExpenseRequest = async (expenseRequest) => {
         description: expenseRequest.description,
         amount: expenseRequest.amount,
         imageUrl: imageUrl,
-        status: "PENDING",
       },
     });
 
@@ -219,7 +218,6 @@ export const getRequestsByStatus = async (status) => {
   return await ExpenseRequestRepository.findMany({
     where: { status },
 
-  
     orderBy: { createdAt: "desc" },
   });
 };
@@ -279,39 +277,38 @@ export const changeStatusRequest = async (
 
 // Get all requests from manager's team (same department)
 export const getTeamRequests = async (managerId) => {
-    // First, get manager info to find their department
-    const manager = await EmployeeRepository.findUnique({
-        where: { id: parseInt(managerId) }
-    });
-    
-    if (!manager || manager.role !== 'MANAGER') {
-        throw new Error('Manager not found or insufficient permissions');
-    }
-    
-    // Get all employees in the same department
-    const teamEmployees = await EmployeeRepository.findMany({
-        where: {
-            department: manager.department,
-            role: 'EMPLOYEE' // Only get employees, not other managers
-        }
-    });
-    
-    const employeeIds = teamEmployees.map(emp => emp.id);
-    
-    // Get all requests from team members
-    return await ExpenseRequestRepository.findMany({
-        where: {
-            employeeId: {
-                in: employeeIds
-            }
-        },
-        include: {
-            employee: true,
-            approvedBy: true
-        },
-        orderBy: {
-            createdAt: "desc"
-        }
-    });
-};
+  // First, get manager info to find their department
+  const manager = await EmployeeRepository.findUnique({
+    where: { id: parseInt(managerId) },
+  });
 
+  if (!manager || manager.role !== "MANAGER") {
+    throw new Error("Manager not found or insufficient permissions");
+  }
+
+  // Get all employees in the same department
+  const teamEmployees = await EmployeeRepository.findMany({
+    where: {
+      department: manager.department,
+      role: "EMPLOYEE", // Only get employees, not other managers
+    },
+  });
+
+  const employeeIds = teamEmployees.map((emp) => emp.id);
+
+  // Get all requests from team members
+  return await ExpenseRequestRepository.findMany({
+    where: {
+      employeeId: {
+        in: employeeIds,
+      },
+    },
+    include: {
+      employee: true,
+      approvedBy: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
