@@ -1,14 +1,30 @@
-import { authService } from "../services/authService.service.js";
+import { logoutUser } from "../services/authService.service.js";
 
-export const logout = async (req, res) => {
+export const logoutController = async (req, res) => {
   try {
-    let employeeId = req.params.employeeId || 0;
-    employeeId = parseInt(employeeId);
+    const { employeeId } = req.params;
+    const id = parseInt(employeeId);
 
-    const result = await authService.logoutUser(employeeId);
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    if (isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid employee ID",
+      });
+    }
+
+    const result = await logoutUser(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+      data: result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error during logout",
+      error: error.message,
+    });
   }
 };
