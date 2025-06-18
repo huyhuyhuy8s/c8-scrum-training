@@ -1,10 +1,13 @@
 {
   "name": "c8-scrum",
+  "type": "module",
   "version": "0.0.1",
   "description": "back-end handle restful api",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "nodejs",

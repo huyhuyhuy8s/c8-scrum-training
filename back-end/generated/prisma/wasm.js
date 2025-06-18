@@ -133,6 +133,7 @@ exports.Prisma.ExpenseRequestScalarFieldEnum = {
   description: 'description',
   amount: 'amount',
   status: 'status',
+  imageUrl: 'imageUrl',
   createdAt: 'createdAt',
   approvedById: 'approvedById',
   finalApprovedById: 'finalApprovedById'
@@ -161,7 +162,8 @@ exports.Prisma.NullsOrder = {
 };
 
 exports.Prisma.ExpenseRequestOrderByRelevanceFieldEnum = {
-  description: 'description'
+  description: 'description',
+  imageUrl: 'imageUrl'
 };
 
 exports.Prisma.SystemLogOrderByRelevanceFieldEnum = {
