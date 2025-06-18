@@ -52,4 +52,28 @@ export const getRequestsByEmployee = async (employeeId) => {
     },
     orderBy: { createdAt: 'desc' }
   });
+}
+export const changeStatusRequest = async (
+  idFinance,
+  idExpenseRequest,
+  changeStatus
+) => {
+  try {
+    const updateData = {
+      status: changeStatus,
+    };
+
+    updateData.finalApprovedById = idFinance;
+    const updatedRequest = await prisma.expenseRequest.update({
+      where: {
+        id: idExpenseRequest,
+      },
+      data: updateData,
+    });
+
+    return updatedRequest;
+  } catch (error) {
+    console.error("Can't update expense request:", error);
+    throw error;
+  }
 };
