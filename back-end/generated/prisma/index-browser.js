@@ -133,8 +133,10 @@ exports.Prisma.ExpenseRequestScalarFieldEnum = {
   description: 'description',
   amount: 'amount',
   status: 'status',
+  imageUrl: 'imageUrl',
   createdAt: 'createdAt',
   approvedById: 'approvedById',
+  rejectedReason: 'rejectedReason',
   finalApprovedById: 'finalApprovedById'
 };
 
@@ -161,7 +163,9 @@ exports.Prisma.NullsOrder = {
 };
 
 exports.Prisma.ExpenseRequestOrderByRelevanceFieldEnum = {
-  description: 'description'
+  description: 'description',
+  imageUrl: 'imageUrl',
+  rejectedReason: 'rejectedReason'
 };
 
 exports.Prisma.SystemLogOrderByRelevanceFieldEnum = {
@@ -178,7 +182,7 @@ exports.RequestStatus = exports.$Enums.RequestStatus = {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   FINAL_APPROVED: 'FINAL_APPROVED',
-  PROCESSED: 'PROCESSED'
+  WRAPPED: 'WRAPPED'
 };
 
 exports.Prisma.ModelName = {
