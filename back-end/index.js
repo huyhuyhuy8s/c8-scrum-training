@@ -1,12 +1,16 @@
 import express from "express";
 import cors from "cors";
+import { config } from "dotenv";
 import expenseRequestRoute from "./routes/expenseRequest.route.js";
+
+config();
 
 const app = express();
 
-// Middleware
+// Fix: Middleware phải đặt trước routes
 app.use(cors());
 app.use(express.json());
+app.use("/api/expense-requests", expenseRequestRoute);
 
 // Routes
 app.use("/api/expense-requests", expenseRequestRoute);
