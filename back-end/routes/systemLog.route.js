@@ -1,9 +1,10 @@
 import { Router } from "express";
 
-import {getNotificationsForAllRequestController} from '../controllers/systemLog.controller.js'
+import {getNotificationsForAllRequestController, getNotificationsForAllSubmitController} from '../controllers/systemLog.controller.js'
 
 const router = Router();
 
+router.get("/allSubmit",getNotificationsForAllSubmitController)
 
 router.get("/:idEmployee", getNotificationsForAllRequestController);
 
