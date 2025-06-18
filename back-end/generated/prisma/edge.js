@@ -173,7 +173,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Data\\MY_CODE\\NodeJs\\c8-scrum-training\\back-end\\generated\\prisma",
+      "value": "/Users/romuncle/srcum hk3/src/c8-scrum-training/back-end/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -182,12 +182,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Data\\MY_CODE\\NodeJs\\c8-scrum-training\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/romuncle/srcum hk3/src/c8-scrum-training/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -200,7 +200,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {

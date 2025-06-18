@@ -1,14 +1,24 @@
 import { Router } from "express";
-import {
-  getEmployeeRequestsController,
-  getRequestsByStatusController,
-  createExpenseRequestController,
+import { 
+    createExpenseRequestController,
+    getPendingRequestsController, 
+    getRequestByIdController, 
+    approveRequestController, 
+    rejectRequestController,
+    getEmployeeRequestsController,
+    updateExpenseRequestController,
+    deleteExpenseRequestController
 } from "../controllers/expenseRequest.controller.js";
 
 const router = Router();
 
-router.post("/employee", createExpenseRequestController);
-router.get("/employee/:employeeId", getEmployeeRequestsController);
-router.get("/employee/status/:status", getRequestsByStatusController);
+router.post("/", createExpenseRequestController);
+router.get("/pending", getPendingRequestsController);
+router.get("/employees/:employeeId", getEmployeeRequestsController); 
+router.get("/:id", getRequestByIdController);
+router.put("/:id/approve", approveRequestController);
+router.put("/:id/reject", rejectRequestController);
+router.put("/my-requests/:id", updateExpenseRequestController);
+router.delete("/my-requests/:id", deleteExpenseRequestController);
 
 export default router;
