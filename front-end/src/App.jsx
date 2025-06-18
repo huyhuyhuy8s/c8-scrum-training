@@ -1,11 +1,14 @@
-import NavigationBar from "./components/NavigationBar";
 import "./App.css";
+import AddExpense from "./components/AddExpense";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <NavigationBar />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<AddExpense />} />
+      </Routes>
+    </Router>
   );
 }
 
