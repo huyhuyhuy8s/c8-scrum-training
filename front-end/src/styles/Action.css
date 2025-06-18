@@ -11,12 +11,12 @@
 .action-title {
   font-size: 30px;
   font-weight: 600;
-  color: #333;
+  color: #050315;
   margin: 0;
 }
 
-.action-button {
-  background-color: #6366f1;
+.action-create-button {
+  background-color: #2f27ce;
   color: white;
   border: none;
   border-radius: 8px;
@@ -27,19 +27,31 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(47, 39, 206, 0.2);
 }
 
-.action-button:hover {
-  background-color: #5856eb;
+.action-create-button:hover {
+  background-color: #433bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(47, 39, 206, 0.3);
+}
+
+.action-create-button:active {
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(47, 39, 206, 0.4);
 }
 
-.action-button:active {
-  transform: translateY(0);
+.action-create-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 39, 206, 0.3);
 }
 
-.action-button-icon {
+.action-create-button:focus:hover {
+  box-shadow: 0 4px 12px rgba(47, 39, 206, 0.3), 0 0 0 3px rgba(47, 39, 206, 0.3);
+}
+
+.action-create-button-icon {
   font-size: 16px;
   line-height: 1;
 }

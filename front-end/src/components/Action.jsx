@@ -6,12 +6,11 @@ const Action = ({ title, buttonText, onButtonClick }) => {
       <h1 className="action-title">
         {title}
       </h1>
-      
-      <button 
-        className="action-button"
+        <button 
+        className="action-create-button"
         onClick={onButtonClick}
       >
-        <span className="action-button-icon">+</span>
+        <span className="action-create-button-icon">+</span>
         {buttonText}
       </button>
     </div>

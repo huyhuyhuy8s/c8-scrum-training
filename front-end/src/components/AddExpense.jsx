@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 
-function AddExpense({ onClose }) {
+function AddExpense({ onClose, initialData = null, isViewMode = false }) {
   const today = new Date().toISOString().split('T')[0]
   const [expense, setExpense] = useState({
-    amount: '',
-    description: '',
+    amount: initialData?.amount || '',
+    description: initialData?.description || '',
     image: null
   })
 
@@ -88,31 +88,38 @@ function AddExpense({ onClose }) {
       image: e.target.files[0] || null
     }))
   }
-
   return (
     <div className="add-expense-container">
-      <h1 className="add-expense-title">Add New Expense</h1>
+      <h1 className="add-expense-title">
+        {isViewMode ? 'Expense Details' : 'Add New Expense'}
+      </h1>
+      {isViewMode && initialData?.employee && (
+        <div className="expense-info">
+          <p><strong>Employee:</strong> {initialData.employee.name}</p>
+          <p><strong>Department:</strong> {initialData.employee.department}</p>
+          <p><strong>Status:</strong> {initialData.status}</p>
+        </div>
+      )}
       <form className="add-expense-form" onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="expenseDate">Expense Date</label>
-            <input
+            <label htmlFor="expenseDate">Expense Date</label>            <input
               type="date"
               id="expenseDate"
               name="expenseDate"
-              value={today}
+              value={initialData?.expenseDate || today}
               readOnly
               className="form-input"
             />
           </div>          <div className="form-group">
-            <label htmlFor="amount">Amount ($)</label>
-            <input
+            <label htmlFor="amount">Amount ($)</label>            <input
               type="text"
               id="amount"
               name="amount"
               value={expense.amount}
               onChange={handleChange}
-              required
+              required={!isViewMode}
+              readOnly={isViewMode}
               className="form-input"
               placeholder="0.00"
               pattern="[0-9]+(\.[0-9]{1,2})?"
@@ -121,13 +128,13 @@ function AddExpense({ onClose }) {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
+          <label htmlFor="description">Description</label>          <textarea
             id="description"
             name="description"
             value={expense.description}
             onChange={handleChange}
-            required
+            required={!isViewMode}
+            readOnly={isViewMode}
             className="form-input"
             placeholder="Enter description"
             rows={3}
@@ -143,9 +150,17 @@ function AddExpense({ onClose }) {
             accept="image/*"
             onChange={handleFileChange}
             className="form-input"
-          />
-        </div>
-        <button type="submit" className="add-expense-btn">Add Expense</button>
+          />        </div>
+        {!isViewMode && (
+          <button type="submit" className="add-expense-btn">Add Expense</button>
+        )}
+        {isViewMode && (
+          <div className="view-mode-actions">
+            <button type="button" className="close-btn" onClick={onClose}>
+              Close
+            </button>
+          </div>
+        )}
       </form>
     </div>
   )
