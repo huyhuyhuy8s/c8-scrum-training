@@ -1,10 +1,36 @@
 import { Router } from "express";
+
 import { getEmployeeRequests } from "../controllers/expenseRequest.controller.js";
-import { createExpenseRequestController } from "../controllers/expenseRequest.controller.js";
+import { createExpenseRequestController,changeStatusRequestController } from "../controllers/expenseRequest.controller.js";
+
+import {
+  createExpenseRequestController,
+  getPendingRequestsController,
+  getRequestByIdController,
+  approveRequestController,
+  rejectRequestController,
+  getEmployeeRequestsController,
+  updateExpenseRequestController,
+  deleteExpenseRequestController,
+  getRequestsByStatusController,
+} from "../controllers/expenseRequest.controller.js";
+
 import { logout } from "../controllers/auth.controller.js";
 const router = Router();
 
 router.post("/employee", createExpenseRequestController);
+router.get("/pending", getPendingRequestsController);
+router.get("/employees/:employeeId", getEmployeeRequestsController);
+router.get("/:id", getRequestByIdController);
+router.put("/:id/approve", approveRequestController);
+router.put("/:id/reject", rejectRequestController);
+router.put("/my-requests/:id", updateExpenseRequestController);
+router.delete("/my-requests/:id", deleteExpenseRequestController);
+router.get("/finance/status/:status", getRequestsByStatusController);
+
+
+router.patch("/:idFinance/:idExpenseRequest/:changeStatus",changeStatusRequestController)
 router.get("/employee/:employeeId", getEmployeeRequests);
 router.post("/logout/:employeeId", logout);
 export default router;
+

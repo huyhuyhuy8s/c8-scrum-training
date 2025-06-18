@@ -174,7 +174,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Data\\MY_CODE\\NodeJs\\c8-scrum-training\\back-end\\generated\\prisma",
+      "value": "/Users/romuncle/srcum hk3/src/c8-scrum-training/back-end/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -183,12 +183,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Data\\MY_CODE\\NodeJs\\c8-scrum-training\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/romuncle/srcum hk3/src/c8-scrum-training/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -201,7 +201,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -250,8 +250,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "back-end/generated/prisma/query_engine-windows.dll.node")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "back-end/generated/prisma/libquery_engine-darwin-arm64.dylib.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "back-end/generated/prisma/schema.prisma")
