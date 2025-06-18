@@ -2,7 +2,7 @@ import cloudinary from "../libs/cloudinary.js";
 import SystemLogRepository from "../models/systemLog.js";
 
 import ExpenseRequestRepository from "../models/expenseRequest.js";
-
+import EmployeeRepository from "../models/employee.js";
 
 export const createExpenseRequest = async (expenseRequest) => {
   try {
@@ -18,11 +18,10 @@ export const createExpenseRequest = async (expenseRequest) => {
 
     const newExpenseRequest = await ExpenseRequestRepository.create({
       data: {
-        employeeId: expenseRequest.employeeId,
+        employeeId: expenseRequest.employeeId || 1,
         description: expenseRequest.description,
         amount: expenseRequest.amount,
         imageUrl: imageUrl,
-        status: "PENDING",
       },
     });
 
@@ -36,25 +35,6 @@ export const createExpenseRequest = async (expenseRequest) => {
 // Get all pending requests for manager
 export const getPendingRequests = async () => {
   return await ExpenseRequestRepository.findMany({
-    where: { employeeId },
-    select: {
-      id: true,
-      description: true,
-      amount: true,
-      status: true,
-      createdAt: true,
-      imageUrl: true,
-      approvedBy: {
-        select: { id: true, name: true },
-      },
-      finalApprovedBy: {
-        select: { id: true, name: true },
-      },
-      logs: {
-        select: { id: true, action: true, timestamp: true },
-      },
-    },
-
     where: {
       status: "PENDING",
     },
@@ -193,10 +173,12 @@ export const updateExpenseRequest = async (
   });
 
   // Log the action
-  // await SystemLogRepository.create({
-  //     action: `Request updated by employee ID ${employeeId}`,
-  //     requestId: parseInt(requestId)
-  // });
+  await SystemLogRepository.create({
+    data: {
+      action: `Request updated by employee ID ${employeeId}`,
+      requestId: parseInt(requestId),
+    },
+  });
 
   return updatedRequest;
 };
@@ -216,16 +198,17 @@ export const deleteExpenseRequest = async (requestId, employeeId) => {
     throw new Error("Request not found or cannot be deleted");
   }
 
-  // Delete the request
+  // Delete related system logs first
+  await SystemLogRepository.deleteMany({
+    where: {
+      requestId: parseInt(requestId),
+    },
+  });
+
+  // Then delete the request
   const deletedRequest = await ExpenseRequestRepository.delete({
     where: { id: parseInt(requestId) },
   });
-
-  // Log the action
-  // await SystemLogRepository.create({
-  //     action: `Request deleted by employee ID ${employeeId}`,
-  //     requestId: parseInt(requestId)
-  // });
 
   return deletedRequest;
 };
@@ -290,4 +273,42 @@ export const changeStatusRequest = async (
     console.error("Error updating expense request:", error.message); // Log the error message
     throw error; // Re-throw the original error
   }
+};
+
+// Get all requests from manager's team (same department)
+export const getTeamRequests = async (managerId) => {
+  // First, get manager info to find their department
+  const manager = await EmployeeRepository.findUnique({
+    where: { id: parseInt(managerId) },
+  });
+
+  if (!manager || manager.role !== "MANAGER") {
+    throw new Error("Manager not found or insufficient permissions");
+  }
+
+  // Get all employees in the same department
+  const teamEmployees = await EmployeeRepository.findMany({
+    where: {
+      department: manager.department,
+      role: "EMPLOYEE", // Only get employees, not other managers
+    },
+  });
+
+  const employeeIds = teamEmployees.map((emp) => emp.id);
+
+  // Get all requests from team members
+  return await ExpenseRequestRepository.findMany({
+    where: {
+      employeeId: {
+        in: employeeIds,
+      },
+    },
+    include: {
+      employee: true,
+      approvedBy: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };

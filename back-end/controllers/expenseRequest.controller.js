@@ -1,5 +1,6 @@
 import {
   createExpenseRequest,
+  changeStatusRequest,
   getPendingRequests,
   getRequestById,
   approveRequest,
@@ -8,6 +9,8 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   changeStatusRequest,
+  getRequestsByStatus,
+  getTeamRequests,
 } from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
@@ -21,6 +24,33 @@ export const createExpenseRequestController = async (req, res) => {
   }
 };
 
+
+// Fix: Complete the getEmployeeRequestsController function
+export const getEmployeeRequestsController = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+
+    if (!employeeId) {
+      return res.status(400).json({
+        success: false,
+        message: "Employee ID is required",
+      });
+    }
+
+    const requests = await getEmployeeRequests(employeeId);
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching employee requests",
+      error: error.message,
+    });
+  }
+};
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
   try {
@@ -76,9 +106,7 @@ export const approveRequestController = async (req, res) => {
         message: "Manager ID is required",
       });
     }
-    console.log(" controller: ");
-    // console.log(updatedRequest)
-    // Comment is optional for approval
+
     const updatedRequest = await approveRequest(
       id,
       managerId,
@@ -112,14 +140,6 @@ export const rejectRequestController = async (req, res) => {
       });
     }
 
-    // Comment is now optional for rejection - removed the validation
-    // if (!comment || comment.trim() === "") {
-    //     return res.status(400).json({
-    //         success: false,
-    //         message: "Comment explaining the decision is required"
-    //     });
-    // }
-
     const updatedRequest = await rejectRequest(
       id,
       managerId,
@@ -135,33 +155,6 @@ export const rejectRequestController = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error rejecting request",
-      error: error.message,
-    });
-  }
-};
-
-// Get employee's own requests
-export const getEmployeeRequestsController = async (req, res) => {
-  try {
-    const { employeeId } = req.params;
-
-    if (!employeeId) {
-      return res.status(400).json({
-        success: false,
-        message: "Employee ID is required",
-      });
-    }
-
-    const requests = await getEmployeeRequests(employeeId);
-
-    res.status(200).json({
-      success: true,
-      data: requests,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching employee requests",
       error: error.message,
     });
   }
@@ -252,14 +245,23 @@ export const deleteExpenseRequestController = async (req, res) => {
 
 export const getRequestsByStatusController = async (req, res) => {
   try {
-    const status = req.params.status;
+    const { status } = req.params;
     const requests = await getRequestsByStatus(status);
-    res.json(requests);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Server error" });
+
+    res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching requests by status",
+      error: error.message,
+    });
   }
 };
+
+// Change status request (Finance)
 export const changeStatusRequestController = async (req, res) => {
   try {
     const idFinance = parseInt(req.params.idFinance);
@@ -272,13 +274,60 @@ export const changeStatusRequestController = async (req, res) => {
     }
 
     const updatedRequest = await changeStatusRequest(
-      idFinance,
-      idExpenseRequest,
+      parseInt(idFinance),
+      parseInt(idExpenseRequest),
       changeStatus,
       rejectedReason
     );
-    res.status(201).json(updatedRequest);
+
+    res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      data: updatedRequest,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Error updating request status",
+      error: error.message,
+    });
+  }
+};
+// Get all requests from manager's team
+export const getTeamRequestsController = async (req, res) => {
+  try {
+    const { managerId } = req.params;
+
+    if (!managerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Manager ID is required",
+      });
+    }
+
+    const requests = await getTeamRequests(managerId);
+
+    res.status(200).json({
+      success: true,
+      message: "Team requests retrieved successfully",
+      data: requests,
+      count: requests.length,
+    });
+  } catch (error) {
+    if (
+      error.message.includes("Manager not found") ||
+      error.message.includes("insufficient permissions")
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Error fetching team requests",
+      error: error.message,
+    });
   }
 };
