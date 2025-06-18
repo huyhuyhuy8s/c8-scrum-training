@@ -47,7 +47,7 @@ export const RequestStatus: {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   FINAL_APPROVED: 'FINAL_APPROVED',
-  PROCESSED: 'PROCESSED'
+  WRAPPED: 'WRAPPED'
 };
 
 export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]

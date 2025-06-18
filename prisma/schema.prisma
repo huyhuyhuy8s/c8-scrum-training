@@ -65,5 +65,5 @@ enum RequestStatus {
   APPROVED
   REJECTED
   FINAL_APPROVED
-  PROCESSED
+  WRAPPED
 }
