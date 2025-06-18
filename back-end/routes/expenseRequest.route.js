@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import {
   createExpenseRequestController,
   getPendingRequestsController,
@@ -12,8 +11,6 @@ import {
   getRequestsByStatusController,
   changeStatusRequestController,
 } from "../controllers/expenseRequest.controller.js";
-
-import { logout } from "../controllers/auth.controller.js";
 const router = Router();
 
 router.post("/employee", createExpenseRequestController);
@@ -29,5 +26,4 @@ router.patch(
   "/:idFinance/:idExpenseRequest/:changeStatus",
   changeStatusRequestController
 );
-router.post("/logout/:employeeId", logout);
 export default router;
