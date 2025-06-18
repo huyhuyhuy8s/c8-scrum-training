@@ -2,7 +2,7 @@ import EmployeeRepository from "../models/employee.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const logout = (req, res) => {
+export const logoutUser = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully" });
@@ -12,19 +12,22 @@ export const logout = (req, res) => {
   }
 };
 
-export const loginUser = async (email, password, role) => {
+export const loginUser = async (email, password) => {
   const employee = await EmployeeRepository.findUnique({
-    where: { email, role },
+    where: { email },
   });
   if (!employee) {
     console.log("Employee not found");
+    throw new Error("Employee not found");
   }
-  const result = bcrypt.compare(password, employee.password);
-  if (password !== employee.password) {
+  const result = await bcrypt.compare(password, employee.password);
+  if (!result) {
     console.log("Invalid password");
+    throw new Error("Invalid password");
   }
   return employee;
 };
+
 export const getEmployeeById = async (id) => {
   const employee = await EmployeeRepository.findUnique({
     where: { id },

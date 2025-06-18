@@ -10,6 +10,7 @@ import {
   deleteExpenseRequest,
   getRequestsByStatus,
   getTeamRequests,
+  updateExpenseRequestStatus,
 } from "../services/expenseRequest.service.js";
 
 export const createExpenseRequestController = async (req, res) => {
@@ -264,7 +265,7 @@ export const getRequestsByStatusController = async (req, res) => {
 export const changeStatusRequestController = async (req, res) => {
   try {
     const { idFinance, idExpenseRequest, changeStatus } = req.params;
-    const { rejectedReason } = req.body;
+    const { rejectedReason } = req.body || {};
 
     const updatedRequest = await changeStatusRequest(
       parseInt(idFinance),
@@ -320,6 +321,41 @@ export const getTeamRequestsController = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error fetching team requests",
+      error: error.message,
+    });
+  }
+};
+
+// Update expense request status
+export const updateExpenseRequestStatusController = async (req, res) => {
+  try {
+    const { id, status } = req.params;
+    console.log(id, status);
+    // Validate status
+    const validStatuses = [
+      "PENDING",
+      "APPROVED",
+      "REJECTED",
+      "FINAL_APPROVED",
+      "WRAPPED",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    const updatedRequest = await updateExpenseRequestStatus(id, status);
+    res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating request status",
       error: error.message,
     });
   }

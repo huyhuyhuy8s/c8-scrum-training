@@ -32,9 +32,9 @@ export const logoutController = async (req, res) => {
 };
 
 export const loginController = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
   try {
-    const employee = await loginUser(email, password, role);
+    const employee = await loginUser(email, password);
     const token = generateToken(employee);
     res.status(200).json({ employee, token });
   } catch (error) {

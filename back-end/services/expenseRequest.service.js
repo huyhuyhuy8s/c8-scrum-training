@@ -312,3 +312,10 @@ export const getTeamRequests = async (managerId) => {
     },
   });
 };
+
+export const updateExpenseRequestStatus = async (requestId, status) => {
+  return await ExpenseRequestRepository.update({
+    where: { id: parseInt(requestId) },
+    data: { status },
+  });
+};
