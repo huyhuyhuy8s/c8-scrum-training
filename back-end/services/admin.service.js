@@ -62,3 +62,26 @@ export const updateEmployeeById = async (
     throw new Error();
   }
 };
+
+export const deleteEmployeeById = async (
+  idEmployee
+) => {
+  try {
+    const deletedEmployee = await EmployeeRepository.delete({
+      where: {
+        id: idEmployee,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // If the delete operation completes without throwing an error,
+    // it means a record was found and deleted.
+    console.log(`Employee with ID ${deletedEmployee.id} deleted successfully.`);
+    return true;
+  } catch (error) {
+    console.error('Error deleting employee:', error);
+    throw new Error;
+  } 
+};

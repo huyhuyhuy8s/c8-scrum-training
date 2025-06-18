@@ -1,6 +1,7 @@
 import {
   createNewEmployee,
-  updateEmployeeById
+  updateEmployeeById,
+  deleteEmployeeById
 } from "../services/admin.service.js";
 
 export const createEmployee = async (req, res) => {
@@ -20,6 +21,16 @@ export const updateEmployee = async (req, res) => {
     const employee = await updateEmployeeById(idEmployee,req.body)
 
     res.status(201).json(employee);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const deleteEmployee = async (req, res) => {
+  try {
+    const idEmployee = parseInt(req.params.idEmployee)
+    const deletedEmployee = await deleteEmployeeById(idEmployee)
+
+    res.status(201).json(deletedEmployee);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
