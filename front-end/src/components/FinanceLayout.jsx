@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import NavigationBar from "./NavigationBar";
 import Card from "./Card";
-import ManagerAction from "./ManagerAction";
+import FinanceAction from "./FinanceAction";
 import List from "./List";
 import FeedbackButton from "./FeedbackButton";
+import { FiDownload, FiCalendar } from "react-icons/fi";
 import "../styles/MainLayout.css";
 
-const FinanceLayout = () => {
-  const [selectedRequests, setSelectedRequests] = useState([]);
+const FinanceLayout = () => {  const [selectedRequests, setSelectedRequests] = useState([]);
+  const [exportStartDate, setExportStartDate] = useState('');
+  const [exportEndDate, setExportEndDate] = useState('');
+  const [isExporting, setIsExporting] = useState(false);
+  const [filterStartDate, setFilterStartDate] = useState('');
+  const [filterEndDate, setFilterEndDate] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleApprove = () => {
     if (selectedRequests.length === 0) {
@@ -41,11 +47,133 @@ const FinanceLayout = () => {
       setSelectedRequests(prev => prev.filter(id => id !== requestId));
     }
   };
-
   const handleFeedback = () => {
     console.log("Finance feedback submitted");
     alert("Thank you for your feedback! We appreciate your input.");
   };
+
+  const handleDateFilter = () => {
+    if (!filterStartDate || !filterEndDate) {
+      alert('Please select both start and end dates');
+      return;
+    }
+
+    const startDate = new Date(filterStartDate);
+    const endDate = new Date(filterEndDate);
+    
+    if (startDate > endDate) {
+      alert('Start date cannot be after end date');
+      return;
+    }
+
+    // Filter data based on date range
+    const filtered = expenseRequestsData.filter(item => {
+      const itemDate = new Date(item.date);
+      return itemDate >= startDate && itemDate <= endDate;
+    });
+
+    setFilteredData(filtered);
+    console.log(`Filtered ${filtered.length} requests between ${filterStartDate} and ${filterEndDate}`);
+    alert(`Found ${filtered.length} requests in the selected date range`);
+  };
+
+  const clearDateFilter = () => {
+    setFilterStartDate('');
+    setFilterEndDate('');
+    setFilteredData([]);
+  };
+
+  const handleExport = async () => {
+    if (!exportStartDate || !exportEndDate) {
+      alert('Please select both start and end dates for export');
+      return;
+    }
+
+    if (new Date(exportStartDate) > new Date(exportEndDate)) {
+      alert('Start date cannot be later than end date');
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+      
+      // Filter approved requests within date range
+      const filteredData = expenseRequestsData.filter(request => {
+        const requestDate = new Date(request.date);
+        const startDate = new Date(exportStartDate);
+        const endDate = new Date(exportEndDate);
+        
+        return request.status === 'finance_approved' && 
+               requestDate >= startDate && 
+               requestDate <= endDate;
+      });
+
+      if (filteredData.length === 0) {
+        alert('No approved requests found in the selected date range');
+        return;
+      }
+
+      // Generate CSV content
+      const csvContent = generateCSV(filteredData);
+      
+      // Download CSV file
+      downloadCSV(csvContent, `approved_requests_${exportStartDate}_to_${exportEndDate}.csv`);
+      
+      alert(`Successfully exported ${filteredData.length} approved request(s)`);
+      
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('Error occurred during export. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const generateCSV = (data) => {
+    const headers = [
+      'Request ID',
+      'Date',
+      'Employee Name',
+      'Department', 
+      'Category',
+      'Amount',
+      'Status',
+      'Approved Date'
+    ];
+
+    const csvRows = [
+      headers.join(','),
+      ...data.map(row => [
+        row.id,
+        row.date,
+        `"${row.employee.name}"`,
+        `"${row.employee.department}"`,
+        `"${row.category}"`,
+        row.amount,
+        row.statusText,
+        row.approvedDate || row.date
+      ].join(','))
+    ];
+
+    return csvRows.join('\n');
+  };
+
+  const downloadCSV = (csvContent, filename) => {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  };
+
   // Finance-specific data - requests with pending, approved, or rejected status
   const expenseRequestsData = [
     // Pending requests - waiting for finance review
@@ -165,11 +293,50 @@ const FinanceLayout = () => {
       employee: {
         name: "Rachel Green",
         department: "Marketing"
-      },
-      category: "Advertising Campaign",
+      },      category: "Advertising Campaign",
       amount: "$2,500.00",
       status: "rejected",
       statusText: "Rejected"
+    },
+    // Finance approved requests for testing export
+    {
+      id: 33,
+      date: "2025-06-10",
+      employee: {
+        name: "Lisa Wang",
+        department: "Product Management"
+      },
+      category: "Market Research Tools",
+      amount: "$499.00",
+      status: "finance_approved",
+      statusText: "Finance Approved",
+      approvedDate: "2025-06-11"
+    },
+    {
+      id: 34,
+      date: "2025-06-08",
+      employee: {
+        name: "Mark Johnson",
+        department: "Sales"
+      },
+      category: "Client Presentation",
+      amount: "$320.75",
+      status: "finance_approved",
+      statusText: "Finance Approved", 
+      approvedDate: "2025-06-09"
+    },
+    {
+      id: 35,
+      date: "2025-06-05",
+      employee: {
+        name: "Sophie Chen",
+        department: "HR"
+      },
+      category: "Team Building Event",
+      amount: "$1,200.00",
+      status: "finance_approved",
+      statusText: "Finance Approved",
+      approvedDate: "2025-06-06"
     }
   ];
 
@@ -183,25 +350,46 @@ const FinanceLayout = () => {
           <Card title="PENDING" count="4" subtitle="request(s)" />
           <Card title="APPROVED" count="3" subtitle="request(s)" />
           <Card title="REJECTED" count="3" subtitle="request(s)" />
-        </div>
-
-        {/* Finance Action Section */}
-        <ManagerAction
-          title="Finance Final Approval"
+        </div>        {/* Finance Action Section with Date Filter */}
+        <FinanceAction
           selectedCount={selectedRequests.length}
           onAccept={handleApprove}
           onReject={handleReject}
-        />
-
-        {/* All Expense Requests List */}
+          startDate={filterStartDate}
+          endDate={filterEndDate}
+          onStartDateChange={setFilterStartDate}
+          onEndDateChange={setFilterEndDate}
+          onDateFilter={handleDateFilter}
+        />        {/* All Expense Requests List */}
         <List 
-          title="Expense Requests - Finance Review"
-          data={expenseRequestsData}
+          title={filteredData.length > 0 ? `Filtered Expense Requests (${filteredData.length})` : "Expense Requests - Finance Review"}
+          data={filteredData.length > 0 ? filteredData : expenseRequestsData}
           isManagerView={true}
           isFinanceView={true}
           onRequestSelection={handleRequestSelection}
           selectedRequests={selectedRequests}
         />
+
+        {filteredData.length > 0 && (
+          <div style={{ textAlign: 'center', margin: '10px 0' }}>
+            <button 
+              onClick={clearDateFilter}
+              style={{
+                padding: '8px 16px',
+                background: '#dedcff',
+                border: 'none',
+                borderRadius: '6px',
+                color: '#2f27ce',
+                cursor: 'pointer',
+                fontSize: '0.875rem'
+              }}
+            >
+              Clear Date Filter
+            </button>
+          </div>
+        )}
+
+        
 
         {/* Feedback Button */}
         <FeedbackButton onClick={handleFeedback} />
