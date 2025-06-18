@@ -1,6 +1,3 @@
-
-import { createExpenseRequest,changeStatusRequest } from "../services/expenseRequest.service.js";
-
 import {
   createExpenseRequest,
   getPendingRequests,
@@ -10,26 +7,22 @@ import {
   getEmployeeRequests,
   updateExpenseRequest,
   deleteExpenseRequest,
-  getRequestsByStatus,
+  changeStatusRequest,
 } from "../services/expenseRequest.service.js";
-
 
 export const createExpenseRequestController = async (req, res) => {
   try {
     const expenseRequest = req.body;
     const newExpenseRequest = await createExpenseRequest(expenseRequest);
+    console.log(newExpenseRequest);
     res.status(201).json(newExpenseRequest);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getEmployeeRequests = async (req, res) => {
-
-
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
-
   try {
     const requests = await getPendingRequests();
     res.status(200).json({
@@ -257,7 +250,6 @@ export const deleteExpenseRequestController = async (req, res) => {
   }
 };
 
-// Get requests by status
 export const getRequestsByStatusController = async (req, res) => {
   try {
     const status = req.params.status;
@@ -273,8 +265,12 @@ export const changeStatusRequestController = async (req, res) => {
     const idFinance = parseInt(req.params.idFinance);
     const idExpenseRequest = parseInt(req.params.idExpenseRequest);
     const changeStatus = req.params.changeStatus;
-    const rejectedReason = req.body.rejectedReason || ""
-    
+    const rejectedReason =  ""
+
+    if (changeStatus != "FINAL_APPROVED") {
+      const rejectedReason = req.body.rejectedReason
+    }
+
     const updatedRequest = await changeStatusRequest(
       idFinance,
       idExpenseRequest,
@@ -282,7 +278,6 @@ export const changeStatusRequestController = async (req, res) => {
       rejectedReason
     );
     res.status(201).json(updatedRequest);
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
