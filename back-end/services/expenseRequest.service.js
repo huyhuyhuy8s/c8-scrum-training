@@ -1,6 +1,5 @@
 import cloudinary from "../libs/cloudinary.js";
 import SystemLogRepository from "../models/systemLog.js";
-
 import ExpenseRequestRepository from "../models/expenseRequest.js";
 import EmployeeRepository from "../models/employee.js";
 
@@ -432,4 +431,49 @@ export const exportFinalApprovedRequests = async (financeId, filters) => {
     }
 
   });
+};
+// Tổng chi tiêu theo nhân viên
+export const getTotalSpentPerEmployee = async () => {
+  return await ExpenseRequestRepository.groupBy({
+    by: ['employeeId'],
+    _sum: {
+      amount: true,
+    },
+    orderBy: {
+      _sum: {
+        amount: 'desc',
+      },
+    },
+  });
+};
+
+// Tổng chi tiêu theo phòng ban
+export const getTotalSpentPerDepartment = async () => {
+  const data = await ExpenseRequestRepository.findMany({
+    select: {
+      amount: true,
+      employee: {
+        select: {
+          department: true,
+        },
+      },
+    },
+  });
+
+  // Group dữ liệu trong JS
+  const departmentSummary = {};
+
+  data.forEach(item => {
+    const dept = item.employee?.department || "Unknown";
+    if (!departmentSummary[dept]) {
+      departmentSummary[dept] = 0;
+    }
+    departmentSummary[dept] += item.amount;
+  });
+
+  const result = Object.entries(departmentSummary)
+    .map(([department, total]) => ({ department, total }))
+    .sort((a, b) => b.total - a.total);
+
+  return result;
 };

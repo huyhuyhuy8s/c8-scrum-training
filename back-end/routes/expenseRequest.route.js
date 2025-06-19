@@ -15,6 +15,9 @@ import {
   updateExpenseRequestStatusController,
   filterTeamRequestsController,
   exportFinalApprovedRequestsController,
+
+  totalSpentPerEmployeeController,
+  totalSpentPerDepartmentController
 } from "../controllers/expenseRequest.controller.js";
 const router = Router();
 
@@ -56,4 +59,6 @@ router.get(
   exportFinalApprovedRequestsController
 ); //C8-16: Finance officer lọc những request có finalApprovedById = financeId và status = FINAL_APPROVED (Công Thuận)
 
+router.get("/summary/employee", totalSpentPerEmployeeController);
+router.get("/summary/department", totalSpentPerDepartmentController);
 export default router;
