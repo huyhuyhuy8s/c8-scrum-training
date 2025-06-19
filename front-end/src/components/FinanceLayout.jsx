@@ -372,36 +372,7 @@ const FinanceLayout = () => {
             onClose={handleCloseSummary} 
           />
         )}
-
-        {/* Export Section */}
-        <div className="export-container">
-          <h2>Export Approved Requests</h2>
-          <div className="date-range">
-            <div className="date-picker">
-              <label>Start Date:</label>
-              <input 
-                type="date" 
-                value={exportStartDate} 
-                onChange={(e) => setExportStartDate(e.target.value)} 
-              />
-            </div>
-            <div className="date-picker">
-              <label>End Date:</label>
-              <input 
-                type="date" 
-                value={exportEndDate} 
-                onChange={(e) => setExportEndDate(e.target.value)} 
-              />
-            </div>
-          </div>
-          <button 
-            className="export-button" 
-            onClick={handleExport}
-            disabled={isExporting}
-          >
-            {isExporting ? 'Exporting...' : <><FiDownload /> Export to CSV</>}
-          </button>
-        </div>
+        
       </div>
     </>
   );
