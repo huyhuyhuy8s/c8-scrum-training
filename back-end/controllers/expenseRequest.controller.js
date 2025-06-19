@@ -11,6 +11,8 @@ import {
   deleteExpenseRequest,
   getRequestsByStatus,
   getTeamRequests,
+  getTotalSpentPerEmployee,
+  getTotalSpentPerDepartment,
 } from "../services/expenseRequest.service.js";
 export const createExpenseRequestController = async (req, res) => {
   try {
