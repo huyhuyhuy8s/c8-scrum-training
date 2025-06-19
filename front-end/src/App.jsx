@@ -1,13 +1,24 @@
 import "./App.css";
-import AddExpense from "./components/AddExpense";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import MainLayout from "./components/MainLayout";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MainLayout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );

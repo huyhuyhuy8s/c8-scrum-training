@@ -1,0 +1,372 @@
+/* Register Component Styles */
+/* Following Perfect Fourth type scale (1.333) and color palette */
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fbfbfe 0%, #f0efff 100%);
+  padding: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.register-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 2rem rgba(47, 39, 206, 0.1);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 42rem; /* Wider for two-column layout */
+  border: 1px solid rgba(222, 220, 255, 0.3);
+}
+
+/* Header Styles */
+.register-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.register-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background: linear-gradient(135deg, #2f27ce 0%, #433bff 100%);
+  border-radius: 1rem;
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.register-title {
+  color: #050315;
+  font-size: 1.777rem; /* Perfect Fourth scale */
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.register-subtitle {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Form Styles */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  color: #050315;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: #6b7280;
+  font-size: 1.25rem;
+  z-index: 2;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  color: #050315;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #2f27ce;
+  box-shadow: 0 0 0 3px rgba(47, 39, 206, 0.1);
+}
+
+.form-input:disabled,
+.form-select:disabled {
+  background: #f9fafb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.form-select option {
+  color: #050315;
+  background: #ffffff;
+}
+
+/* Password Toggle */
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #2f27ce;
+}
+
+.password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Register Button */
+.register-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #2f27ce 0%, #433bff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 3rem;
+  margin-top: 0.5rem;
+}
+
+.register-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #251f9a 0%, #362eb3 100%);
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.5rem 1rem rgba(47, 39, 206, 0.3);
+}
+
+.register-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 0.25rem 0.5rem rgba(47, 39, 206, 0.2);
+}
+
+.register-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error and Success Messages */
+.register-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.register-error::before {
+  content: '⚠️';
+  font-size: 1rem;
+}
+
+.register-success {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  color: #0369a1;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.register-success::before {
+  content: '✅';
+  font-size: 1rem;
+}
+
+/* Footer */
+.register-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.register-footer p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.register-link {
+  color: #2f27ce;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.register-link:hover {
+  color: #433bff;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .register-card {
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .register-container {
+    padding: 0.5rem;
+  }
+  
+  .register-card {
+    padding: 2rem 1.5rem;
+    border-radius: 0.75rem;
+  }
+  
+  .register-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-input,
+  .form-select {
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+  }
+  
+  .input-icon {
+    left: 0.875rem;
+    font-size: 1.125rem;
+  }
+  
+  .password-toggle {
+    right: 0.875rem;
+    font-size: 1.125rem;
+  }
+}
+
+/* Focus management for accessibility */
+.register-card:focus-within {
+  box-shadow: 0 0.5rem 2rem rgba(47, 39, 206, 0.15);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .register-card {
+    border: 2px solid #050315;
+  }
+  
+  .form-input,
+  .form-select {
+    border-width: 2px;
+  }
+  
+  .register-button {
+    border: 2px solid #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .register-button,
+  .register-link,
+  .form-input,
+  .form-select,
+  .password-toggle {
+    transition: none;
+  }
+  
+  .loading-spinner {
+    animation: none;
+  }
+  
+  .register-button:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Custom styles for select dropdown */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 3rem;
+}
+
+.form-select:focus {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232f27ce' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+}

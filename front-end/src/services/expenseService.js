@@ -26,6 +26,7 @@ export const createExpense = async (expenseData) => {
     // Validate required fields
     const { expenseDate, description, amount } = expenseData;
 
+
     if (!description || !amount || !expenseDate) {
       throw new Error("Date, description, and amount are required");
     }
@@ -45,7 +46,7 @@ export const createExpense = async (expenseData) => {
     };
 
     // Make the API request
-    const response = await axios.post(`${API_BASE_URL}/employee`, payload, {
+    const response = await axios.post(`${API_BASE_URL}/employees`, payload, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -243,10 +244,30 @@ export const updateExpense = async (expenseId, expenseData) => {
 };
 
 /**
+ * Update expense status
+ * @param {number} expenseId - The ID of the expense to update
+ * @param {string} status - The new status ('pending', 'approved', 'rejected', 'draft')
+ * @returns {Promise<Object>} The response from the API
+ * @throws {Error} If the update fails
+ */
+export const updateExpenseStatus = async (expenseId, status) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/expenses/${expenseId}/status`, {
+      status: status
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error updating expense status:', error);
+    throw new Error(error.response?.data?.message || 'Failed to update expense status');
+  }
+};
+
+/**
  * Delete an expense
- * @param {string} expenseId - The ID of the expense to delete
- * @returns {Promise<Object>} Confirmation of deletion
- * @throws {Error} Network errors or server errors
+ * @param {number} expenseId - The ID of the expense to delete
+ * @returns {Promise<Object>} The response from the API
+ * @throws {Error} If the deletion fails
  */
 export const deleteExpense = async (expenseId) => {
   try {

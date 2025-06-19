@@ -11,8 +11,20 @@
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   position: relative;
+}
+
+.list-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .list-icon {
@@ -128,6 +140,11 @@
   color: #d97706;
 }
 
+.list-status.draft {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
 .list-status.approved {
   background-color: #d1fae5;
   color: #065f46;
@@ -156,4 +173,109 @@
   text-align: center;
   color: #6b7280;
   font-style: italic;
+}
+
+/* Action buttons for list items */
+.list-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  font-size: 0.875rem;
+}
+
+.action-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.send-btn {
+  color: var(--primary, #2f27ce);
+  border-color: var(--primary, #2f27ce);
+}
+
+.send-btn:hover:not(:disabled) {
+  background: var(--primary, #2f27ce);
+  color: white;
+}
+
+.delete-btn {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: #dc2626;
+  color: white;
+}
+
+.action-loading {
+  display: inline-block;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.no-actions {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+/* Disabled action button styles */
+.action-btn.disabled {
+  opacity: 0.4;
+  background: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.action-btn.disabled:hover {
+  background: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  transform: none;
+}
+
+/* Responsive design for actions column */
+@media (max-width: 768px) {
+  .list-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .action-btn {
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    padding: 0.375rem;
+    font-size: 0.75rem;
+  }
 }

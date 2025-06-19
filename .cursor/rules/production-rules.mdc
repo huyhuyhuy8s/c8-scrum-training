@@ -33,4 +33,14 @@ All React components must be stored in /front-end/src/components/
 All React components styles must be stored in /front-end/src/styles/ then import the styles onto /front-end/src/App.css
 All React services must be stored in /front-end/src/services/
 
+Services call using axios
+
+User Information:
+
+- email
+- password
+- name
+- department
+- role
+
 ## BACK-END

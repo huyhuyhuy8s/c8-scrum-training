@@ -36,3 +36,74 @@
   color: #666;
   font-weight: 500;
 }
+
+/* Clickable card styles */
+.card-clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-clickable:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  border-color: var(--accent, #433bff);
+}
+
+.card-clickable:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(67, 59, 255, 0.2);
+  border-color: var(--accent, #433bff);
+}
+
+.card-clickable:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Active card filter state */
+.card-active {
+  background: linear-gradient(135deg, var(--primary, #2f27ce), var(--accent, #433bff));
+  color: white;
+  border-color: var(--primary, #2f27ce);
+}
+
+.card-active .card-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.card-active .card-count {
+  color: white;
+}
+
+.card-active .card-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card-active:hover {
+  background: linear-gradient(135deg, var(--accent, #433bff), var(--primary, #2f27ce));
+  transform: translateY(-2px);
+}
+
+/* Add click indicator */
+.card-clickable::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent, #433bff);
+  border-radius: 50%;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.card-clickable:hover::before {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.card-active::before {
+  background: rgba(255, 255, 255, 0.8);
+}

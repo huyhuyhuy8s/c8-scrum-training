@@ -1,69 +1,384 @@
+/* Feedback Button and Modal Styles */
+
+/* Floating Feedback Button */
 .feedback-button {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-  transition: all 0.3s ease;
-  z-index: 1000;
+  bottom: 2rem;
+  right: 2rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent, #433bff) 0%, var(--primary, #2f27ce) 100%);
+  color: white;
+  border: none;
+  border-radius: 3rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(67, 59, 255, 0.4);
+  z-index: 1000;
+  min-width: 3.5rem;
+  min-height: 3.5rem;
 }
 
 .feedback-button:hover {
-  background-color: #2563eb;
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(135deg, var(--primary, #2f27ce) 0%, #1e1b9a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(67, 59, 255, 0.5);
 }
 
 .feedback-button:active {
-  transform: scale(0.95);
+  transform: translateY(0);
+}
+
+.feedback-icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .feedback-button-text {
-  display: none;
-  position: absolute;
-  right: 70px;
-  background-color: #1f2937;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
   white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
-.feedback-button-text::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent transparent #1f2937;
-}
-
-.feedback-button:hover .feedback-button-text {
-  display: block;
-  opacity: 1;
-}
-
+/* Hide text on smaller screens, show only icon */
 @media (max-width: 768px) {
   .feedback-button {
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    padding: 1rem;
+    border-radius: 50%;
+  }
+  
+  .feedback-button-text {
+    display: none;
+  }
+}
+
+.feedback-button:active {
+  transform: translateY(0);
+}
+
+.feedback-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.feedback-button-text {
+  white-space: nowrap;
+}
+
+/* Modal Overlay */
+.feedback-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Container */
+.feedback-modal {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Header */
+.feedback-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.feedback-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text, #050315);
+}
+
+.feedback-modal-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--accent, #433bff);
+}
+
+.feedback-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-modal-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.feedback-modal-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Success State */
+.feedback-success {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.feedback-success-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feedback-success h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text, #050315);
+}
+
+.feedback-success p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* Form Styles */
+.feedback-form {
+  padding: 1.5rem 2rem 2rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.feedback-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.feedback-form-group:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.feedback-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text, #050315);
+}
+
+.feedback-input,
+.feedback-select,
+.feedback-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #374151;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.feedback-input:focus,
+.feedback-select:focus,
+.feedback-textarea:focus {
+  outline: none;
+  border-color: var(--accent, #433bff);
+  box-shadow: 0 0 0 3px rgba(67, 59, 255, 0.1);
+}
+
+.feedback-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.feedback-input::placeholder,
+.feedback-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Rating Stars */
+.feedback-rating {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.feedback-star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-star:hover {
+  color: #fbbf24;
+  background: #fef3c7;
+}
+
+.feedback-star.active {
+  color: #f59e0b;
+}
+
+.feedback-star svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+/* Form Actions */
+.feedback-form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.feedback-button-primary,
+.feedback-button-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.feedback-button-primary {
+  background: linear-gradient(135deg, var(--accent, #433bff) 0%, var(--primary, #2f27ce) 100%);
+  color: white;
+}
+
+.feedback-button-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary, #2f27ce) 0%, #1e1b9a 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(67, 59, 255, 0.2);
+}
+
+.feedback-button-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.feedback-button-secondary {
+  background: #ffffff;
+  color: #374151;
+  border-color: #e5e7eb;
+}
+
+.feedback-button-secondary:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.feedback-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-loading::after {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .feedback-modal {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .feedback-modal-header {
+    padding: 1rem 1.5rem 0.75rem;
+  }
+  
+  .feedback-modal-title {
+    font-size: 1.125rem;
+  }
+  
+  .feedback-form {
+    padding: 1rem 1.5rem 1.5rem;
+  }
+  
+  .feedback-form-actions {
+    flex-direction: column;
+  }
+  
+  .feedback-button-primary,
+  .feedback-button-secondary {
+    justify-content: center;
   }
 }
