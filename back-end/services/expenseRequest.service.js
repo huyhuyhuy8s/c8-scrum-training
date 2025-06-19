@@ -74,8 +74,7 @@ export const approveRequest = async (requestId, managerId, comment) => {
     },
   });
 
-  console.log("server1:");
-  console.log(updatedRequest);
+ 
   // Log the action
   await SystemLogRepository.create({
     data: {
@@ -84,8 +83,7 @@ export const approveRequest = async (requestId, managerId, comment) => {
     },
   });
 
-  console.log("server2:");
-  console.log(updatedRequest);
+
 
   return updatedRequest;
 };
@@ -105,7 +103,7 @@ export const rejectRequest = async (requestId, managerId, comment) => {
     },
   });
 
-  console.log(updatedRequest);
+
   // Log the action
   await SystemLogRepository.create({
     data: {
@@ -191,7 +189,7 @@ export const deleteExpenseRequest = async (requestId, employeeId) => {
     where: {
       id: parseInt(requestId),
       employeeId: parseInt(employeeId),
-      status: "PENDING",
+      status: "WRAPPED",
     },
   });
 
@@ -279,7 +277,7 @@ export const changeStatusRequest = async (
 
 // Get all requests from manager's team (same department)
 export const getTeamRequests = async (managerId) => {
-    // First, get manager info to find their department
+    // Kiểm tra manager có tồn tại không
     const manager = await EmployeeRepository.findUnique({
         where: { id: parseInt(managerId) }
     });
@@ -288,22 +286,10 @@ export const getTeamRequests = async (managerId) => {
         throw new Error('Manager not found or insufficient permissions');
     }
     
-    // Get all employees in the same department
-    const teamEmployees = await EmployeeRepository.findMany({
-        where: {
-            department: manager.department,
-            role: 'EMPLOYEE' // Only get employees, not other managers
-        }
-    });
-    
-    const employeeIds = teamEmployees.map(emp => emp.id);
-    
-    // Get all requests from team members
+    // Lấy tất cả requests mà manager này đã approve
     return await ExpenseRequestRepository.findMany({
         where: {
-            employeeId: {
-                in: employeeIds
-            }
+            approvedById: parseInt(managerId)
         },
         include: {
             employee: true,
@@ -315,3 +301,135 @@ export const getTeamRequests = async (managerId) => {
     });
 };
 
+export const updateExpenseRequestStatus = async (requestId, status) => {
+  return await ExpenseRequestRepository.update({
+    where: { id: parseInt(requestId) },
+    data: { status },
+  });
+};
+
+// Filter team requests by employee name, date, or status
+export const filterTeamRequests = async (managerId, filters) => {
+    const manager = await EmployeeRepository.findUnique({
+        where: { id: parseInt(managerId) }
+    });
+   
+    if (!manager || manager.role !== 'MANAGER') {
+        throw new Error('Manager not found or insufficient permissions');
+    }
+    
+    // Build dynamic where clause - lấy requests có approvedById là managerId
+    const whereClause = {
+        approvedById: parseInt(managerId)
+    };
+    
+    // Handle status filter
+    if (filters.status) {
+        const validStatuses = ['APPROVED', 'REJECTED', 'FINAL_APPROVED'];
+        if (validStatuses.includes(filters.status)) {
+            whereClause.status = filters.status;
+        } else {
+            // Nếu status không hợp lệ, trả về empty array
+            return [];
+        }
+    } else {
+        // Nếu không có status filter, chỉ lấy các requests đã được approve/reject
+        whereClause.status = {
+            in: ['APPROVED', 'REJECTED', 'FINAL_APPROVED']
+        };
+    }
+    
+    // Add date range filter
+    if (filters.startDate || filters.endDate) {
+        whereClause.createdAt = {};
+        if (filters.startDate) {
+            whereClause.createdAt.gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+            whereClause.createdAt.lte = new Date(filters.endDate);
+        }
+    }
+    
+    // Thêm dòng này trước khi query database
+    console.log('whereClause:', JSON.stringify(whereClause, null, 2));
+    
+    let requests = await ExpenseRequestRepository.findMany({
+        where: whereClause,
+        include: {
+            employee: true,
+            approvedBy: true,
+            finalApprovedBy: true
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+    
+    // Filter by employee name if provided (sau khi lấy data từ DB)
+    if (filters.employee_name) {
+        requests = requests.filter(request => 
+            request.employee.name.toLowerCase().includes(filters.employee_name.toLowerCase())
+        );
+    }
+    
+    return requests;
+};
+
+
+
+
+// Export final approved requests for finance officer
+export const exportFinalApprovedRequests = async (financeId, filters) => {
+  // Verify finance officer exists and has correct role
+  const financeOfficer = await EmployeeRepository.findUnique({
+    where: { id: parseInt(financeId) }
+  });
+  
+  if (!financeOfficer || financeOfficer.role !== 'FINANCE') {
+    throw new Error('Finance officer not found or insufficient permissions');
+  }
+  
+  const whereClause = {
+    status: 'FINAL_APPROVED',
+    finalApprovedById: parseInt(financeId)
+  };
+  
+  // Add date range filter
+  if (filters.startDate || filters.endDate) {
+    whereClause.createdAt = {};
+    if (filters.startDate) {
+      whereClause.createdAt.gte = new Date(filters.startDate);
+    }
+    if (filters.endDate) {
+      whereClause.createdAt.lte = new Date(filters.endDate);
+    }
+  }
+  
+  return await ExpenseRequestRepository.findMany({
+    where: whereClause,
+    include: {
+      employee: {
+        select: {
+          id: true,
+          name: true,
+          department: true
+        }
+      },
+      approvedBy: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+      finalApprovedBy: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+};
