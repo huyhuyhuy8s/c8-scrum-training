@@ -135,4 +135,95 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-/generated/prisma
+# ===== PRISMA SPECIFIC =====
+# Generated Prisma client (cross-platform)
+back-end/generated/
+/generated/
+
+# Prisma migration files (if using migrations)
+prisma/migrations/
+
+# ===== DATABASE =====
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== PLATFORM SPECIFIC =====
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ===== IDE SPECIFIC =====
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ===== CLOUDINARY & UPLOADS =====
+# Temporary upload files
+uploads/
+temp/
+*.tmp
+
+# ===== BUILD & DIST =====
+# Build outputs
+build/
+dist/
+out/
+
+# ===== TESTING =====
+# Test coverage
+coverage/
+.nyc_output/
+
+# ===== MISC =====
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Log files
+*.log
+logs/

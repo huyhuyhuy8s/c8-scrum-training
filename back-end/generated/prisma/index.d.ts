@@ -47,7 +47,7 @@ export const RequestStatus: {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   FINAL_APPROVED: 'FINAL_APPROVED',
-  PROCESSED: 'PROCESSED'
+  WRAPPED: 'WRAPPED'
 };
 
 export type RequestStatus = (typeof RequestStatus)[keyof typeof RequestStatus]
@@ -1164,6 +1164,8 @@ export namespace Prisma {
     name: string | null
     department: string | null
     role: $Enums.Role | null
+    email: string | null
+    password: string | null
   }
 
   export type EmployeeMaxAggregateOutputType = {
@@ -1171,6 +1173,8 @@ export namespace Prisma {
     name: string | null
     department: string | null
     role: $Enums.Role | null
+    email: string | null
+    password: string | null
   }
 
   export type EmployeeCountAggregateOutputType = {
@@ -1178,6 +1182,8 @@ export namespace Prisma {
     name: number
     department: number
     role: number
+    email: number
+    password: number
     _all: number
   }
 
@@ -1195,6 +1201,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
   }
 
   export type EmployeeMaxAggregateInputType = {
@@ -1202,6 +1210,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
   }
 
   export type EmployeeCountAggregateInputType = {
@@ -1209,6 +1219,8 @@ export namespace Prisma {
     name?: true
     department?: true
     role?: true
+    email?: true
+    password?: true
     _all?: true
   }
 
@@ -1303,6 +1315,8 @@ export namespace Prisma {
     name: string
     department: string
     role: $Enums.Role
+    email: string
+    password: string
     _count: EmployeeCountAggregateOutputType | null
     _avg: EmployeeAvgAggregateOutputType | null
     _sum: EmployeeSumAggregateOutputType | null
@@ -1329,6 +1343,8 @@ export namespace Prisma {
     name?: boolean
     department?: boolean
     role?: boolean
+    email?: boolean
+    password?: boolean
     requests?: boolean | Employee$requestsArgs<ExtArgs>
     managerApprovals?: boolean | Employee$managerApprovalsArgs<ExtArgs>
     financeApprovals?: boolean | Employee$financeApprovalsArgs<ExtArgs>
@@ -1342,9 +1358,11 @@ export namespace Prisma {
     name?: boolean
     department?: boolean
     role?: boolean
+    email?: boolean
+    password?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "department" | "role", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "department" | "role" | "email" | "password", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     requests?: boolean | Employee$requestsArgs<ExtArgs>
     managerApprovals?: boolean | Employee$managerApprovalsArgs<ExtArgs>
@@ -1364,6 +1382,8 @@ export namespace Prisma {
       name: string
       department: string
       role: $Enums.Role
+      email: string
+      password: string
     }, ExtArgs["result"]["employee"]>
     composites: {}
   }
@@ -1740,6 +1760,8 @@ export namespace Prisma {
     readonly name: FieldRef<"Employee", 'String'>
     readonly department: FieldRef<"Employee", 'String'>
     readonly role: FieldRef<"Employee", 'Role'>
+    readonly email: FieldRef<"Employee", 'String'>
+    readonly password: FieldRef<"Employee", 'String'>
   }
     
 
@@ -2207,8 +2229,10 @@ export namespace Prisma {
     description: string | null
     amount: number | null
     status: $Enums.RequestStatus | null
+    imageUrl: string | null
     createdAt: Date | null
     approvedById: number | null
+    rejectedReason: string | null
     finalApprovedById: number | null
   }
 
@@ -2218,8 +2242,10 @@ export namespace Prisma {
     description: string | null
     amount: number | null
     status: $Enums.RequestStatus | null
+    imageUrl: string | null
     createdAt: Date | null
     approvedById: number | null
+    rejectedReason: string | null
     finalApprovedById: number | null
   }
 
@@ -2229,8 +2255,10 @@ export namespace Prisma {
     description: number
     amount: number
     status: number
+    imageUrl: number
     createdAt: number
     approvedById: number
+    rejectedReason: number
     finalApprovedById: number
     _all: number
   }
@@ -2258,8 +2286,10 @@ export namespace Prisma {
     description?: true
     amount?: true
     status?: true
+    imageUrl?: true
     createdAt?: true
     approvedById?: true
+    rejectedReason?: true
     finalApprovedById?: true
   }
 
@@ -2269,8 +2299,10 @@ export namespace Prisma {
     description?: true
     amount?: true
     status?: true
+    imageUrl?: true
     createdAt?: true
     approvedById?: true
+    rejectedReason?: true
     finalApprovedById?: true
   }
 
@@ -2280,8 +2312,10 @@ export namespace Prisma {
     description?: true
     amount?: true
     status?: true
+    imageUrl?: true
     createdAt?: true
     approvedById?: true
+    rejectedReason?: true
     finalApprovedById?: true
     _all?: true
   }
@@ -2378,8 +2412,10 @@ export namespace Prisma {
     description: string
     amount: number
     status: $Enums.RequestStatus
+    imageUrl: string | null
     createdAt: Date
     approvedById: number | null
+    rejectedReason: string | null
     finalApprovedById: number | null
     _count: ExpenseRequestCountAggregateOutputType | null
     _avg: ExpenseRequestAvgAggregateOutputType | null
@@ -2408,8 +2444,10 @@ export namespace Prisma {
     description?: boolean
     amount?: boolean
     status?: boolean
+    imageUrl?: boolean
     createdAt?: boolean
     approvedById?: boolean
+    rejectedReason?: boolean
     finalApprovedById?: boolean
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvedBy?: boolean | ExpenseRequest$approvedByArgs<ExtArgs>
@@ -2426,12 +2464,14 @@ export namespace Prisma {
     description?: boolean
     amount?: boolean
     status?: boolean
+    imageUrl?: boolean
     createdAt?: boolean
     approvedById?: boolean
+    rejectedReason?: boolean
     finalApprovedById?: boolean
   }
 
-  export type ExpenseRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "description" | "amount" | "status" | "createdAt" | "approvedById" | "finalApprovedById", ExtArgs["result"]["expenseRequest"]>
+  export type ExpenseRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeId" | "description" | "amount" | "status" | "imageUrl" | "createdAt" | "approvedById" | "rejectedReason" | "finalApprovedById", ExtArgs["result"]["expenseRequest"]>
   export type ExpenseRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | EmployeeDefaultArgs<ExtArgs>
     approvedBy?: boolean | ExpenseRequest$approvedByArgs<ExtArgs>
@@ -2454,8 +2494,10 @@ export namespace Prisma {
       description: string
       amount: number
       status: $Enums.RequestStatus
+      imageUrl: string | null
       createdAt: Date
       approvedById: number | null
+      rejectedReason: string | null
       finalApprovedById: number | null
     }, ExtArgs["result"]["expenseRequest"]>
     composites: {}
@@ -2835,8 +2877,10 @@ export namespace Prisma {
     readonly description: FieldRef<"ExpenseRequest", 'String'>
     readonly amount: FieldRef<"ExpenseRequest", 'Float'>
     readonly status: FieldRef<"ExpenseRequest", 'RequestStatus'>
+    readonly imageUrl: FieldRef<"ExpenseRequest", 'String'>
     readonly createdAt: FieldRef<"ExpenseRequest", 'DateTime'>
     readonly approvedById: FieldRef<"ExpenseRequest", 'Int'>
+    readonly rejectedReason: FieldRef<"ExpenseRequest", 'String'>
     readonly finalApprovedById: FieldRef<"ExpenseRequest", 'Int'>
   }
     
@@ -4235,7 +4279,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     department: 'department',
-    role: 'role'
+    role: 'role',
+    email: 'email',
+    password: 'password'
   };
 
   export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
@@ -4247,8 +4293,10 @@ export namespace Prisma {
     description: 'description',
     amount: 'amount',
     status: 'status',
+    imageUrl: 'imageUrl',
     createdAt: 'createdAt',
     approvedById: 'approvedById',
+    rejectedReason: 'rejectedReason',
     finalApprovedById: 'finalApprovedById'
   };
 
@@ -4275,7 +4323,9 @@ export namespace Prisma {
 
   export const EmployeeOrderByRelevanceFieldEnum: {
     name: 'name',
-    department: 'department'
+    department: 'department',
+    email: 'email',
+    password: 'password'
   };
 
   export type EmployeeOrderByRelevanceFieldEnum = (typeof EmployeeOrderByRelevanceFieldEnum)[keyof typeof EmployeeOrderByRelevanceFieldEnum]
@@ -4290,7 +4340,9 @@ export namespace Prisma {
 
 
   export const ExpenseRequestOrderByRelevanceFieldEnum: {
-    description: 'description'
+    description: 'description',
+    imageUrl: 'imageUrl',
+    rejectedReason: 'rejectedReason'
   };
 
   export type ExpenseRequestOrderByRelevanceFieldEnum = (typeof ExpenseRequestOrderByRelevanceFieldEnum)[keyof typeof ExpenseRequestOrderByRelevanceFieldEnum]
@@ -4361,6 +4413,8 @@ export namespace Prisma {
     name?: StringFilter<"Employee"> | string
     department?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    email?: StringFilter<"Employee"> | string
+    password?: StringFilter<"Employee"> | string
     requests?: ExpenseRequestListRelationFilter
     managerApprovals?: ExpenseRequestListRelationFilter
     financeApprovals?: ExpenseRequestListRelationFilter
@@ -4371,6 +4425,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
     requests?: ExpenseRequestOrderByRelationAggregateInput
     managerApprovals?: ExpenseRequestOrderByRelationAggregateInput
     financeApprovals?: ExpenseRequestOrderByRelationAggregateInput
@@ -4379,22 +4435,26 @@ export namespace Prisma {
 
   export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    email?: string
     AND?: EmployeeWhereInput | EmployeeWhereInput[]
     OR?: EmployeeWhereInput[]
     NOT?: EmployeeWhereInput | EmployeeWhereInput[]
     name?: StringFilter<"Employee"> | string
     department?: StringFilter<"Employee"> | string
     role?: EnumRoleFilter<"Employee"> | $Enums.Role
+    password?: StringFilter<"Employee"> | string
     requests?: ExpenseRequestListRelationFilter
     managerApprovals?: ExpenseRequestListRelationFilter
     financeApprovals?: ExpenseRequestListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type EmployeeOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
     _count?: EmployeeCountOrderByAggregateInput
     _avg?: EmployeeAvgOrderByAggregateInput
     _max?: EmployeeMaxOrderByAggregateInput
@@ -4410,6 +4470,8 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Employee"> | string
     department?: StringWithAggregatesFilter<"Employee"> | string
     role?: EnumRoleWithAggregatesFilter<"Employee"> | $Enums.Role
+    email?: StringWithAggregatesFilter<"Employee"> | string
+    password?: StringWithAggregatesFilter<"Employee"> | string
   }
 
   export type ExpenseRequestWhereInput = {
@@ -4421,8 +4483,10 @@ export namespace Prisma {
     description?: StringFilter<"ExpenseRequest"> | string
     amount?: FloatFilter<"ExpenseRequest"> | number
     status?: EnumRequestStatusFilter<"ExpenseRequest"> | $Enums.RequestStatus
+    imageUrl?: StringNullableFilter<"ExpenseRequest"> | string | null
     createdAt?: DateTimeFilter<"ExpenseRequest"> | Date | string
     approvedById?: IntNullableFilter<"ExpenseRequest"> | number | null
+    rejectedReason?: StringNullableFilter<"ExpenseRequest"> | string | null
     finalApprovedById?: IntNullableFilter<"ExpenseRequest"> | number | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvedBy?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
@@ -4436,8 +4500,10 @@ export namespace Prisma {
     description?: SortOrder
     amount?: SortOrder
     status?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     approvedById?: SortOrderInput | SortOrder
+    rejectedReason?: SortOrderInput | SortOrder
     finalApprovedById?: SortOrderInput | SortOrder
     employee?: EmployeeOrderByWithRelationInput
     approvedBy?: EmployeeOrderByWithRelationInput
@@ -4455,8 +4521,10 @@ export namespace Prisma {
     description?: StringFilter<"ExpenseRequest"> | string
     amount?: FloatFilter<"ExpenseRequest"> | number
     status?: EnumRequestStatusFilter<"ExpenseRequest"> | $Enums.RequestStatus
+    imageUrl?: StringNullableFilter<"ExpenseRequest"> | string | null
     createdAt?: DateTimeFilter<"ExpenseRequest"> | Date | string
     approvedById?: IntNullableFilter<"ExpenseRequest"> | number | null
+    rejectedReason?: StringNullableFilter<"ExpenseRequest"> | string | null
     finalApprovedById?: IntNullableFilter<"ExpenseRequest"> | number | null
     employee?: XOR<EmployeeScalarRelationFilter, EmployeeWhereInput>
     approvedBy?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
@@ -4470,8 +4538,10 @@ export namespace Prisma {
     description?: SortOrder
     amount?: SortOrder
     status?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     approvedById?: SortOrderInput | SortOrder
+    rejectedReason?: SortOrderInput | SortOrder
     finalApprovedById?: SortOrderInput | SortOrder
     _count?: ExpenseRequestCountOrderByAggregateInput
     _avg?: ExpenseRequestAvgOrderByAggregateInput
@@ -4489,8 +4559,10 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"ExpenseRequest"> | string
     amount?: FloatWithAggregatesFilter<"ExpenseRequest"> | number
     status?: EnumRequestStatusWithAggregatesFilter<"ExpenseRequest"> | $Enums.RequestStatus
+    imageUrl?: StringNullableWithAggregatesFilter<"ExpenseRequest"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ExpenseRequest"> | Date | string
     approvedById?: IntNullableWithAggregatesFilter<"ExpenseRequest"> | number | null
+    rejectedReason?: StringNullableWithAggregatesFilter<"ExpenseRequest"> | string | null
     finalApprovedById?: IntNullableWithAggregatesFilter<"ExpenseRequest"> | number | null
   }
 
@@ -4551,6 +4623,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
@@ -4561,6 +4635,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
@@ -4570,6 +4646,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
@@ -4580,6 +4658,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
@@ -4590,12 +4670,16 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
   }
 
   export type EmployeeUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
   }
 
   export type EmployeeUncheckedUpdateManyInput = {
@@ -4603,13 +4687,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
   }
 
   export type ExpenseRequestCreateInput = {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     employee: EmployeeCreateNestedOneWithoutRequestsInput
     approvedBy?: EmployeeCreateNestedOneWithoutManagerApprovalsInput
     finalApprovedBy?: EmployeeCreateNestedOneWithoutFinanceApprovalsInput
@@ -4622,8 +4710,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     finalApprovedById?: number | null
     logs?: SystemLogUncheckedCreateNestedManyWithoutRequestInput
   }
@@ -4632,7 +4722,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutRequestsNestedInput
     approvedBy?: EmployeeUpdateOneWithoutManagerApprovalsNestedInput
     finalApprovedBy?: EmployeeUpdateOneWithoutFinanceApprovalsNestedInput
@@ -4645,8 +4737,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
     logs?: SystemLogUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -4657,8 +4751,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     finalApprovedById?: number | null
   }
 
@@ -4666,7 +4762,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ExpenseRequestUncheckedUpdateManyInput = {
@@ -4675,8 +4773,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -4779,6 +4879,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeAvgOrderByAggregateInput = {
@@ -4790,6 +4892,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeMinOrderByAggregateInput = {
@@ -4797,6 +4901,8 @@ export namespace Prisma {
     name?: SortOrder
     department?: SortOrder
     role?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
   }
 
   export type EmployeeSumOrderByAggregateInput = {
@@ -4865,6 +4971,21 @@ export namespace Prisma {
     not?: NestedEnumRequestStatusFilter<$PrismaModel> | $Enums.RequestStatus
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -4924,8 +5045,10 @@ export namespace Prisma {
     description?: SortOrder
     amount?: SortOrder
     status?: SortOrder
+    imageUrl?: SortOrder
     createdAt?: SortOrder
     approvedById?: SortOrder
+    rejectedReason?: SortOrder
     finalApprovedById?: SortOrder
   }
 
@@ -4943,8 +5066,10 @@ export namespace Prisma {
     description?: SortOrder
     amount?: SortOrder
     status?: SortOrder
+    imageUrl?: SortOrder
     createdAt?: SortOrder
     approvedById?: SortOrder
+    rejectedReason?: SortOrder
     finalApprovedById?: SortOrder
   }
 
@@ -4954,8 +5079,10 @@ export namespace Prisma {
     description?: SortOrder
     amount?: SortOrder
     status?: SortOrder
+    imageUrl?: SortOrder
     createdAt?: SortOrder
     approvedById?: SortOrder
+    rejectedReason?: SortOrder
     finalApprovedById?: SortOrder
   }
 
@@ -4991,6 +5118,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -5251,6 +5396,10 @@ export namespace Prisma {
     set?: $Enums.RequestStatus
   }
 
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -5428,6 +5577,21 @@ export namespace Prisma {
     not?: NestedEnumRequestStatusFilter<$PrismaModel> | $Enums.RequestStatus
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -5476,6 +5640,24 @@ export namespace Prisma {
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -5521,7 +5703,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     approvedBy?: EmployeeCreateNestedOneWithoutManagerApprovalsInput
     finalApprovedBy?: EmployeeCreateNestedOneWithoutFinanceApprovalsInput
     logs?: SystemLogCreateNestedManyWithoutRequestInput
@@ -5532,8 +5716,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     finalApprovedById?: number | null
     logs?: SystemLogUncheckedCreateNestedManyWithoutRequestInput
   }
@@ -5552,7 +5738,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     employee: EmployeeCreateNestedOneWithoutRequestsInput
     finalApprovedBy?: EmployeeCreateNestedOneWithoutFinanceApprovalsInput
     logs?: SystemLogCreateNestedManyWithoutRequestInput
@@ -5564,7 +5752,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     finalApprovedById?: number | null
     logs?: SystemLogUncheckedCreateNestedManyWithoutRequestInput
   }
@@ -5583,7 +5773,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     employee: EmployeeCreateNestedOneWithoutRequestsInput
     approvedBy?: EmployeeCreateNestedOneWithoutManagerApprovalsInput
     logs?: SystemLogCreateNestedManyWithoutRequestInput
@@ -5595,8 +5787,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     logs?: SystemLogUncheckedCreateNestedManyWithoutRequestInput
   }
 
@@ -5635,8 +5829,10 @@ export namespace Prisma {
     description?: StringFilter<"ExpenseRequest"> | string
     amount?: FloatFilter<"ExpenseRequest"> | number
     status?: EnumRequestStatusFilter<"ExpenseRequest"> | $Enums.RequestStatus
+    imageUrl?: StringNullableFilter<"ExpenseRequest"> | string | null
     createdAt?: DateTimeFilter<"ExpenseRequest"> | Date | string
     approvedById?: IntNullableFilter<"ExpenseRequest"> | number | null
+    rejectedReason?: StringNullableFilter<"ExpenseRequest"> | string | null
     finalApprovedById?: IntNullableFilter<"ExpenseRequest"> | number | null
   }
 
@@ -5676,6 +5872,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5685,6 +5883,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5698,6 +5898,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     financeApprovals?: ExpenseRequestCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5707,6 +5909,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     financeApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutFinalApprovedByInput
   }
@@ -5720,6 +5924,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestCreateNestedManyWithoutApprovedByInput
   }
@@ -5729,6 +5935,8 @@ export namespace Prisma {
     name: string
     department: string
     role?: $Enums.Role
+    email: string
+    password: string
     requests?: ExpenseRequestUncheckedCreateNestedManyWithoutEmployeeInput
     managerApprovals?: ExpenseRequestUncheckedCreateNestedManyWithoutApprovedByInput
   }
@@ -5774,6 +5982,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5783,6 +5993,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5802,6 +6014,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     financeApprovals?: ExpenseRequestUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5811,6 +6025,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     financeApprovals?: ExpenseRequestUncheckedUpdateManyWithoutFinalApprovedByNestedInput
   }
@@ -5830,6 +6046,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUpdateManyWithoutApprovedByNestedInput
   }
@@ -5839,6 +6057,8 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     department?: StringFieldUpdateOperationsInput | string
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
     requests?: ExpenseRequestUncheckedUpdateManyWithoutEmployeeNestedInput
     managerApprovals?: ExpenseRequestUncheckedUpdateManyWithoutApprovedByNestedInput
   }
@@ -5873,7 +6093,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     employee: EmployeeCreateNestedOneWithoutRequestsInput
     approvedBy?: EmployeeCreateNestedOneWithoutManagerApprovalsInput
     finalApprovedBy?: EmployeeCreateNestedOneWithoutFinanceApprovalsInput
@@ -5885,8 +6107,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     finalApprovedById?: number | null
   }
 
@@ -5910,7 +6134,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutRequestsNestedInput
     approvedBy?: EmployeeUpdateOneWithoutManagerApprovalsNestedInput
     finalApprovedBy?: EmployeeUpdateOneWithoutFinanceApprovalsNestedInput
@@ -5922,8 +6148,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -5932,8 +6160,10 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
     finalApprovedById?: number | null
   }
 
@@ -5943,7 +6173,9 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
+    rejectedReason?: string | null
     finalApprovedById?: number | null
   }
 
@@ -5953,15 +6185,19 @@ export namespace Prisma {
     description: string
     amount: number
     status?: $Enums.RequestStatus
+    imageUrl?: string | null
     createdAt?: Date | string
     approvedById?: number | null
+    rejectedReason?: string | null
   }
 
   export type ExpenseRequestUpdateWithoutEmployeeInput = {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedBy?: EmployeeUpdateOneWithoutManagerApprovalsNestedInput
     finalApprovedBy?: EmployeeUpdateOneWithoutFinanceApprovalsNestedInput
     logs?: SystemLogUpdateManyWithoutRequestNestedInput
@@ -5972,8 +6208,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
     logs?: SystemLogUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -5983,8 +6221,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -5992,7 +6232,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutRequestsNestedInput
     finalApprovedBy?: EmployeeUpdateOneWithoutFinanceApprovalsNestedInput
     logs?: SystemLogUpdateManyWithoutRequestNestedInput
@@ -6004,7 +6246,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
     logs?: SystemLogUncheckedUpdateManyWithoutRequestNestedInput
   }
@@ -6015,7 +6259,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     finalApprovedById?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -6023,7 +6269,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneRequiredWithoutRequestsNestedInput
     approvedBy?: EmployeeUpdateOneWithoutManagerApprovalsNestedInput
     logs?: SystemLogUpdateManyWithoutRequestNestedInput
@@ -6035,8 +6283,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
     logs?: SystemLogUncheckedUpdateManyWithoutRequestNestedInput
   }
 
@@ -6046,8 +6296,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
     status?: EnumRequestStatusFieldUpdateOperationsInput | $Enums.RequestStatus
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     approvedById?: NullableIntFieldUpdateOperationsInput | number | null
+    rejectedReason?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SystemLogCreateManyRequestInput = {
