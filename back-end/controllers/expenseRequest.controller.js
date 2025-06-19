@@ -9,9 +9,7 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-  getTeamRequests,
-  getTotalSpentPerEmployee,
-  getTotalSpentPerDepartment
+  getTeamRequests
 } from "../services/expenseRequest.service.js";
 export const createExpenseRequestController = async (req, res) => {
   try {
@@ -49,7 +47,6 @@ export const getEmployeeRequestsController = async (req, res) => {
     });
   }
 };
-
 
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
@@ -266,7 +263,7 @@ export const getRequestsByStatusController = async (req, res) => {
 export const changeStatusRequestController = async (req, res) => {
   try {
     const { idFinance, idExpenseRequest, changeStatus } = req.params;
-    const { rejectedReason } = req.body;
+    const { rejectedReason } = req.body || {};
 
     const updatedRequest = await changeStatusRequest(
       parseInt(idFinance),
@@ -290,9 +287,84 @@ export const changeStatusRequestController = async (req, res) => {
 };
 // Get all requests from manager's team
 export const getTeamRequestsController = async (req, res) => {
+  try {
+    const { managerId } = req.params;
+
+    if (!managerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Manager ID is required",
+      });
+    }
+
+    const requests = await getTeamRequests(managerId);
+
+    res.status(200).json({
+      success: true,
+      message: "Team requests retrieved successfully",
+      data: requests,
+      count: requests.length,
+    });
+  } catch (error) {
+    if (
+      error.message.includes("Manager not found") ||
+      error.message.includes("insufficient permissions")
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Error fetching team requests",
+      error: error.message,
+    });
+  }
+};
+
+// Update expense request status
+export const updateExpenseRequestStatusController = async (req, res) => {
+  try {
+    const { id, status } = req.params;
+    console.log(id, status);
+    // Validate status
+    const validStatuses = [
+      "PENDING",
+      "APPROVED",
+      "REJECTED",
+      "FINAL_APPROVED",
+      "WRAPPED",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    const updatedRequest = await updateExpenseRequestStatus(id, status);
+    res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating request status",
+      error: error.message,
+    });
+  }
+};
+
+// Filter team requests by employee name, date, or status
+export const filterTeamRequestsController = async (req, res) => {
     try {
         const { managerId } = req.params;
-        
+        const { employee_name, status, startDate, endDate } = req.query;
+       
         if (!managerId) {
             return res.status(400).json({
                 success: false,
@@ -300,13 +372,24 @@ export const getTeamRequestsController = async (req, res) => {
             });
         }
 
-        const requests = await getTeamRequests(managerId);
+        const filters = {};
+        if (employee_name) filters.employee_name = employee_name.trim();
+        if (status) filters.status = status.trim();
+        if (startDate) filters.startDate = startDate.trim();
+        if (endDate) filters.endDate = endDate.trim();
+
+
+
+        const requests = await filterTeamRequests(managerId, filters);
+
+      
         
         res.status(200).json({
             success: true,
-            message: "Team requests retrieved successfully",
+            message: "Filtered team requests retrieved successfully",
             data: requests,
-            count: requests.length
+            count: requests.length,
+            filters: filters
         });
     } catch (error) {
         if (error.message.includes('Manager not found') || error.message.includes('insufficient permissions')) {
@@ -318,10 +401,44 @@ export const getTeamRequestsController = async (req, res) => {
         
         res.status(500).json({
             success: false,
-            message: "Error fetching team requests",
+            message: "Error filtering team requests",
             error: error.message
         });
     }
+};
+
+export const exportFinalApprovedRequestsController = async (req, res) => {
+  try {
+    const { financeId } = req.params;
+    const { startDate, endDate } = req.query;
+    
+    if (!financeId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Finance ID is required'
+      });
+    }
+    
+    const filters = {};
+    if (startDate) filters.startDate = startDate;
+    if (endDate) filters.endDate = endDate;
+    
+    const requests = await exportFinalApprovedRequests(financeId, filters);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Final approved requests retrieved successfully',
+      data: requests,
+      count: requests.length,
+      filters: filters
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error exporting final approved requests',
+      error: error.message
+    });
+  }
 };
 
 export const totalSpentPerEmployeeController = async (req, res) => {
