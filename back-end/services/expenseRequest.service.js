@@ -2,7 +2,7 @@ import cloudinary from "../libs/cloudinary.js";
 import SystemLogRepository from "../models/systemLog.js";
 
 import ExpenseRequestRepository from "../models/expenseRequest.js";
-import EmployeeRepository from "../models/employee.js";  
+import EmployeeRepository from "../models/employee.js";
 
 export const createExpenseRequest = async (expenseRequest) => {
   try {
@@ -22,7 +22,6 @@ export const createExpenseRequest = async (expenseRequest) => {
         description: expenseRequest.description,
         amount: expenseRequest.amount,
         imageUrl: imageUrl,
-        status: "PENDING",
       },
     });
 
@@ -142,7 +141,7 @@ export const updateExpenseRequest = async (
     where: {
       id: parseInt(requestId),
       employeeId: parseInt(employeeId),
-      status: "PENDING",
+      status: "WRAPPED",
     },
   });
 
@@ -217,7 +216,6 @@ export const getRequestsByStatus = async (status) => {
   return await ExpenseRequestRepository.findMany({
     where: { status },
 
-  
     orderBy: { createdAt: "desc" },
   });
 };
@@ -277,6 +275,7 @@ export const changeStatusRequest = async (
 
 // Get all requests from manager's team (same department)
 export const getTeamRequests = async (managerId) => {
+
     // Kiểm tra manager có tồn tại không
     const manager = await EmployeeRepository.findUnique({
         where: { id: parseInt(managerId) }
@@ -431,5 +430,6 @@ export const exportFinalApprovedRequests = async (financeId, filters) => {
     orderBy: {
       createdAt: 'desc'
     }
+
   });
 };
