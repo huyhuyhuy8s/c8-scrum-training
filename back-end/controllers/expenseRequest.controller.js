@@ -15,11 +15,13 @@ export const createExpenseRequestController = async (req, res) => {
   try {
     const expenseRequest = req.body;
     const newExpenseRequest = await createExpenseRequest(expenseRequest);
+    console.log(newExpenseRequest);
     res.status(201).json(newExpenseRequest);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Fix: Complete the getEmployeeRequestsController function
 export const getEmployeeRequestsController = async (req, res) => {
@@ -47,7 +49,6 @@ export const getEmployeeRequestsController = async (req, res) => {
     });
   }
 };
-
 // Get all pending requests
 export const getPendingRequestsController = async (req, res) => {
   try {
@@ -240,7 +241,6 @@ export const deleteExpenseRequestController = async (req, res) => {
   }
 };
 
-// Get requests by status
 export const getRequestsByStatusController = async (req, res) => {
   try {
     const { status } = req.params;
@@ -262,8 +262,15 @@ export const getRequestsByStatusController = async (req, res) => {
 // Change status request (Finance)
 export const changeStatusRequestController = async (req, res) => {
   try {
-    const { idFinance, idExpenseRequest, changeStatus } = req.params;
-    const { rejectedReason } = req.body || {};
+
+    const idFinance = parseInt(req.params.idFinance);
+    const idExpenseRequest = parseInt(req.params.idExpenseRequest);
+    const changeStatus = req.params.changeStatus;
+    const rejectedReason =  ""
+
+    if (changeStatus != "FINAL_APPROVED") {
+      const rejectedReason = req.body.rejectedReason
+    }
 
     const updatedRequest = await changeStatusRequest(
       parseInt(idFinance),
