@@ -20,7 +20,8 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [onClose]);  const handleSubmit = async (e) => {
+  }, [onClose]);
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate amount
@@ -42,7 +43,8 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
       amount: amount,
       description: expense.description.trim(),
       image: expense.image,
-    };    try {
+    };
+    try {
       if (isEditing && existingExpense?.id) {
         // Update existing expense
         await updateExpense(existingExpense.id, data);
@@ -140,7 +142,8 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
               name="amount"
               value={expense.amount}
               onChange={handleChange}
-              required
+              required={!isViewMode}
+              readOnly={isViewMode}
               className="form-input"
               placeholder="0.00"
               pattern="[0-9]+(\.[0-9]{1,2})?"
@@ -149,13 +152,14 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">Description</label>{" "}
           <textarea
             id="description"
             name="description"
             value={expense.description}
             onChange={handleChange}
-            required
+            required={!isViewMode}
+            readOnly={isViewMode}
             className="form-input"
             placeholder="Enter description"
             rows={3}

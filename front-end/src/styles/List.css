@@ -73,13 +73,15 @@
 }
 
 .list-table-row.clickable:hover {
-  background-color: #f0f9ff; /* Light blue on hover for clickable rows */
+  background-color: #f0f9ff;
+  /* Light blue on hover for clickable rows */
   transform: translateY(-1px);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .list-table-row.clickable:focus {
-  outline: 2px solid #2f27ce; /* Primary color from design system */
+  outline: 2px solid #2f27ce;
+  /* Primary color from design system */
   outline-offset: -2px;
   background-color: #f0f9ff;
 }
@@ -235,9 +237,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -271,7 +276,7 @@
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .action-btn {
     min-width: 1.75rem;
     min-height: 1.75rem;

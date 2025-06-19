@@ -5,6 +5,7 @@ import Card from "./Card";
 import Action from "./Action";
 import List from "./List";
 import FeedbackButton from "./FeedbackButton";
+import "../styles/MainLayout.css";
 
 const MainLayout = () => {
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -95,9 +96,11 @@ const MainLayout = () => {
       <NavigationBar />{" "}
       {/* Main Content Area - with padding to account for fixed navbar */}
       <div className="main-layout">
+      <div className="main-layout">
         {/* Add Expense Modal/Overlay */}
         {showAddExpense && (
           <div
+            className="modal-overlay"
             className="modal-overlay"
             onClick={handleCloseAddExpense}
             role="dialog"
@@ -172,7 +175,7 @@ const MainLayout = () => {
           onFilterChange={handleFilterChange}
           onClearFilters={handleClearFilters}
           key={refreshList}        />
-        
+
         {/* Floating Feedback Button */}
         <FeedbackButton />
       </div>
