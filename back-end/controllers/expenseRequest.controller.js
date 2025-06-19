@@ -9,9 +9,8 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-  getTeamRequests,
+  getTeamRequests
 } from "../services/expenseRequest.service.js";
-
 export const createExpenseRequestController = async (req, res) => {
   try {
     const expenseRequest = req.body;
@@ -263,6 +262,7 @@ export const getRequestsByStatusController = async (req, res) => {
 // Change status request (Finance)
 export const changeStatusRequestController = async (req, res) => {
   try {
+
     const idFinance = parseInt(req.params.idFinance);
     const idExpenseRequest = parseInt(req.params.idExpenseRequest);
     const changeStatus = req.params.changeStatus;
@@ -328,5 +328,142 @@ export const getTeamRequestsController = async (req, res) => {
       message: "Error fetching team requests",
       error: error.message,
     });
+  }
+};
+
+// Update expense request status
+export const updateExpenseRequestStatusController = async (req, res) => {
+  try {
+    const { id, status } = req.params;
+    console.log(id, status);
+    // Validate status
+    const validStatuses = [
+      "PENDING",
+      "APPROVED",
+      "REJECTED",
+      "FINAL_APPROVED",
+      "WRAPPED",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    const updatedRequest = await updateExpenseRequestStatus(id, status);
+    res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      data: updatedRequest,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error updating request status",
+      error: error.message,
+    });
+  }
+};
+
+// Filter team requests by employee name, date, or status
+export const filterTeamRequestsController = async (req, res) => {
+    try {
+        const { managerId } = req.params;
+        const { employee_name, status, startDate, endDate } = req.query;
+       
+        if (!managerId) {
+            return res.status(400).json({
+                success: false,
+                message: "Manager ID is required"
+            });
+        }
+
+        const filters = {};
+        if (employee_name) filters.employee_name = employee_name.trim();
+        if (status) filters.status = status.trim();
+        if (startDate) filters.startDate = startDate.trim();
+        if (endDate) filters.endDate = endDate.trim();
+
+
+
+        const requests = await filterTeamRequests(managerId, filters);
+
+      
+        
+        res.status(200).json({
+            success: true,
+            message: "Filtered team requests retrieved successfully",
+            data: requests,
+            count: requests.length,
+            filters: filters
+        });
+    } catch (error) {
+        if (error.message.includes('Manager not found') || error.message.includes('insufficient permissions')) {
+            return res.status(403).json({
+                success: false,
+                message: error.message
+            });
+        }
+        
+        res.status(500).json({
+            success: false,
+            message: "Error filtering team requests",
+            error: error.message
+        });
+    }
+};
+
+export const exportFinalApprovedRequestsController = async (req, res) => {
+  try {
+    const { financeId } = req.params;
+    const { startDate, endDate } = req.query;
+    
+    if (!financeId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Finance ID is required'
+      });
+    }
+    
+    const filters = {};
+    if (startDate) filters.startDate = startDate;
+    if (endDate) filters.endDate = endDate;
+    
+    const requests = await exportFinalApprovedRequests(financeId, filters);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Final approved requests retrieved successfully',
+      data: requests,
+      count: requests.length,
+      filters: filters
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error exporting final approved requests',
+      error: error.message
+    });
+  }
+};
+
+export const totalSpentPerEmployeeController = async (req, res) => {
+  try {
+    const data = await getTotalSpentPerEmployee();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching total spent per employee:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const totalSpentPerDepartmentController = async (req, res) => {
+  try {
+    const data = await getTotalSpentPerDepartment();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching total spent per department:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
