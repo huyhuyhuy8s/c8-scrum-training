@@ -147,7 +147,6 @@ const FinanceLayout = () => {
       'Date',
       'Employee Name',
       'Department', 
-      'Category',
       'Amount',
       'Status',
       'Approved Date'
@@ -160,7 +159,6 @@ const FinanceLayout = () => {
         row.date,
         `"${row.employee.name}"`,
         `"${row.employee.department}"`,
-        `"${row.category}"`,
         row.amount,
         row.statusText,
         row.approvedDate || row.date
@@ -196,7 +194,6 @@ const FinanceLayout = () => {
         name: "John Smith",
         department: "IT"
       },
-      category: "Transportation",
       amount: "$500.00",
       status: "pending",
       statusText: "Pending"
@@ -208,7 +205,6 @@ const FinanceLayout = () => {
         name: "Sarah Johnson",
         department: "Marketing"
       },
-      category: "Client Entertainment",
       amount: "$275.50",
       status: "pending",
       statusText: "Pending"
@@ -220,7 +216,6 @@ const FinanceLayout = () => {
         name: "Michael Chen",
         department: "Sales"
       },
-      category: "Meals & Accommodation",
       amount: "$125.50",
       status: "pending",
       statusText: "Pending"
@@ -232,7 +227,6 @@ const FinanceLayout = () => {
         name: "Carlos Santos",
         department: "Security"
       },
-      category: "Security Tools & Software",
       amount: "$1,100.00",
       status: "pending",
       statusText: "Pending"
@@ -245,7 +239,6 @@ const FinanceLayout = () => {
         name: "David Brown",
         department: "Finance"
       },
-      category: "Business Travel",
       amount: "$890.00",
       status: "approved",
       statusText: "Finance"
@@ -257,7 +250,6 @@ const FinanceLayout = () => {
         name: "Alex Thompson",
         department: "Customer Success"
       },
-      category: "Customer Visit Travel",
       amount: "$650.00",
       status: "approved",
       statusText: "Finance"
@@ -269,7 +261,6 @@ const FinanceLayout = () => {
         name: "Lisa Wang",
         department: "Product Management"
       },
-      category: "Market Research Tools",
       amount: "$499.00",
       status: "approved",
       statusText: "Finance"
@@ -282,7 +273,6 @@ const FinanceLayout = () => {
         name: "Jennifer Lee",
         department: "Marketing"
       },
-      category: "Equipment Purchase",
       amount: "$2,450.75",
       status: "rejected",
       statusText: "Rejected"
@@ -294,7 +284,6 @@ const FinanceLayout = () => {
         name: "Grace Kim",
         department: "UX/UI Design"
       },
-      category: "Design Software License",
       amount: "$199.00",
       status: "rejected",
       statusText: "Rejected"
@@ -305,7 +294,7 @@ const FinanceLayout = () => {
       employee: {
         name: "Rachel Green",
         department: "Marketing"
-      },      category: "Advertising Campaign",
+      },      
       amount: "$2,500.00",
       status: "rejected",
       statusText: "Rejected"
@@ -318,7 +307,6 @@ const FinanceLayout = () => {
         name: "Lisa Wang",
         department: "Product Management"
       },
-      category: "Market Research Tools",
       amount: "$499.00",
       status: "finance_approved",
       statusText: "Finance Approved",
@@ -331,7 +319,6 @@ const FinanceLayout = () => {
         name: "Mark Johnson",
         department: "Sales"
       },
-      category: "Client Presentation",
       amount: "$320.75",
       status: "finance_approved",
       statusText: "Finance Approved", 
@@ -344,7 +331,6 @@ const FinanceLayout = () => {
         name: "Sophie Chen",
         department: "HR"
       },
-      category: "Team Building Event",
       amount: "$1,200.00",
       status: "finance_approved",
       statusText: "Finance Approved",

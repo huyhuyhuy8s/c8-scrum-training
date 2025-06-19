@@ -23,7 +23,6 @@ const List = ({
         name: "Alice Cooper",
         department: "Design"
       },
-      category: "Software License",
       amount: "$299.00",
       status: "draft",
       statusText: "Draft"
@@ -35,7 +34,6 @@ const List = ({
         name: "Tom Rodriguez",
         department: "Engineering"
       },
-      category: "Training & Development",
       amount: "$1,450.00",
       status: "draft",
       statusText: "Draft"
@@ -47,7 +45,6 @@ const List = ({
         name: "Maria Gonzalez",
         department: "Quality Assurance"
       },
-      category: "Office Supplies",
       amount: "$89.95",
       status: "draft",
       statusText: "Draft"
@@ -61,7 +58,6 @@ const List = ({
         name: "John Smith",
         department: "IT"
       },
-      category: "Transportation",
       amount: "$500.00",
       status: "pending",
       statusText: "Pending Manager"
@@ -73,7 +69,6 @@ const List = ({
         name: "Sarah Johnson",
         department: "Marketing"
       },
-      category: "Client Entertainment",
       amount: "$275.50",
       status: "pending",
       statusText: "Pending Manager"
@@ -85,7 +80,6 @@ const List = ({
         name: "David Brown",
         department: "Finance"
       },
-      category: "Business Travel",
       amount: "$890.00",
       status: "pending",
       statusText: "Pending Manager"
@@ -97,7 +91,6 @@ const List = ({
         name: "Jennifer Lee",
         department: "Marketing"
       },
-      category: "Equipment Purchase",
       amount: "$2,450.75",
       status: "pending",
       statusText: "Pending Manager"
@@ -109,7 +102,6 @@ const List = ({
         name: "Michael Chen",
         department: "Sales"
       },
-      category: "Meals & Accommodation",
       amount: "$125.50",
       status: "pending",
       statusText: "Pending Manager"
@@ -121,7 +113,6 @@ const List = ({
         name: "Emma Wilson",
         department: "Operations"
       },
-      category: "Conference & Events",
       amount: "$850.00",
       status: "pending",
       statusText: "Pending Manager"
@@ -135,7 +126,6 @@ const List = ({
         name: "Lisa Anderson",
         department: "IT"
       },
-      category: "Software License",
       amount: "$1,200.00",
       status: "approved",
       statusText: "Approved"
@@ -147,7 +137,6 @@ const List = ({
         name: "Robert Taylor",
         department: "Operations"
       },
-      category: "Training & Development",
       amount: "$750.00",
       status: "approved",
       statusText: "Approved"
@@ -159,7 +148,6 @@ const List = ({
         name: "Emily Davis",
         department: "HR"
       },
-      category: "Office Supplies",
       amount: "$150.25",
       status: "approved",
       statusText: "Approved"
@@ -171,7 +159,6 @@ const List = ({
         name: "Kevin Park",
         department: "Legal"
       },
-      category: "Legal & Professional Services",
       amount: "$3,200.00",
       status: "approved",
       statusText: "Approved"
@@ -183,7 +170,6 @@ const List = ({
         name: "Amanda White",
         department: "Marketing"
       },
-      category: "Advertising & Promotion",
       amount: "$5,500.00",
       status: "approved",
       statusText: "Approved"
@@ -197,7 +183,6 @@ const List = ({
         name: "Mike Wilson",
         department: "Sales"
       },
-      category: "Personal Entertainment",
       amount: "$320.00",
       status: "rejected",
       statusText: "Rejected"
@@ -209,7 +194,6 @@ const List = ({
         name: "Rachel Green",
         department: "Customer Support"
       },
-      category: "Excessive Meal Allowance",
       amount: "$450.00",
       status: "rejected",
       statusText: "Rejected"
@@ -221,7 +205,6 @@ const List = ({
         name: "James Miller",
         department: "Research & Development"
       },
-      category: "Unauthorized Equipment",
       amount: "$1,850.00",
       status: "rejected",
       statusText: "Rejected"
@@ -234,7 +217,6 @@ const List = ({
         name: "Sophie Turner",
         department: "Product Management"
       },
-      category: "Market Research",
       amount: "$680.00",
       status: "approved",
       statusText: "Approved"
@@ -246,7 +228,6 @@ const List = ({
         name: "Carlos Santos",
         department: "Security"
       },
-      category: "Security Tools & Software",
       amount: "$1,100.00",
       status: "pending",
       statusText: "Pending Manager"
@@ -258,7 +239,6 @@ const List = ({
         name: "Nina Patel",
         department: "Business Intelligence"
       },
-      category: "Data Analytics Tools",
       amount: "$2,200.00",
       status: "draft",
       statusText: "Draft"
@@ -272,7 +252,7 @@ const List = ({
         name: "Alex Johnson",
         department: "Engineering"
       },
-      category: "Personal Equipment",
+
       amount: "$1,299.99",
       status: "rejected",
       statusText: "Rejected"
@@ -284,7 +264,6 @@ const List = ({
         name: "Isabella Garcia",
         department: "Design"
       },
-      category: "Non-Business Travel",
       amount: "$750.00",
       status: "rejected",
       statusText: "Rejected"
@@ -296,7 +275,6 @@ const List = ({
         name: "Daniel Kim",
         department: "Operations"
       },
-      category: "Excessive Meal Expense",
       amount: "$85.75",
       status: "rejected",
       statusText: "Rejected"
@@ -311,7 +289,6 @@ const List = ({
         name: "Grace Liu",
         department: "Quality Assurance"
       },
-      category: "Testing Tools",
       amount: "$420.00",
       status: "rejected",
       statusText: "Rejected"
@@ -324,7 +301,6 @@ const List = ({
         name: "Sophia Chen",
         department: "Research & Development"
       },
-      category: "Lab Equipment",
       amount: "$3,750.00",
       status: "rejected",
       statusText: "Rejected"
@@ -463,19 +439,19 @@ const List = ({
         <h2 className="list-title">{title}</h2>
       </div>
       
-      <table className="list-table">        <thead className="list-table-header">
+      <table className="list-table">
+        <thead className="list-table-header">
           <tr>
             {(isManagerView || isFinanceView) && <th>Select</th>}
             <th>Date</th>
             <th>Employee</th>
-            <th>Category</th>
             <th>Amount</th>
             <th>Status</th>
-            <th>Note</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {displayData.map((item) => (            <tr 
+          {displayData.map((item) => (<tr 
               key={item.id} 
               className={`list-table-row ${(!isManagerView && !isFinanceView) ? 'clickable-row' : ''}`}
               onClick={(!isManagerView && !isFinanceView) ? () => handleRowClick(item) : undefined}
@@ -502,16 +478,15 @@ const List = ({
                 </div>
               </td>
               <td className="list-table-cell">
-                <span className="list-category">{item.category}</span>
+                <span className="list-amount">{item.amount}</span>
               </td>
-              <td className="list-table-cell">
-                <span className="list-amount">{item.amount}</span>              </td>
               <td className="list-table-cell">
                 <span className={`list-status ${getStatusClass(item.status)}`}>
                   {item.statusText}
-                </span>              </td>
-              {(!isManagerView && !isFinanceView) && (
-                <td className="list-table-cell">
+                </span>
+              </td>
+              <td className="list-table-cell">
+                {(!isManagerView && !isFinanceView) && (
                   <div className="list-actions">
                     <button 
                       className={`action-button update-button ${item.status !== 'draft' ? 'disabled' : ''}`}
@@ -530,10 +505,10 @@ const List = ({
                       <FiTrash2 />
                     </button>
                   </div>
-                </td>
-              )}              {(isManagerView || isFinanceView) && (
-                <td className="list-table-cell">
-                  <div className="list-actions">                    <button 
+                )}
+                {(isManagerView || isFinanceView) && (
+                  <div className="list-actions">
+                    <button 
                       className={`action-button manager-accept-button ${
                         isFinanceView 
                           ? (item.status !== 'pending' ? 'disabled' : '') 
@@ -566,8 +541,8 @@ const List = ({
                       <FiX />
                     </button>
                   </div>
-                </td>
-              )}
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
