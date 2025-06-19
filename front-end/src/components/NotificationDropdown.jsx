@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   FiBell,
   FiCheck,
@@ -8,16 +8,16 @@ import {
   FiChevronDown,
   FiCheckCircle,
   FiAlertCircle,
-  FiInfo
-} from 'react-icons/fi';
-import { getCurrentUser } from '../services/authService';
+  FiInfo,
+} from "react-icons/fi";
+import { getCurrentUser } from "../services/authService";
 import {
   getNotificationsByRole,
   formatNotificationTime,
   getNotificationIcon,
-  getNotificationType
-} from '../services/notificationService';
-import '../styles/NotificationDropdown.css';
+  getNotificationType,
+} from "../services/notificationService";
+import "../styles/NotificationDropdown.css";
 
 /**
  * NotificationDropdown component for displaying user notifications
@@ -51,7 +51,7 @@ const NotificationDropdown = () => {
       setNotifications(data);
       setLastChecked(new Date());
     } catch (err) {
-      console.error('Error fetching notifications:', err);
+      console.error("Error fetching notifications:", err);
       setError(err.message);
       // Don't clear existing notifications on error - keep showing cached data
     } finally {
@@ -69,8 +69,8 @@ const NotificationDropdown = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   /**
@@ -78,27 +78,24 @@ const NotificationDropdown = () => {
    */
   useEffect(() => {
     const handleEscape = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      return () => document.removeEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
     }
   }, [isOpen]);
 
-  /**
-   * Initial load and auto-refresh setup
-   */
+  // Only poll for notifications when dropdown is open
   useEffect(() => {
+    if (!isOpen) return;
     fetchNotifications();
-
-    // Set up auto-refresh
     const intervalId = setInterval(fetchNotifications, REFRESH_INTERVAL);
     return () => clearInterval(intervalId);
-  }, [fetchNotifications, REFRESH_INTERVAL]);
+  }, [isOpen, fetchNotifications, REFRESH_INTERVAL]);
 
   /**
    * Toggle dropdown visibility
@@ -123,7 +120,7 @@ const NotificationDropdown = () => {
       FiBell,
       FiCheckCircle,
       FiAlertCircle,
-      FiInfo
+      FiInfo,
     };
     return icons[iconName] || FiBell;
   };
@@ -133,27 +130,40 @@ const NotificationDropdown = () => {
    */
   const formatNotificationMessage = (notification) => {
     if (!notification.request) {
-      return notification.action || 'New notification';
+      return notification.action || "New notification";
     }
 
     const { request } = notification;
-    const employeeName = request.employee?.name || 'Someone';
-    const amount = request.amount ? `$${parseFloat(request.amount).toFixed(2)}` : '';
-    const action = notification.action || '';
+    const employeeName = request.employee?.name || "Someone";
+    const amount = request.amount
+      ? `$${parseFloat(request.amount).toFixed(2)}`
+      : "";
+    const action = notification.action || "";
 
-    if (currentUser?.role?.toLowerCase() === 'employee') {
+    if (currentUser?.role?.toLowerCase() === "employee") {
       // For employees: show status changes
-      if (action.toLowerCase().includes('approved')) {
-        return `Your expense request ${amount ? `(${amount})` : ''} has been approved`;
-      } else if (action.toLowerCase().includes('rejected')) {
-        return `Your expense request ${amount ? `(${amount})` : ''} has been rejected`;
-      } else if (action.toLowerCase().includes('pending')) {
-        return `Your expense request ${amount ? `(${amount})` : ''} is under review`;
+      if (action.toLowerCase().includes("approved")) {
+        return `Your expense request ${
+          amount ? `(${amount})` : ""
+        } has been approved`;
+      } else if (action.toLowerCase().includes("rejected")) {
+        return `Your expense request ${
+          amount ? `(${amount})` : ""
+        } has been rejected`;
+      } else if (action.toLowerCase().includes("pending")) {
+        return `Your expense request ${
+          amount ? `(${amount})` : ""
+        } is under review`;
       }
     } else {
       // For managers/finance: show new submissions
-      if (action.toLowerCase().includes('created') || action.toLowerCase().includes('submitted')) {
-        return `${employeeName} submitted a new expense request ${amount ? `(${amount})` : ''}`;
+      if (
+        action.toLowerCase().includes("created") ||
+        action.toLowerCase().includes("submitted")
+      ) {
+        return `${employeeName} submitted a new expense request ${
+          amount ? `(${amount})` : ""
+        }`;
       }
     }
 
@@ -164,14 +174,16 @@ const NotificationDropdown = () => {
    * Get notification subtitle/description
    */
   const getNotificationSubtitle = (notification) => {
-    if (!notification.request) return '';
-    
+    if (!notification.request) return "";
+
     const description = notification.request.description;
-    return description ? description.substring(0, 50) + (description.length > 50 ? '...' : '') : '';
+    return description
+      ? description.substring(0, 50) + (description.length > 50 ? "..." : "")
+      : "";
   };
 
   // Calculate unread count (notifications from last 24 hours)
-  const unreadCount = notifications.filter(notification => {
+  const unreadCount = notifications.filter((notification) => {
     const notificationTime = new Date(notification.timestamp);
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     return notificationTime > oneDayAgo;
@@ -180,23 +192,34 @@ const NotificationDropdown = () => {
   return (
     <div className="notification-dropdown" ref={dropdownRef}>
       <button
-        className={`notification-trigger ${isOpen ? 'active' : ''}`}
+        className={`notification-trigger ${isOpen ? "active" : ""}`}
         onClick={toggleDropdown}
-        aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ''}`}
+        aria-label={`Notifications ${
+          unreadCount > 0 ? `(${unreadCount} unread)` : ""
+        }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         <FiBell className="notification-icon" />
         {unreadCount > 0 && (
-          <span className="notification-badge" aria-label={`${unreadCount} unread notifications`}>
-            {unreadCount > 99 ? '99+' : unreadCount}
+          <span
+            className="notification-badge"
+            aria-label={`${unreadCount} unread notifications`}
+          >
+            {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
-        <FiChevronDown className={`dropdown-arrow ${isOpen ? 'rotated' : ''}`} />
+        <FiChevronDown
+          className={`dropdown-arrow ${isOpen ? "rotated" : ""}`}
+        />
       </button>
 
       {isOpen && (
-        <div className="notification-dropdown-menu" role="menu" aria-label="Notifications menu">
+        <div
+          className="notification-dropdown-menu"
+          role="menu"
+          aria-label="Notifications menu"
+        >
           <div className="notification-header">
             <h3 className="notification-title">Notifications</h3>
             {lastChecked && (
@@ -216,7 +239,9 @@ const NotificationDropdown = () => {
               <div className="notification-item error">
                 <FiAlertCircle className="error-icon" />
                 <div className="notification-content">
-                  <div className="notification-message">Unable to load notifications</div>
+                  <div className="notification-message">
+                    Unable to load notifications
+                  </div>
                   <div className="notification-subtitle">{error}</div>
                 </div>
               </div>
@@ -225,16 +250,21 @@ const NotificationDropdown = () => {
                 <FiBell className="empty-icon" />
                 <div className="notification-content">
                   <div className="notification-message">No notifications</div>
-                  <div className="notification-subtitle">You're all caught up!</div>
+                  <div className="notification-subtitle">
+                    You're all caught up!
+                  </div>
                 </div>
               </div>
             ) : (
               notifications.slice(0, 10).map((notification) => {
                 const IconComponent = getIconComponent(
-                  getNotificationIcon(notification.action, notification.request?.status)
+                  getNotificationIcon(
+                    notification.action,
+                    notification.request?.status
+                  )
                 );
                 const notificationType = getNotificationType(
-                  notification.action, 
+                  notification.action,
                   notification.request?.status
                 );
 
@@ -245,7 +275,9 @@ const NotificationDropdown = () => {
                     role="menuitem"
                     tabIndex={0}
                   >
-                    <div className={`notification-icon-wrapper ${notificationType}`}>
+                    <div
+                      className={`notification-icon-wrapper ${notificationType}`}
+                    >
                       <IconComponent className="notification-type-icon" />
                     </div>
                     <div className="notification-content">

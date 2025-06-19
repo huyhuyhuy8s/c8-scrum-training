@@ -142,8 +142,8 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
               name="amount"
               value={expense.amount}
               onChange={handleChange}
-              required={!isViewMode}
-              readOnly={isViewMode}
+              required={true}
+              readOnly={false}
               className="form-input"
               placeholder="0.00"
               pattern="[0-9]+(\.[0-9]{1,2})?"
@@ -158,8 +158,8 @@ function AddExpense({ onClose, existingExpense = null, isEditing = false }) {
             name="description"
             value={expense.description}
             onChange={handleChange}
-            required={!isViewMode}
-            readOnly={isViewMode}
+            required={true}
+            readOnly={false}
             className="form-input"
             placeholder="Enter description"
             rows={3}

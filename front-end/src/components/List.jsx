@@ -86,47 +86,68 @@ const List = ({
     }
   }, []);
 
-  // Fetch expenses from the API
-
-  // Fetch expenses from the API
+  // Debounced fetch when filters or searchQuery change
   useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await getAllExpenses();
-        setExpenses(response);
-      } catch (err) {
-        console.error("Error fetching expenses:", err);
-        setError("Failed to load expenses");
-        // Fall back to sample data if API fails
-        setExpenses([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const handler = setTimeout(() => {
+      const fetchExpenses = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          const response = await getAllExpenses();
+          setExpenses(response);
+        } catch (err) {
+          console.error("Error fetching expenses:", err);
+          setError("Failed to load expenses");
+          setExpenses([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchExpenses();
+    }, 500); // 500ms debounce
 
-    fetchExpenses();
-  }, []);
+    return () => clearTimeout(handler);
+  }, [filters, searchQuery]);
 
-  // Transform API expense data to display format
+  // Helper to format status
+  const formatStatus = (status) => {
+    switch (status) {
+      case "FINAL_APPROVED":
+        return "Final Approved";
+      case "WRAPPED":
+        return "Wrapped";
+      case "PENDING":
+        return "Pending";
+      case "REJECTED":
+        return "Rejected";
+      case "APPROVED":
+        return "Approved";
+      default:
+        return status;
+    }
+  };
+
+  // Update transformExpenseToDisplay to include manager and image
   const transformExpenseToDisplay = useCallback(
     (expense) => {
       return {
         id: expense.id,
+        employeeId: expense.employeeId,
         date: formatDate(
           expense.expenseDate || expense.createdAt || expense.date
-        ), // Use formatDate with fallback
+        ),
         employee: {
-          name: expense.employeeName || "Current User",
-          department: expense.department || "Unknown",
+          name: expense.employee?.name || "Current User",
+          department: expense.employee?.department || "Unknown",
+          email: expense.employee?.email || "",
         },
-        category: expense.description || "General",
+        manager: expense.approvedBy?.name || "-",
+        managerDept: expense.approvedBy?.department || "-",
         amount: `$${parseFloat(expense.amount).toFixed(2)}`,
         status: expense.status || "pending",
-        statusText: expense.status
-          ? expense.status.charAt(0).toUpperCase() + expense.status.slice(1)
-          : "Pending",
+        statusText: formatStatus(expense.status),
+        imageUrl: expense.imageUrl,
+        description: expense.description || "",
       };
     },
     [formatDate]
@@ -182,21 +203,24 @@ const List = ({
       return filteredData.filter((item) => {
         // Status filter
         if (filters.status && filters.status !== "") {
-          const itemStatus = item.status.toLowerCase();
+          const itemStatus = item.status.toUpperCase();
           const filterStatus = filters.status.toLowerCase();
 
-          // Handle special status mappings
-          if (
-            filterStatus === "approved" &&
-            !["approved", "final approved"].includes(itemStatus)
-          ) {
-            return false;
-          } else if (filterStatus === "pending" && itemStatus !== "pending") {
-            return false;
-          } else if (filterStatus === "rejected" && itemStatus !== "rejected") {
-            return false;
-          } else if (filterStatus === "draft" && itemStatus !== "draft") {
-            return false;
+          // Custom status mappings
+          if (filterStatus === "draft") {
+            // Show WRAPPED
+            if (itemStatus !== "WRAPPED") return false;
+          } else if (filterStatus === "pending") {
+            // Show only PENDING
+            if (itemStatus !== "PENDING") return false;
+          } else if (filterStatus === "approved") {
+            // Show only APPROVED
+            if (itemStatus !== "APPROVED") return false;
+          } else if (filterStatus === "final_approved") {
+            // Show only FINAL_APPROVED
+            if (itemStatus !== "FINAL_APPROVED") return false;
+          } else if (filterStatus === "rejected") {
+            if (itemStatus !== "REJECTED") return false;
           }
         }
 
@@ -255,8 +279,13 @@ const List = ({
   };
 
   // Handle deleting expense
-  const handleDeleteExpense = async (expenseId, e) => {
+  const handleDeleteExpense = async (expenseId, e, employeeId) => {
     e.stopPropagation(); // Prevent row click
+
+    if (!expenseId || !employeeId) {
+      alert("Cannot delete: missing expense or employee ID.");
+      return;
+    }
 
     if (
       !window.confirm(
@@ -269,7 +298,7 @@ const List = ({
     setActionLoading((prev) => ({ ...prev, [`delete_${expenseId}`]: true }));
 
     try {
-      await deleteExpense(expenseId);
+      await deleteExpense(expenseId, employeeId);
       // Refresh the list
       const response = await getAllExpenses();
       setExpenses(response);
@@ -279,7 +308,9 @@ const List = ({
     } finally {
       setActionLoading((prev) => ({ ...prev, [`delete_${expenseId}`]: false }));
     }
-  }; // Check if user is employee and can perform actions
+  };
+
+  // Check if user is employee and can perform actions
   const canPerformActions = currentUser?.role === "employee";
 
   // Apply sorting to data
@@ -364,6 +395,7 @@ const List = ({
   const handleSortChange = (newSortConfig) => {
     setSortConfig(newSortConfig);
   };
+
   // Handle search change
   const handleSearchChange = (query, criteria) => {
     setSearchQuery(query);
@@ -397,7 +429,9 @@ const List = ({
     } catch (err) {
       console.error("Error refreshing expenses:", err);
     }
-  }; // Memoize displayData to prevent unnecessary re-renders
+  };
+
+  // Memoize displayData to prevent unnecessary re-renders
   const displayData = useMemo(() => {
     if (data.length > 0) {
       return data;
@@ -433,20 +467,23 @@ const List = ({
     if (onCompleteDataChange) {
       onCompleteDataChange(displayData);
     }
-  }, [displayData, onCompleteDataChange]); // Transform list item to expense format for editing
+  }, [displayData, onCompleteDataChange]);
+
+  // Transform list item to expense format for editing
   const transformItemToExpense = (item) => {
     return {
       id: item.id,
       date: item.date, // Keep original date field for ExpenseDetailModal
       expenseDate: item.date, // Also provide expenseDate for compatibility
       amount: item.amount.replace("$", "").replace(",", ""), // Remove $ and commas
-      description: `${item.employee.department} - ${item.employee.name}`,
+      description: `${item.description}`,
       category: item.employee.department, // Use department as category
       employee: item.employee,
       status: item.status,
       originalItem: item, // Keep reference to original item
     };
   };
+
   const getStatusClass = (status) => {
     switch (status) {
       case "pending":
@@ -461,6 +498,7 @@ const List = ({
         return "draft";
     }
   };
+
   return (
     <div className="list-container">
       <div className="list-header">
@@ -495,10 +533,10 @@ const List = ({
           <tr>
             <th>Date</th>
             <th>Employee</th>
-            <th>Department</th>
+            <th>Description</th>
             <th>Amount</th>
             <th>Status</th>
-            {canPerformActions && <th>Actions</th>}
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -531,7 +569,7 @@ const List = ({
                 onClick={() => handleItemClick(transformItemToExpense(item))}
                 role="button"
                 tabIndex={0}
-                aria-label={`View expense details for ${item.employee.name} - ${item.employee.department}`}
+                aria-label={`View expense details for ${item.employee.name}`}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
@@ -545,11 +583,7 @@ const List = ({
                 <td className="list-table-cell">
                   <div className="list-employee-name">{item.employee.name}</div>
                 </td>
-                <td className="list-table-cell">
-                  <span className="list-department">
-                    {item.employee.department}
-                  </span>
-                </td>
+                <td className="list-table-cell">{item.description}</td>
                 <td className="list-table-cell">
                   <span className="list-amount">{item.amount}</span>
                 </td>
@@ -560,29 +594,31 @@ const List = ({
                     {item.statusText}
                   </span>
                 </td>
-                {canPerformActions && (
-                  <td className="list-table-cell">
+                <td className="list-table-cell">
+                  {canPerformActions && (
                     <div className="list-actions">
                       <button
                         className={`action-btn send-btn ${
-                          item.status !== "draft" ? "disabled" : ""
+                          item.status?.toLowerCase() !== "wrapped"
+                            ? "disabled"
+                            : ""
                         }`}
-                        onClick={(e) =>
-                          item.status === "draft"
-                            ? handleSendToPending(item.id, e)
-                            : e.stopPropagation()
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (item.status?.toLowerCase() === "wrapped")
+                            handleSendToPending(item.id, e);
+                        }}
                         disabled={
-                          item.status !== "draft" ||
+                          item.status?.toLowerCase() !== "wrapped" ||
                           actionLoading[`pending_${item.id}`]
                         }
                         title={
-                          item.status === "draft"
+                          item.status?.toLowerCase() === "wrapped"
                             ? "Send to Pending"
                             : "Action not available"
                         }
                         aria-label={
-                          item.status === "draft"
+                          item.status?.toLowerCase() === "wrapped"
                             ? "Send expense to pending approval"
                             : "Action not available for this status"
                         }
@@ -595,24 +631,26 @@ const List = ({
                       </button>
                       <button
                         className={`action-btn delete-btn ${
-                          item.status !== "draft" ? "disabled" : ""
+                          item.status?.toLowerCase() !== "wrapped"
+                            ? "disabled"
+                            : ""
                         }`}
-                        onClick={(e) =>
-                          item.status === "draft"
-                            ? handleDeleteExpense(item.id, e)
-                            : e.stopPropagation()
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (item.status?.toLowerCase() === "wrapped")
+                            handleDeleteExpense(item.id, e, item.employeeId);
+                        }}
                         disabled={
-                          item.status !== "draft" ||
+                          item.status?.toLowerCase() !== "wrapped" ||
                           actionLoading[`delete_${item.id}`]
                         }
                         title={
-                          item.status === "draft"
+                          item.status?.toLowerCase() === "wrapped"
                             ? "Delete Expense"
                             : "Action not available"
                         }
                         aria-label={
-                          item.status === "draft"
+                          item.status?.toLowerCase() === "wrapped"
                             ? "Delete this expense"
                             : "Action not available for this status"
                         }
@@ -624,8 +662,8 @@ const List = ({
                         )}
                       </button>
                     </div>
-                  </td>
-                )}
+                  )}
+                </td>
               </tr>
             ))
           )}

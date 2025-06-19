@@ -26,7 +26,6 @@ export const createExpense = async (expenseData) => {
     // Validate required fields
     const { expenseDate, description, amount } = expenseData;
 
-
     if (!description || !amount || !expenseDate) {
       throw new Error("Date, description, and amount are required");
     }
@@ -46,7 +45,7 @@ export const createExpense = async (expenseData) => {
     };
 
     // Make the API request
-    const response = await axios.post(`${API_BASE_URL}/employees`, payload, {
+    const response = await axios.post(`${API_BASE_URL}/employee`, payload, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -110,7 +109,7 @@ export const createExpense = async (expenseData) => {
 export const getAllExpenses = async () => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/employees/${DEFAULT_USER_ID}`,
+      `${API_BASE_URL}/detail-expense-requests-of-employee/${DEFAULT_USER_ID}`,
       {
         timeout: 10000,
       }
@@ -252,38 +251,42 @@ export const updateExpense = async (expenseId, expenseData) => {
  */
 export const updateExpenseStatus = async (expenseId, status) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/expenses/${expenseId}/status`, {
-      status: status
-    });
-
+    // Only support updating to 'pending' for now
+    const response = await axios.patch(
+      `${API_BASE_URL}/employee/expense/${expenseId}/${"PENDING"}`,
+      { timeout: 10000 }
+    );
     return response.data;
   } catch (error) {
-    console.error('Error updating expense status:', error);
-    throw new Error(error.response?.data?.message || 'Failed to update expense status');
+    console.error("Error updating expense status:", error);
+    throw new Error(
+      error.response?.data?.message || "Failed to update expense status"
+    );
   }
 };
 
 /**
  * Delete an expense
  * @param {number} expenseId - The ID of the expense to delete
+ * @param {number} employeeId - The ID of the employee
  * @returns {Promise<Object>} The response from the API
  * @throws {Error} If the deletion fails
  */
-export const deleteExpense = async (expenseId) => {
+export const deleteExpense = async (expenseId, employeeId) => {
   try {
-    if (!expenseId) {
-      throw new Error("Expense ID is required");
+    if (!expenseId || !employeeId) {
+      throw new Error("Expense ID and Employee ID are required");
     }
-
-    const response = await axios.delete(`${API_BASE_URL}/${expenseId}`, {
-      timeout: 10000,
-    });
-
-    // Handle the response structure with success wrapper
+    const response = await axios.delete(
+      `${API_BASE_URL}/delete-my-requests/${expenseId}`,
+      {
+        data: { employeeId },
+        timeout: 10000,
+      }
+    );
     if (response.data && response.data.success && response.data.data) {
       return response.data.data;
     } else if (response.data) {
-      // Fallback for direct response
       return response.data;
     } else {
       throw new Error("Invalid response format from server");
@@ -291,7 +294,6 @@ export const deleteExpense = async (expenseId) => {
   } catch (error) {
     if (error.response) {
       const { status } = error.response;
-
       switch (status) {
         case 401:
           throw new Error("Authentication required. Please log in.");

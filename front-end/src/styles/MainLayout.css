@@ -3,14 +3,15 @@
 /* Main content container - accounts for fixed navbar */
 .main-layout {
   margin: 0;
-  padding: 1.25rem;
-  padding-top: calc(10vh + 1.25rem);
+  padding: 2rem 2.5rem;
+  padding-top: calc(15vh + 1.5rem);
   /* Account for fixed navbar height */
   background-color: #fbfbfe;
   /* Use design system background color */
   min-height: 100vh;
   width: 100vw;
   box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
 /* Modal overlay/backdrop */
@@ -76,11 +77,111 @@
 /* Dashboard cards container */
 .dashboard-cards {
   display: flex;
-  gap: 1.25rem;
-  width: 100%;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Card styles */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(47, 39, 206, 0.06);
+  padding: 1.5rem 2rem;
+  min-width: 180px;
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: "Inter", sans-serif;
+}
+.card-title {
+  color: #2f27ce;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+.card-count {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #050315;
+  margin-bottom: 0.25rem;
+}
+.card-subtitle {
+  color: #433bff;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* List/table and controls */
+.list-header {
+  display: flex;
   justify-content: space-between;
-  align-items: stretch;
-  margin-bottom: 1.25rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.list-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(47, 39, 206, 0.04);
+  font-family: "Inter", sans-serif;
+}
+.list-table-header th {
+  background: #dedcff;
+  color: #2f27ce;
+  font-weight: 600;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: left;
+}
+.list-table-cell {
+  padding: 1rem;
+  color: #050315;
+  font-size: 1rem;
+  border-bottom: 1px solid #f0f0f5;
+  text-align: left;
+}
+.list-table-row:nth-child(even) {
+  background: #f6f6fb;
+}
+.list-table-row:nth-child(odd) {
+  background: #fff;
+}
+.list-amount {
+  font-weight: 700;
+  color: #2f27ce;
+}
+.list-table-row {
+  transition: background 0.15s;
+}
+.list-table-row:hover {
+  background: #ecebff;
+  cursor: pointer;
+}
+.list-table-cell .list-actions button {
+  cursor: pointer;
+}
+.list-table-cell .list-actions button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.list-table-cell .list-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.list-table-header th:last-child {
+  text-align: center;
+}
+.list-table-cell:last-child {
+  text-align: center;
 }
 
 /* Responsive design for mobile */
@@ -98,5 +199,11 @@
   .modal-content {
     width: 95%;
     margin: 1rem;
+  }
+
+  .list-table-header th,
+  .list-table-cell {
+    padding: 0.5rem;
+    font-size: 0.95rem;
   }
 }

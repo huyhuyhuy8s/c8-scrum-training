@@ -45,6 +45,9 @@ const MainLayout = () => {
         case "pending":
           statusFilter = "pending";
           break;
+        case "final_approved":
+          statusFilter = "final_approved";
+          break;
         case "rejected":
           statusFilter = "rejected";
           break;
@@ -81,18 +84,28 @@ const MainLayout = () => {
   }, []);
   // Get card counts based on complete data (not filtered)
   const cardCounts = useMemo(() => {
-    const approved = completeData.filter(
-      (item) => item.status === "approved" || item.status === "final approved"
+    const draft = completeData.filter(
+      (item) =>
+        item.status === "draft" ||
+        item.status === "DRAFT" ||
+        item.status === "wrapped" ||
+        item.status === "WRAPPED"
     ).length;
     const pending = completeData.filter(
-      (item) => item.status === "pending"
+      (item) => item.status === "pending" || item.status === "PENDING"
+    ).length;
+    const approved = completeData.filter(
+      (item) => item.status === "approved" || item.status === "APPROVED"
+    ).length;
+    const finalApproved = completeData.filter(
+      (item) =>
+        item.status === "final_approved" || item.status === "FINAL_APPROVED"
     ).length;
     const rejected = completeData.filter(
-      (item) => item.status === "rejected"
+      (item) => item.status === "rejected" || item.status === "REJECTED"
     ).length;
-    const draft = completeData.filter((item) => item.status === "draft").length;
 
-    return { approved, pending, rejected, draft };
+    return { draft, pending, approved, finalApproved, rejected };
   }, [completeData]);
 
   return (
@@ -153,6 +166,15 @@ const MainLayout = () => {
             onClick={handleCardFilter}
             filterValue="approved"
             isActive={activeCardFilter === "approved"}
+          />
+
+          <Card
+            title="FINAL APPROVED"
+            count={cardCounts.finalApproved}
+            subtitle="expense(s)"
+            onClick={handleCardFilter}
+            filterValue="final_approved"
+            isActive={activeCardFilter === "final_approved"}
           />
 
           <Card
