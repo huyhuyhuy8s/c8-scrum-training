@@ -11,8 +11,9 @@ import {
   deleteExpenseRequestController,
   getRequestsByStatusController,
   changeStatusRequestController,
-  getTeamRequestsController
-
+  getTeamRequestsController,
+  totalSpentPerEmployeeController,
+  totalSpentPerDepartmentController
 } from "../controllers/expenseRequest.controller.js";
 const router = Router();
 
@@ -30,4 +31,6 @@ router.patch(
   "/:idFinance/:idExpenseRequest/:changeStatus",
   changeStatusRequestController
 );
+router.get("/summary/employee", totalSpentPerEmployeeController);
+router.get("/summary/department", totalSpentPerDepartmentController);
 export default router;

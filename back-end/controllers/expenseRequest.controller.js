@@ -9,9 +9,10 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
-  getTeamRequests
+  getTeamRequests,
+  getTotalSpentPerEmployee,
+  getTotalSpentPerDepartment
 } from "../services/expenseRequest.service.js";
-
 export const createExpenseRequestController = async (req, res) => {
   try {
     const expenseRequest = req.body;
@@ -323,3 +324,22 @@ export const getTeamRequestsController = async (req, res) => {
     }
 };
 
+export const totalSpentPerEmployeeController = async (req, res) => {
+  try {
+    const data = await getTotalSpentPerEmployee();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching total spent per employee:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const totalSpentPerDepartmentController = async (req, res) => {
+  try {
+    const data = await getTotalSpentPerDepartment();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching total spent per department:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
