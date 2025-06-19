@@ -36,7 +36,8 @@ export namespace $Enums {
   export const Role: {
   EMPLOYEE: 'EMPLOYEE',
   MANAGER: 'MANAGER',
-  FINANCE: 'FINANCE'
+  FINANCE: 'FINANCE',
+  ADMIN: 'ADMIN'
 };
 
 export type Role = (typeof Role)[keyof typeof Role]

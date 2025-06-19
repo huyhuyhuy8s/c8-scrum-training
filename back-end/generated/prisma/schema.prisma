@@ -61,6 +61,7 @@ enum Role {
   EMPLOYEE
   MANAGER
   FINANCE
+  ADMIN
 }
 
 enum RequestStatus {

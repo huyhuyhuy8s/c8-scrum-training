@@ -178,7 +178,8 @@ exports.Prisma.SystemLogOrderByRelevanceFieldEnum = {
 exports.Role = exports.$Enums.Role = {
   EMPLOYEE: 'EMPLOYEE',
   MANAGER: 'MANAGER',
-  FINANCE: 'FINANCE'
+  FINANCE: 'FINANCE',
+  ADMIN: 'ADMIN'
 };
 
 exports.RequestStatus = exports.$Enums.RequestStatus = {
