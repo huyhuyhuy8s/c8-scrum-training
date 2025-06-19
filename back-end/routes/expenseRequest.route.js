@@ -49,7 +49,7 @@ router.patch(
 );
 
 router.patch(
-  "/requests/:type/:requestId/:newStatus",
+  "/:idFinance/:idExpenseRequest/:changeStatus",
   changeStatusRequestController
 );
 
