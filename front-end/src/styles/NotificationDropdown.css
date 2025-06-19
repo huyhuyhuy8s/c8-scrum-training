@@ -17,26 +17,26 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: var(--text, #050315);
-  font-family: 'Inter', sans-serif;
+  color: var(--color-text, #050315);
+  font-family: var(--font-family, 'Inter', sans-serif);
   position: relative;
 }
 
 .notification-trigger:hover {
   background: #f9fafb;
-  border-color: var(--accent, #433bff);
+  border-color: var(--color-accent, #433bff);
 }
 
 .notification-trigger.active {
-  background: var(--secondary, #dedcff);
-  border-color: var(--primary, #2f27ce);
-  color: var(--primary, #2f27ce);
+  background: var(--color-secondary, #dedcff);
+  border-color: var(--color-primary, #2f27ce);
+  color: var(--color-primary, #2f27ce);
 }
 
 .notification-trigger:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(47, 39, 206, 0.1);
-  border-color: var(--primary, #2f27ce);
+  border-color: var(--color-primary, #2f27ce);
 }
 
 /* Icons */
@@ -118,7 +118,7 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
-  color: var(--text, #050315);
+  color: var(--color-text, #050315);
   font-family: 'Inter', sans-serif;
 }
 
@@ -220,8 +220,8 @@
 }
 
 .notification-icon-wrapper.info {
-  background: var(--secondary, #dedcff);
-  color: var(--primary, #2f27ce);
+  background: var(--color-secondary, #dedcff);
+  color: var(--color-primary, #2f27ce);
 }
 
 .notification-type-icon {
@@ -238,7 +238,7 @@
 .notification-message {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text, #050315);
+  color: var(--color-text, #050315);
   line-height: 1.4;
   margin-bottom: 0.25rem;
   font-family: 'Inter', sans-serif;
@@ -263,7 +263,7 @@
   width: 1.25rem;
   height: 1.25rem;
   border: 2px solid #e5e7eb;
-  border-top: 2px solid var(--primary, #2f27ce);
+  border-top: 2px solid var(--color-primary, #2f27ce);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-right: 0.5rem;
@@ -339,16 +339,15 @@
     border-color: #374151;
     color: #f9fafb;
   }
-  
-  .notification-trigger:hover {
+    .notification-trigger:hover {
     background: #1f2937;
-    border-color: var(--accent, #433bff);
+    border-color: var(--color-accent, #433bff);
   }
   
   .notification-trigger.active {
     background: rgba(222, 220, 255, 0.1);
-    border-color: var(--primary, #2f27ce);
-    color: var(--primary, #2f27ce);
+    border-color: var(--color-primary, #2f27ce);
+    color: var(--color-primary, #2f27ce);
   }
   
   .notification-dropdown-menu {

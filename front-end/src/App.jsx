@@ -8,7 +8,6 @@ import AddExpense from "./components/AddExpense";
 import EmployeeLayout from "./components/EmployeeLayout";
 import ManagerLayout from "./components/ManagerLayout";
 import FinanceLayout from "./components/FinanceLayout";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
   return (

@@ -25,39 +25,42 @@ const MainLayout = () => {
     setEditingExpense(null); // Clear editing data when closing
     setRefreshList((prev) => prev + 1); // Trigger list refresh
   }, []);
-    // Filter handling functions
-  const handleCardFilter = useCallback((filterValue) => {
-    // If the same card is clicked again, remove the filter (toggle behavior)
-    if (activeCardFilter === filterValue) {
-      setActiveFilters({ ...activeFilters, status: "" });
-      setActiveCardFilter(null);
-      return;
-    }
+  // Filter handling functions
+  const handleCardFilter = useCallback(
+    (filterValue) => {
+      // If the same card is clicked again, remove the filter (toggle behavior)
+      if (activeCardFilter === filterValue) {
+        setActiveFilters({ ...activeFilters, status: "" });
+        setActiveCardFilter(null);
+        return;
+      }
 
-    let statusFilter = "";
+      let statusFilter = "";
 
-    // Map card titles to status filters
-    switch (filterValue) {
-      case "approved":
-        statusFilter = "approved";
-        break;
-      case "pending":
-        statusFilter = "pending";
-        break;
-      case "rejected":
-        statusFilter = "rejected";
-        break;
-      case "draft":
-        statusFilter = "draft";
-        break;
-      default:
-        statusFilter = "";
-    }
+      // Map card titles to status filters
+      switch (filterValue) {
+        case "approved":
+          statusFilter = "approved";
+          break;
+        case "pending":
+          statusFilter = "pending";
+          break;
+        case "rejected":
+          statusFilter = "rejected";
+          break;
+        case "draft":
+          statusFilter = "draft";
+          break;
+        default:
+          statusFilter = "";
+      }
 
-    const newFilters = { ...activeFilters, status: statusFilter };
-    setActiveFilters(newFilters);
-    setActiveCardFilter(filterValue);
-  }, [activeFilters, activeCardFilter]);
+      const newFilters = { ...activeFilters, status: statusFilter };
+      setActiveFilters(newFilters);
+      setActiveCardFilter(filterValue);
+    },
+    [activeFilters, activeCardFilter]
+  );
   const handleFilterChange = useCallback((newFilters) => {
     setActiveFilters(newFilters);
     // Clear card filter if manual filter is applied
@@ -67,7 +70,8 @@ const MainLayout = () => {
   const handleClearFilters = useCallback(() => {
     setActiveFilters({});
     setActiveCardFilter(null);
-  }, []);const handleFilteredDataChange = useCallback(() => {
+  }, []);
+  const handleFilteredDataChange = useCallback(() => {
     // We don't need to store filtered data in MainLayout anymore
     // This callback can be used for future analytics or notifications
   }, []);
@@ -96,11 +100,9 @@ const MainLayout = () => {
       <NavigationBar />{" "}
       {/* Main Content Area - with padding to account for fixed navbar */}
       <div className="main-layout">
-      <div className="main-layout">
         {/* Add Expense Modal/Overlay */}
         {showAddExpense && (
           <div
-            className="modal-overlay"
             className="modal-overlay"
             onClick={handleCloseAddExpense}
             role="dialog"
@@ -167,15 +169,16 @@ const MainLayout = () => {
           title="Employees expense management"
           buttonText="Create a new request"
           onButtonClick={handleCreateRequest}
-        />        {/* List Component */}
+        />{" "}
+        {/* List Component */}
         <List
           filters={activeFilters}
           onFilteredDataChange={handleFilteredDataChange}
           onCompleteDataChange={handleCompleteDataChange}
           onFilterChange={handleFilterChange}
           onClearFilters={handleClearFilters}
-          key={refreshList}        />
-
+          key={refreshList}
+        />
         {/* Floating Feedback Button */}
         <FeedbackButton />
       </div>
