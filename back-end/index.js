@@ -3,10 +3,12 @@ import cors from "cors";
 import { config } from "dotenv";
 import expenseRequestRoute from "./routes/expenseRequest.route.js";
 import authRoute from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 config();
 
 const app = express();
+app.use(cookieParser());
 
 // Fix: Middleware phải đặt trước routes
 app.use(

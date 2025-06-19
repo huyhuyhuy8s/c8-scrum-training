@@ -35,7 +35,7 @@ export const loginController = async (req, res) => {
   const { email, password } = req.body;
   try {
     const employee = await loginUser(email, password);
-    const token = generateToken(employee);
+    const token = generateToken(employee.id, res);
     res.status(200).json({ employee, token });
   } catch (error) {
     console.error(error);
