@@ -10,6 +10,8 @@ import {
   updateExpenseRequest,
   deleteExpenseRequest,
   getRequestsByStatus,
+  filterTeamRequests,
+  exportFinalApprovedRequests,
   getTeamRequests,
   getTotalSpentPerEmployee,
   getTotalSpentPerDepartment,

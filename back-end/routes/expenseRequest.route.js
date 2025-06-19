@@ -15,9 +15,8 @@ import {
   updateExpenseRequestStatusController,
   filterTeamRequestsController,
   exportFinalApprovedRequestsController,
-
   totalSpentPerEmployeeController,
-  totalSpentPerDepartmentController
+  totalSpentPerDepartmentController,
 } from "../controllers/expenseRequest.controller.js";
 const router = Router();
 
@@ -40,11 +39,17 @@ router.delete("/delete-my-requests/:id", deleteExpenseRequestController); //C8-8
 router.get("/finance/status/:status", getRequestsByStatusController);
 
 // Put more specific routes before generic ones
-router.patch("/finance/:id/:status", updateExpenseRequestStatusController);
-router.patch("/employee/:id/:status", updateExpenseRequestStatusController);
+router.patch(
+  "/finance/expense/:id/:status",
+  updateExpenseRequestStatusController
+);
+router.patch(
+  "/employee/expense/:id/:status",
+  updateExpenseRequestStatusController
+);
 
 router.patch(
-  "/:idFinance/:idExpenseRequest/:changeStatus",
+  "/requests/:type/:requestId/:newStatus",
   changeStatusRequestController
 );
 
